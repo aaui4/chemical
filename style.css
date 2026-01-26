@@ -80,10 +80,11 @@ header{
 
 .btn{
     display: inline-block;
-    margin-top: 1rem;
+    margin-top: 15px;
+    margin-right: 15px;
     padding: 1rem 2.5rem;
     font-size: 1.6rem;
-    background: #74ace4;
+    background: #007AFF;
     color: white;
 }
 .features {
