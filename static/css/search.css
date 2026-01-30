@@ -106,7 +106,9 @@ body{
 
 .card:hover{
     transform: translateY(-8px);
+    background: rgba(255,255,255,0.95); /* نفس الخلفية */
 }
+
 
 /* الصورة على الحافة */
 .card img{

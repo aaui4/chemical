@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}محاكاة التفاعلات{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/reactants.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="overlay">
+  <div class="card">
+
+    <h1>محاكاة التفاعلات الكيميائية</h1>
+
+    <div class="form">
+      <select name="reactant1">
+        <option value="">اختر المتفاعل الأول</option>
+        {% for reactant in reactants %}
+          <option value="{{ reactant }}">{{ reactant }}</option>
+        {% endfor %}
+      </select>
+
+      <input type="number" name="quantity1" placeholder="الكمية (mol)">
+
+      <select name="reactant2">
+        <option value="">اختر المتفاعل الثاني</option>
+        {% for reactant in reactants %}
+          <option value="{{ reactant }}">{{ reactant }}</option>
+        {% endfor %}
+      </select>
+
+      <input type="number" name="quantity2" placeholder="الكمية (mol)">
+
+      <button class="add">إضافة التفاعل</button>
+    </div>
+
+    <div class="list">
+      <p>التفاعلات المختارة:</p>
+      <ul>
+        {% for reaction in reactions %}
+          <li>{{ reaction.reactant1 }} - {{ reaction.quantity1 }} mol + {{ reaction.reactant2 }} - {{ reaction.quantity2 }} mol</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <button class="start">ابدأ المحاكاة</button>
+
+  </div>
+</div>
+{% endblock %}

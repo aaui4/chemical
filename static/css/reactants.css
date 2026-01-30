@@ -1,0 +1,93 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: url("../img/img1.png") no-repeat center center / cover;
+}
+
+.overlay {
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  width: 420px;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  color: #fff;
+  box-shadow: 0 0 25px rgba(0,0,0,0.6);
+}
+
+.card h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 22px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+select,
+input {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+
+.add {
+  background: #1e90ff;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+.add:hover {
+  background: #187bcd;
+}
+
+.list {
+  margin: 20px 0;
+}
+
+.list ul {
+  list-style: none;
+  margin-top: 8px;
+}
+
+.list li {
+  background: rgba(255,255,255,0.15);
+  padding: 6px;
+  margin-bottom: 5px;
+  border-radius: 6px;
+}
+
+.start {
+  width: 100%;
+  padding: 12px;
+  background: #00b894;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.start:hover {
+  background: #019875;
+}

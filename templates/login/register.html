@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
+<head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Register </title>
@@ -8,8 +6,13 @@
         <link rel="stylesheet" href="{{url_for('static', filename='css/login.css')}}">
         <link href='https://cdn.boxicons.com/3.0.6/fonts/basic/boxicons.min.css' rel='stylesheet'>
     </head>
-    <body>
-        <div class="wrapper">
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<!-- كود register -->
+ <div class="wrapper">
             <form action="">
                 <h1>Register</h1>
                 <div class="input-box">
@@ -30,7 +33,4 @@
                       </div>
 
                 </div>
-            </form>
-        </div>
-    </body>
-</html>
+{% endblock %}
