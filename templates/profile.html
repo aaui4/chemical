@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Profile</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/profile.css') }}"
+    />
+  </head>
+  <body>
+    <div class="overlay">
+      <div class="profile-header">
+        <div class="user-info">
+          <div class="avatar">
+            {% if user.avatar %}
+            <img
+              src="{{ url_for('static', filename='uploads/' + user.avatar) }}"
+              alt="Avatar"
+            />
+            {% else %}
+            <i class="bx bx-user"></i>
+            {% endif %}
+          </div>
+          <h2>Welcome, {{ user.username }}</h2>
+        </div>
+        <a href="{{ url_for('login') }}" class="logout-btn">
+          <i class="bx bx-log-out"></i>
+          Logout
+        </a>
+      </div>
+      <div class="profile-edit">
+        <h3>Edit Profile</h3>
+        <form
+          action="{{ url_for('update_profile') }}"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <!-- تغيير الاسم -->
+          <label for="username">Name:</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            value="Asma"
+            required
+          />
+
+          <!-- رفع الصورة -->
+          <label for="avatar">Profile Picture:</label>
+          <input type="file" id="avatar" name="avatar" accept="image/*" />
+
+          <!-- زر الحفظ -->
+          <button type="submit" class="btn primary">Save Changes</button>
+        </form>
+      </div>
+
+      <div class="stats-container">
+        <div class="stat-card">
+          <h3>Saved Simulations</h3>
+          <p>5</p>
+        </div>
+
+        <div class="stat-card">
+          <h3>Last Reaction</h3>
+          <p>Acid + Base</p>
+        </div>
+
+        <div class="stat-card">
+          <h3>Total Experiments</h3>
+          <p>12</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a href="{{ url_for('reactants') }}" class="btn primary"
+          >Start New Simulation</a
+        >
+        <a href="{{ url_for('search') }}" class="btn secondary"
+          >Browse Reactions</a
+        >
+      </div>
+    </div>
+  </body>
+</html>
