@@ -1,26 +1,40 @@
 from flask import Flask, render_template, redirect, url_for, session
+from database.db import close_db
+from database.models import create_tables
+from routes.login import login_user
+from routes.register import register_user
 
 app = Flask(__name__)
 app.secret_key = "secret_key"
-
+# انشاء  الجداول مرة واحدة
+with app.app_context():
+    create_tables()
+    # اغلاق اتصال  بعد كل request
+app.teardown_appcontext(close_db)
 # الصفحة الرئيسية
 @app.route('/')
 def home():
     return render_template('home.html')
 
-# تسجيل الدخول
-@app.route('/login')
-def login():
-    return render_template('login/login.html')
+@app.route("/admin")
+def admin():
+    if session.get("role") != "admin":
+        return redirect(url_for("home"))
+    return render_template("admin/admon-bord.html")
 
-@app.route('/forgot')
+# تسجيل الدخول
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    return login_user()
+
+@app.route('/forgot', methods=["GET", "POST"])
 def forgot():
     return render_template('login/forgot.html')
 
 # تسجيل جديد
-@app.route('/register')
+@app.route('/register', methods=["GET", "POST"])
 def register():
-    return render_template('login/register.html')
+    return register_user()
 
 # صفحة التفاعلات
 @app.route('/search')

@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="{{url_for('static', filename='css/login.css')}}">
         <link href='https://cdn.boxicons.com/3.0.6/fonts/basic/boxicons.min.css' rel='stylesheet'>
     </head>
+
 {% extends "base.html" %}
 
 {% block title %}Register{% endblock %}
@@ -13,15 +14,16 @@
 {% block content %}
 <!-- كود register -->
  <div class="wrapper">
-            <form action="">
+            <form method="POST" action="{{url_for('register')}}">
                 <h1>Register</h1>
+                
                 <div class="input-box">
-                     <input type="text" placeholder="Username" required>
+                     <input type="text" name="username" placeholder="Username" required>
                      <i class='bx  bxs-user'></i>  
                 </div>
                 <div class="input-box">
                     <input type="email" name="email" placeholder="Email" required>
-                     <i class='bxr  bxs-envelope'></i> 
+                     <i class='bx  bxs-envelope'></i> 
                  </div>
                  <div class="input-box">
                     <input type="password" placeholder="Password" required>
@@ -31,6 +33,6 @@
                       <div class="register-link">
                         <p>Already have an account? <a href="{{url_for('login')}}">Login</a></p>
                       </div>
-
-                </div>
+            </form>
+        </div>
 {% endblock %}
