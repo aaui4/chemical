@@ -1,49 +1,46 @@
-{% extends "base.html" %}
-{% block title %}محاكاة التفاعلات{% endblock %}
-
-{% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/reactants.css') }}">
-{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %} Chemical Reactions Simulation{%
+endblock %} {% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/reactants.css') }}"/>
+{% endblock %} {% block content %}
 <div class="overlay">
   <div class="card">
-
-    <h1>محاكاة التفاعلات الكيميائية</h1>
+    <h1>Chemical Reactions Simulation</h1>
 
     <div class="form">
       <select name="reactant1">
-        <option value="">اختر المتفاعل الأول</option>
+        <option value="">Select the first reactant</option>
         {% for reactant in reactants %}
-          <option value="{{ reactant }}">{{ reactant }}</option>
+        <option value="{{ reactant }}">{{ reactant }}</option>
         {% endfor %}
       </select>
 
-      <input type="number" name="quantity1" placeholder="الكمية (mol)">
+      <input type="number" name="quantity1" placeholder="quantity(mol)" />
 
       <select name="reactant2">
-        <option value="">اختر المتفاعل الثاني</option>
+        <option value="">Select the second reactant</option>
         {% for reactant in reactants %}
-          <option value="{{ reactant }}">{{ reactant }}</option>
+        <option value="{{ reactant }}">{{ reactant }}</option>
         {% endfor %}
       </select>
 
-      <input type="number" name="quantity2" placeholder="الكمية (mol)">
+      <input type="number" name="quantity2" placeholder="quantity(mol)" />
 
-      <button class="add">إضافة التفاعل</button>
+      <button class="add">Add reaction</button>
     </div>
 
     <div class="list">
-      <p>التفاعلات المختارة:</p>
+      <p>Selected reactions:</p>
       <ul>
         {% for reaction in reactions %}
-          <li>{{ reaction.reactant1 }} - {{ reaction.quantity1 }} mol + {{ reaction.reactant2 }} - {{ reaction.quantity2 }} mol</li>
+        <li>
+          {{ reaction.reactant1 }} - {{ reaction.quantity1 }} mol + {{
+          reaction.reactant2 }} - {{ reaction.quantity2 }} mol
+        </li>
         {% endfor %}
       </ul>
     </div>
 
-    <button class="start">ابدأ المحاكاة</button>
-
+    <button class="start">Start Simulation</button>
   </div>
 </div>
 {% endblock %}

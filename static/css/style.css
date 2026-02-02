@@ -1,210 +1,218 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap'); 
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
 
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; 
-    outline: none;
-    border: none;
-    text-decoration: none;
-    text-transform: capitalize;
-    transition: .2s linear;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family:
+    "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  outline: none;
+  border: none;
+  text-decoration: none;
+  text-transform: capitalize;
+  transition: 0.2s linear;
 }
 
-html{
-    font-size: 62.5%;
-    scroll-behavior: smooth;
-    overflow-x: hidden;
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
-section{
-    padding: 2rem 9%;
+section {
+  padding: 2rem 9%;
 }
 
 /* ================= HEADER ================= */
-header{
-    background-color: rgba(0,0,0,0);
-    box-shadow: none;
-    position: fixed;
-    width: 100%;
-    z-index: 999;
+header {
+  background-color: rgba(0, 0, 0, 0);
+  box-shadow: none;
+  position: fixed;
+  width: 100%;
+  z-index: 999;
 }
-
 
 header a,
 header .logo,
 header .navbar a,
 header .user-menu i {
-    color: #fff !important;
+  color: #fff !important;
 }
 
-.logo{
-    font-size: 2rem;
-    font-weight: bolder;
+.logo {
+  font-size: 2rem;
+  font-weight: bolder;
 }
 
-.navbar a{
-    font-size: 2rem;
-    padding: 0 1.5rem;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; 
-
+.navbar a {
+  font-size: 2rem;
+  padding: 0 1.5rem;
+  font-family:
+    "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
-.navbar a:hover{
-    color: #74ace4;
+.navbar a:hover {
+  color: #74ace4;
+}
+.logo img.logo-img {
+  height: 100px; /*ارتفاع الشعار*/
+  width: auto; /* يحافظ على نسبة الصورة */
+  display: block;
 }
 
 /* ================= USER MENU ================= */
-.user-menu{
-    position: relative;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
+.user-menu {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
-.user-menu i{
-    font-size: 24px;
-    padding: 10px;
-    border-radius: 50%;
-    transition: 0.3s ease;
+.user-menu i {
+  font-size: 24px;
+  padding: 10px;
+  border-radius: 50%;
+  transition: 0.3s ease;
 }
 
-.user-menu i:hover{
-    background: rgba(255,255,255,0.2);
+.user-menu i:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 .user-dropdown a {
-    color: #000 !important;
+  color: #666 !important;
 }
 
 /* Dropdown */
-.user-dropdown{
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    width: 180px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px);
-    transition: 0.3s ease;
-    z-index: 1000;
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 180px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: 0.3s ease;
+  z-index: 1000;
 }
 
-.user-menu:hover .user-dropdown{
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+.user-menu:hover .user-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
-.user-dropdown li{
-    list-style: none;
+.user-dropdown li {
+  list-style: none;
 }
 
-.user-dropdown li a{
-    display: block;
-    padding: 10px 15px;
-    font-size: 14px;
-    color: #333;
+.user-dropdown li a {
+  display: block;
+  padding: 10px 15px;
+  font-size: 14px;
+  color: #333;
 }
 
-.user-dropdown li a:hover{
-    background: #f2f2f2;
+.user-dropdown li a:hover {
+  background: #f2f2f2;
 }
 
-.user-dropdown .text-danger{
-    color: #d9534f !important;
+.user-dropdown .text-danger {
+  color: #d9534f !important;
 }
 
 /* ================= HOME ================= */
-.home{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: url("../img/img1.png") no-repeat center/cover;
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url("../img/img1.png") no-repeat center/cover;
 }
 
-.home .content h3{
-    font-size: 3rem;
-    font-family: "Playfair Display", serif;
+.home .content h3 {
+  font-size: 3rem;
+  font-family: "Playfair Display", serif;
 }
 
-.home .content span{
-    font-size: 2rem;
-    display: block;
+.home .content span {
+  font-size: 2rem;
+  display: block;
 }
 
-.home .content p{
-    font-size: 1.6rem;
+.home .content p {
+  font-size: 1.6rem;
 }
 
-.home .content p a:hover{
-    color: #1f4ed8;
+.home .content p a:hover {
+  color: #1f4ed8;
 }
 
 /* ================= BUTTON ================= */
-.btn{
-    display: inline-block;
-    margin-top: 15px;
-    margin-right: 15px;
-    padding: 1rem 2.5rem;
-    font-size: 1.6rem;
-    background: #1f4ed8;
-    color: white;
+.btn {
+  display: inline-block;
+  margin-top: 15px;
+  margin-right: 15px;
+  padding: 1rem 2.5rem;
+  font-size: 1.6rem;
+  background: #1f4ed8;
+  color: white;
 }
 
-.btn:hover{
-    background: #2980b9;
+.btn:hover {
+  background: #2980b9;
 }
 
 /* ================= ABOUT ================= */
-.about{
-    padding: 80px 60px;
-    max-width: 1100px;
-    margin: auto;
-    color: #ffffff;
+.about {
+  padding: 80px 60px;
+  max-width: 1100px;
+  margin: auto;
+  color: #ffffff;
 }
 
-.about h1{
-    font-size: 42px;
-    margin-bottom: 20px;
+.about h1 {
+  font-size: 42px;
+  margin-bottom: 20px;
 }
 
-.about .intro{
-    font-size: 18px;
-    line-height: 1.7;
-    max-width: 700px;
-    margin-bottom: 60px;
-    opacity: 0.9;
+.about .intro {
+  font-size: 18px;
+  line-height: 1.7;
+  max-width: 700px;
+  margin-bottom: 60px;
+  opacity: 0.9;
+}
+/* ================= CARDS ================= */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
 }
 
-.cards{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
+.card {
+  background: rgba(255, 255, 255, 0.06);
+  padding: 30px;
+  border-radius: 12px;
+  transition: 0.3s;
 }
 
-.card{
-    background: rgba(255,255,255,0.06);
-    padding: 30px;
-    border-radius: 12px;
-    transition: 0.3s;
+.card:hover {
+  transform: translateY(-8px);
+  background: rgba(58, 56, 56, 0.1);
 }
 
-.card:hover{
-    transform: translateY(-8px);
-    background: rgba(58,56,56,0.1);
+.card h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
 }
 
-.card h3{
-    margin-bottom: 15px;
-    font-size: 20px;
-}
-
-.card p{
-    line-height: 1.6;
-    opacity: 0.9;
+.card p {
+  line-height: 1.6;
+  opacity: 0.9;
 }

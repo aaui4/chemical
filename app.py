@@ -1,52 +1,170 @@
-from flask import Flask, render_template, redirect, url_for, session
+from flask import Flask, render_template, request, flash, redirect, url_for, session
+from flask_mail import Mail, Message
+from werkzeug.utils import secure_filename
+import secrets
+import os
+from pathlib import Path
+
+# مستخدم وهمي للتجربة
+user_data = {"username": "Asma", "avatar": "default.png"}
 
 app = Flask(__name__)
 app.secret_key = "secret_key"
 
-# الصفحة الرئيسية
+# تكوين البريد الإلكتروني
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'kindkiki9@gmail.com'
+app.config['MAIL_PASSWORD'] = 'bcfo evel snsr dvuq'
+
+mail = Mail(app)
+
+# تكوين مجلد التحميلات
+UPLOAD_FOLDER = 'static/uploads/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB كحد أقصى
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+# إنشاء مجلد التحميلات عند بدء التشغيل
+def create_upload_folder():
+    upload_path = Path(app.config['UPLOAD_FOLDER'])
+    upload_path.mkdir(parents=True, exist_ok=True)
+    print(f" مجلد التحميلات جاهز: {upload_path.absolute()}")
+
+create_upload_folder()
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @app.route('/')
 def home():
     return render_template('home.html')
 
-# تسجيل الدخول
+
 @app.route('/login')
 def login():
     return render_template('login/login.html')
 
-@app.route('/forgot')
+@app.route('/forgot', methods=['GET', 'POST'])
 def forgot():
+    if request.method == 'POST':
+        user_email = request.form['email']
+        token = secrets.token_urlsafe(16)
+        reset_link = url_for('reset_password', token=token, _external=True)
+
+        msg = Message("استرجاع كلمة السر",
+                      sender="kindkiki9@gmail.com",
+                      recipients=[user_email])
+        msg.body = f"اضغطي على الرابط التالي لإعادة تعيين كلمة السر:\n{reset_link}"
+
+        try:
+            mail.send(msg)
+            flash("تم إرسال رابط إعادة تعيين كلمة السر إلى بريدك الإلكتروني")
+        except Exception as e:
+            print(f" خطأ في إرسال البريد: {e}")
+            flash("حدث خطأ أثناء إرسال البريد، حاول لاحقاً")
+
+        return redirect(url_for('forgot'))
+
     return render_template('login/forgot.html')
 
-# تسجيل جديد
+@app.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if request.method == 'POST':
+        new_password = request.form['password']
+        flash("تم تحديث كلمة السر بنجاح!")
+        return redirect(url_for('login'))
+
+    return """
+    <form method="POST">
+        <input type="password" name="password" placeholder="New Password" required>
+        <button type="submit">Reset Password</button>
+    </form>
+    """
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html', user=user_data)
+
+@app.route('/update_profile', methods=['POST'])
+def update_profile():
+    global user_data
+
+    username = request.form.get('username')
+    file = request.files.get('avatar')
+
+    if username:
+        user_data['username'] = username
+
+    if file and allowed_file(file.filename):
+        try:
+            # تأكد من وجود المجلد
+            upload_folder = Path(app.config['UPLOAD_FOLDER'])
+            upload_folder.mkdir(parents=True, exist_ok=True)
+            
+            # حفظ الملف
+            filename = secure_filename(file.filename)
+            # إضافة علامة زمنية لتجنب تكرار الأسماء
+            from datetime import datetime
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            name_part = Path(filename).stem
+            ext = Path(filename).suffix
+            unique_filename = f"{name_part}_{timestamp}{ext}"
+            
+            filepath = upload_folder / unique_filename
+            file.save(filepath)
+            
+            # حذف الصورة القديمة إذا لم تكن default.png
+            if user_data['avatar'] != 'default.png':
+                old_file = upload_folder / user_data['avatar']
+                if old_file.exists():
+                    old_file.unlink()
+            
+            user_data['avatar'] = unique_filename
+            flash("تم تحديث الصورة الشخصية بنجاح!", "success")
+            
+        except Exception as e:
+            print(f" خطأ في حفظ الصورة: {e}")
+            flash("حدث خطأ أثناء حفظ الصورة", "error")
+
+    elif file and not allowed_file(file.filename):
+        flash("نوع الملف غير مسموح به. المسموح: PNG, JPG, JPEG, GIF", "error")
+
+    if username:
+        flash("تم تحديث اسم المستخدم بنجاح!", "success")
+
+    return redirect(url_for('profile'))
+
 @app.route('/register')
 def register():
     return render_template('login/register.html')
 
-# صفحة التفاعلات
+
 @app.route('/search')
 def search():
     return render_template('search/search.html')
 
-# صفحة المحاكاة
+
 @app.route('/reactants')
 def reactants():
     return render_template('reactants/reactants.html')
 
-# صفحة الملف الشخصي
-@app.route('/profile')
-def profile():
-    return "User Profile Page"
 
-# إعدادات المستخدم
+
+
 @app.route('/settings')
 def settings():
     return "Settings Page"
 
-# تسجيل الخروج
+
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('home'))
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    print(" بدء تشغيل التطبيق...")
+    print(f" مجلد التحميلات: {Path(UPLOAD_FOLDER).absolute()}")
+    app.run(debug=True, host='0.0.0.0', port=5000)

@@ -1,7 +1,8 @@
 <header class="fixed-top py-4 text-white">
-    <div class="container-fluid px-5 d-flex align-items-center justify-content-between">
-
-    <a href="{{ url_for('home') }}" class="logo text-white">chemical<span>.</span></a>
+  <div class="container-fluid px-5 d-flex align-items-center justify-content-between">
+    <a href="{{ url_for('home') }}" class="logo">
+      <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="logo-img" />
+    </a>
 
     <nav class="navbar d-none d-md-flex">
       <a href="{{ url_for('home') }}" class="text-white mx-2">Home</a>
@@ -11,16 +12,22 @@
     </nav>
 
     <div class="user-menu position-relative">
-      <i class="bx bx-user" ></i>
+      <i class="bx bx-user" style="color: black"></i>
       <ul class="user-dropdown position-absolute bg-white p-2 rounded shadow">
         {% if session.get('user') %}
-          <li><a href="#" class="dropdown-item">Profile</a></li>
-          <li><a href="#" class="dropdown-item">Settings</a></li>
-          <li><hr></li>
-          <li><a href="{{ url_for('logout') }}" class="dropdown-item text-danger">Logout</a></li>
+        <li><a href="#" class="dropdown-item">Profile</a></li>
+        <li><a href="#" class="dropdown-item">Settings</a></li>
+        <li><hr /></li>
+        <li>
+          <a href="{{ url_for('logout') }}" class="dropdown-item text-danger">Logout</a>
+        </li>
         {% else %}
-          <li><a href="{{ url_for('login') }}" class="dropdown-item">Login</a></li>
-          <li><a href="{{ url_for('register') }}" class="dropdown-item">Register</a></li>
+        <li>
+          <a href="{{ url_for('login') }}" class="dropdown-item">Login</a>
+        </li>
+        <li>
+          <a href="{{ url_for('register') }}" class="dropdown-item">Register</a>
+        </li>
         {% endif %}
       </ul>
     </div>
