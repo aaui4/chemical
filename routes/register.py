@@ -1,6 +1,9 @@
-from flask import render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for
 from database.auth import register_user as auth_register_user
 
+register_bp = Blueprint("register", __name__)
+
+@register_bp.route("/register", methods=["GET", "POST"])
 def register_user():
     if request.method == "POST":
         username = request.form.get("username")

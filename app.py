@@ -46,6 +46,10 @@ def allowed_file(filename):
 def home():
     return render_template('home.html')
 
+@app.route('/go-home')
+def go_home():
+    # هنا نستخدم اسم الدالة home، وليس اسم الملف
+    return redirect(url_for('home'))
 @app.route("/admin")
 def admin():
     if session.get("role") != "admin":
@@ -147,9 +151,10 @@ def update_profile():
 
     return redirect(url_for('profile'))
 
-@app.route('/register')
+@app.route('/register', methods=["GET", "POST"])
 def register():
     return register_user()
+
 
 
 @app.route('/search')
