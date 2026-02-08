@@ -16,8 +16,6 @@ body {
 .overlay {
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(4px);
   padding: 40px;
   display: flex;
   flex-direction: column;
@@ -117,7 +115,7 @@ body {
 }
 
 .profile-edit input {
-  width: 100%;
+  width: 10%;
   padding: 8px;
   margin-bottom: 10px;
 }

@@ -12,10 +12,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}"/>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}"/>
 
+
     {% block head %}{% endblock %}
   </head>
 
   <body>
-    {% include "header.html" %} {% block content %}{% endblock %}
+{% block header %}
+{% include "header.html" %}
+{% endblock %}
+
   </body>
 </html>

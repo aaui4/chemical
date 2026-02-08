@@ -6,8 +6,13 @@ import os
 from pathlib import Path
 from database.db import close_db
 from database.models import create_tables
-from routes.login import login_user
-from routes.register import register_user
+from routes.login import login_bp
+from routes.register import register_bp
+from routes.check_email import check_email_bp
+from routes.check_username import check_username_bp
+
+
+
 
 # مستخدم وهمي للتجربة
 user_data = {"username": "Asma", "avatar": "default.png"}
@@ -21,6 +26,12 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'kindkiki9@gmail.com'
 app.config['MAIL_PASSWORD'] = 'bcfo evel snsr dvuq'
+app.register_blueprint(register_bp)
+app.register_blueprint(check_email_bp)
+app.register_blueprint(check_username_bp)
+
+
+
 
 mail = Mail(app)
 
@@ -53,13 +64,12 @@ def go_home():
 @app.route("/admin")
 def admin():
     if session.get("role") != "admin":
-        return redirect(url_for("home"))
-    return render_template("admin/admon-bord.html")
+     return render_template("admin/admon-bord.html")
 
 # تسجيل الدخول
 @app.route('/login', methods=["GET", "POST"])
 def login():
-    return login_user()
+    return login_bp()
 
 @app.route('/forgot', methods=["GET", "POST"])
 def forgot():
@@ -151,9 +161,7 @@ def update_profile():
 
     return redirect(url_for('profile'))
 
-@app.route('/register', methods=["GET", "POST"])
-def register():
-    return register_user()
+
 
 
 
@@ -180,6 +188,13 @@ def logout():
     return redirect(url_for('home'))
 
 if __name__ == "__main__":
-    print(" بدء تشغيل التطبيق...")
-    print(f" مجلد التحميلات: {Path(UPLOAD_FOLDER).absolute()}")
+    print("بدء تشغيل التطبيق...")
+    
+    # إنشاء Application Context مؤقت
+    with app.app_context():
+        create_tables()  # إنشاء الجداول إذا لم تكن موجودة
+
     app.run(debug=True, host='0.0.0.0', port=5000)
+
+
+
