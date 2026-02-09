@@ -4,6 +4,7 @@ from werkzeug.utils import secure_filename
 import secrets
 import os
 from pathlib import Path
+from config import Config
 from database.db import close_db
 from database.models import create_tables
 from routes.login import login_bp
@@ -12,35 +13,17 @@ from routes.check_email import check_email_bp
 from routes.check_username import check_username_bp
 
 
-
-
 # مستخدم وهمي للتجربة
 user_data = {"username": "Asma", "avatar": "default.png"}
 
 app = Flask(__name__)
-app.secret_key = "secret_key"
-
-# تكوين البريد الإلكتروني
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'kindkiki9@gmail.com'
-app.config['MAIL_PASSWORD'] = 'bcfo evel snsr dvuq'
+app.config.from_object(Config)
+app.register_blueprint(login_bp)
 app.register_blueprint(register_bp)
 app.register_blueprint(check_email_bp)
 app.register_blueprint(check_username_bp)
 
-
-
-
 mail = Mail(app)
-
-# تكوين مجلد التحميلات
-UPLOAD_FOLDER = 'static/uploads/'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB كحد أقصى
-
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 # إنشاء مجلد التحميلات عند بدء التشغيل
 def create_upload_folder():
@@ -51,7 +34,7 @@ def create_upload_folder():
 create_upload_folder()
 
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 @app.route('/')
 def home():
@@ -63,13 +46,14 @@ def go_home():
     return redirect(url_for('home'))
 @app.route("/admin")
 def admin():
-    if session.get("role") != "admin":
-     return render_template("admin/admon-bord.html")
+    if "user_id" not in session:
+        return redirect(url_for("login.login"))
 
-# تسجيل الدخول
-@app.route('/login', methods=["GET", "POST"])
-def login():
-    return login_bp()
+    if session.get("role") != "admin":
+        return redirect(url_for("profile"))
+
+    return render_template("admon-bord.html")
+
 
 @app.route('/forgot', methods=["GET", "POST"])
 def forgot():
@@ -110,6 +94,8 @@ def reset_password(token):
 
 @app.route('/profile')
 def profile():
+    if "user_id" not in session:
+        return redirect(url_for("login.login"))
     return render_template('profile.html', user=user_data)
 
 @app.route('/update_profile', methods=['POST'])
@@ -161,10 +147,6 @@ def update_profile():
 
     return redirect(url_for('profile'))
 
-
-
-
-
 @app.route('/search')
 def search():
     return render_template('search/search.html')
@@ -175,12 +157,9 @@ def reactants():
     return render_template('reactants/reactants.html')
 
 
-
-
 @app.route('/settings')
 def settings():
     return "Settings Page"
-
 
 @app.route('/logout')
 def logout():
@@ -195,6 +174,3 @@ if __name__ == "__main__":
         create_tables()  # إنشاء الجداول إذا لم تكن موجودة
 
     app.run(debug=True, host='0.0.0.0', port=5000)
-
-
-
