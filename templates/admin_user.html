@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-container">
+
+    <!-- SIDEBAR نفسها -->
+    {% include 'sidebar.html' %}
+
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <h1>User Management</h1>
+
+        <div class="glass-table">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+          <tbody>
+    {% for user in users %}
+    <tr>
+        <td>{{ user[0] }}</td>
+        <td>{{ user[1] }}</td>
+        <td>{{ user[2] }}</td>
+        <td>{{ user[3] }}</td>
+        <td class="actions">
+            <a href="/admin/user/{{ user[0] }}" class="view-btn">
+                <i class='bx bx-show'></i>
+            </a>
+
+            <button class="delete-btn" onclick="deleteUser()">
+                <i class='bx bx-trash'></i>
+            </button>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+</div>
+<script>
+function deleteUser(id){
+    if(confirm("Are you sure you want to delete this user?")){
+        fetch('/admin/delete_user/' + id, {
+            method: 'DELETE'
+        })
+        .then(() => {
+            location.reload();
+        });
+    }
+}
+</script>
+
+
+{% endblock %}

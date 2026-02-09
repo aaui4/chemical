@@ -1,109 +1,97 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Chemical Admin Panel</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chemical Admin Panel</title>
 
-<link rel="stylesheet" href="/static/css/admin.css">
-<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
-</head>
-<body>
-
-<div class="container">
-
-    <aside class="sidebar">
-        <h2 class="logo"> <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Chemical Logo"> </h2>
-        <ul class="menu">
-            <li class="active"><i class='bx bxs-dashboard'></i> Dashboard</li>
-            <li><i class='bx bxs-user'></i> User Management</li>
-            <li><i class='bx bxs-flask'></i> Experiments</li>
-            <li><i class='bx bxs-bar-chart-alt-2'></i> Statistics</li>
-            <li><i class='bx bxs-cog'></i> Settings</li>
-            <li><i class='bx bx-log-out'></i> Logout</li>
-        </ul>
-    </aside>
-
-    <main class="main">
-
+    <link rel="stylesheet" href="/static/css/admin.css" />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+  </head>
+  
+  <body>
+    <div class="container">
+      {% include 'sidebar.html' %}
+      <main class="main">
         <div class="topbar">
-            <h3>Admin Control Panel</h3>
-            <div class="profile">
-                <i class='bx bxs-bell'></i>
-                <img src="https://i.pravatar.cc/40">
-            </div>
+          <h3>Admin Control Panel</h3>
+          <div class="profile">
+    <i class="bx bxs-bell"></i>
+    <img 
+        src="{{ url_for('static', filename='uploads/' + (user.avatar if user.avatar else 'img/default.png')) }}" 
+        alt="Profile" 
+    />
+</div>
+
         </div>
 
         <div class="cards">
-            <div class="card">
-                <h4>Active Experiments</h4>
-                <p>28</p>
-                <span>+3 today</span>
-            </div>
-            <div class="card">
-                <h4>Active Users</h4>
-                <p>1,258</p>
-                <span>+12 today</span>
-            </div>
-            <div class="card">
-                <h4>New Alerts</h4>
-                <p>5</p>
-                <span>+5 today</span>
-            </div>
-        </div>
+    <div class="card">
+        <h4>Users</h4>
+        <p>{{ users_count }}</p>
+    </div>
+    <div class="card">
+        <h4>Ongoing Reactions</h4>
+        <p>{{ ongoing_reactions }}</p>
+    </div>
+    <div class="card">
+        <h4>Completed Reactions</h4>
+        <p>{{ completed_reactions }}</p>
+    </div>
+</div>
+
 
         <div class="chart-box">
-            <h4>Experiment Activity</h4>
-            <div class="fake-chart"></div>
+          <h4>Experiment Activity</h4>
+          <div class="fake-chart"></div>
         </div>
 
         <div class="table-box">
-            <h4>Recent Experiments</h4>
-            <table>
-                <tr>
-                    <th>Experiment</th>
-                    <th>Status</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                </tr>
-                <tr>
-                    <td>PhyExp125</td>
-                    <td class="ongoing">Ongoing</td>
-                    <td>04/23/2024</td>
-                    <td>04/28/2024</td>
-                </tr>
-                <tr>
-                    <td>AcidBase301</td>
-                    <td class="done">Completed</td>
-                    <td>04/20/2024</td>
-                    <td>04/22/2024</td>
-                </tr>
-            </table>
+          <h4>Recent Experiments</h4>
+          <table>
+  <tr>
+    <th>Equation</th>
+    <th>Status</th>
+    <th>Date</th>
+    <th>Energy</th>
+  </tr>
+
+  {% for r in reaction_results %}
+  <tr>
+    <td>{{ r.equation }}</td>
+    <td class="{{ 'ongoing' if r.state == 'Ongoing' else 'done' }}">
+      {{ r.state }}
+    </td>
+    <td>{{ r.date }}</td>
+    <td>{{ r.energyReleased }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
         </div>
+      </main>
 
-    </main>
-
-    <aside class="right">
+      <aside class="right">
         <div class="reaction">
-            <h4>Active Reaction</h4>
-            <img src="https://images.unsplash.com/photo-1581091012184-5c0a4d48a05a?auto=format&fit=crop&w=400&q=80">
-            <div class="buttons">
-                <button class="start">Start Reaction</button>
-                <button class="stop">Stop Reaction</button>
-            </div>
+          <h4>Active Reaction</h4>
+          <img
+            src="https://images.unsplash.com/photo-1581091012184-5c0a4d48a05a?auto=format&fit=crop&w=400&q=80"
+          />
+          <div class="buttons">
+            <button class="start">Start Reaction</button>
+            <button class="stop">Stop Reaction</button>
+          </div>
         </div>
 
         <div class="logs">
-            <h4>System Logs</h4>
-            <ul>
-                <li>PhyExp126 started</li>
-                <li>Alert: Reaction Temp critical</li>
-                <li>PhyExp125 started</li>
-            </ul>
+          <h4>System Logs</h4>
+          <ul>
+{% for log in logs %}
+    <li>{{ log.message }}</li>
+{% endfor %}
+</ul>
+
         </div>
-    </aside>
-
-</div>
-
-</body>
+      </aside>
+    </div>
+  </body>
 </html>

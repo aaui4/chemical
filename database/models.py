@@ -20,6 +20,18 @@ def create_tables():
         role TEXT CHECK(role IN ('admin', 'user')) NOT NULL
     )
     """)
+    columns = cursor.execute("PRAGMA table_info(user)").fetchall()
+    if not any(c[1] == "avatar" for c in columns):
+        cursor.execute("ALTER TABLE user ADD COLUMN avatar TEXT DEFAULT 'default.png'")
+        print("تم إضافة العمود avatar")
+
+    cursor.execute("""
+CREATE TABLE IF NOT EXISTS logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    message TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now','localtime'))
+)
+""")
 
     # ===== chemical_elements =====
     cursor.execute("""

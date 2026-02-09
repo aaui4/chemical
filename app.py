@@ -10,8 +10,8 @@ from routes.login import login_bp
 from routes.register import register_bp
 from routes.check_email import check_email_bp
 from routes.check_username import check_username_bp
-
-
+from routes.admin import admin_bp
+from database.db import get_db
 
 
 # مستخدم وهمي للتجربة
@@ -29,6 +29,10 @@ app.config['MAIL_PASSWORD'] = 'bcfo evel snsr dvuq'
 app.register_blueprint(register_bp)
 app.register_blueprint(check_email_bp)
 app.register_blueprint(check_username_bp)
+app.register_blueprint(login_bp)
+app.register_blueprint(admin_bp)
+
+
 
 
 
@@ -61,15 +65,51 @@ def home():
 def go_home():
     # هنا نستخدم اسم الدالة home، وليس اسم الملف
     return redirect(url_for('home'))
-@app.route("/admin")
-def admin():
-    if session.get("role") != "admin":
-     return render_template("admin/admon-bord.html")
 
-# تسجيل الدخول
-@app.route('/login', methods=["GET", "POST"])
-def login():
-    return login_bp()
+
+@app.route('/admin/users')
+def admin_users():
+    db = get_db()
+    cursor = db.cursor()
+
+    cursor.execute("SELECT id, username, email, role FROM user")
+    user = cursor.fetchall()
+
+    return render_template("admin_user.html", users=user)
+
+@app.context_processor
+def inject_user():
+    # هنا ممكن تجيبي المستخدم من session أو من قاعدة البيانات
+    # الآن مؤقتًا نستخدم user_data
+    return dict(user=user_data)
+
+
+@app.route('/admin/user/<int:id>')
+def view_user(id):
+    db = get_db()
+    cursor = db.cursor()
+
+    cursor.execute("SELECT id, username, email, role FROM user WHERE id=?", (id,))
+    user = cursor.fetchone()
+
+    return render_template("view_user.html", user=user)
+
+
+@app.route('/admin/delete_user/<int:id>', methods=['DELETE'])
+def delete_user(id):
+    db = get_db()
+    cursor = db.cursor()
+
+    cursor.execute("DELETE FROM user WHERE id=?", (id,))
+    db.commit()
+
+    return '', 204
+
+
+
+
+
+
 
 @app.route('/forgot', methods=["GET", "POST"])
 def forgot():
@@ -99,7 +139,7 @@ def reset_password(token):
     if request.method == 'POST':
         new_password = request.form['password']
         flash("تم تحديث كلمة السر بنجاح!")
-        return redirect(url_for('login'))
+        return redirect(url_for('login.login'))
 
     return """
     <form method="POST">
