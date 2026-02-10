@@ -13,7 +13,7 @@ def register():
         success, error = auth_register_user(username, email, password)
 
         if success:
-            return redirect(url_for("login"))  # اسم الدالة في app.py
+            return redirect(url_for("login.login"))  # اسم الدالة في app.py
         else:
             return render_template("login/register.html", error=error)
 

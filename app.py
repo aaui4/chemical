@@ -4,32 +4,31 @@ from werkzeug.utils import secure_filename
 import secrets
 import os
 from pathlib import Path
-from database.db import close_db
+from config import Config
+
 from database.models import create_tables
 from routes.login import login_bp
 from routes.register import register_bp
 from routes.check_email import check_email_bp
 from routes.check_username import check_username_bp
 from routes.admin import admin_bp
-from database.db import get_db
+from database.db import get_db, close_db
+
+
+
+
+
 
 
 # مستخدم وهمي للتجربة
 user_data = {"username": "Asma", "avatar": "default.png"}
 
 app = Flask(__name__)
-app.secret_key = "secret_key"
-
-# تكوين البريد الإلكتروني
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'kindkiki9@gmail.com'
-app.config['MAIL_PASSWORD'] = 'bcfo evel snsr dvuq'
+app.config.from_object(Config)
+app.register_blueprint(login_bp)
 app.register_blueprint(register_bp)
 app.register_blueprint(check_email_bp)
 app.register_blueprint(check_username_bp)
-app.register_blueprint(login_bp)
 app.register_blueprint(admin_bp)
 
 
@@ -39,12 +38,6 @@ app.register_blueprint(admin_bp)
 
 mail = Mail(app)
 
-# تكوين مجلد التحميلات
-UPLOAD_FOLDER = 'static/uploads/'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB كحد أقصى
-
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 # إنشاء مجلد التحميلات عند بدء التشغيل
 def create_upload_folder():
@@ -55,7 +48,7 @@ def create_upload_folder():
 create_upload_folder()
 
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 @app.route('/')
 def home():
@@ -65,48 +58,6 @@ def home():
 def go_home():
     # هنا نستخدم اسم الدالة home، وليس اسم الملف
     return redirect(url_for('home'))
-
-
-@app.route('/admin/users')
-def admin_users():
-    db = get_db()
-    cursor = db.cursor()
-
-    cursor.execute("SELECT id, username, email, role FROM user")
-    user = cursor.fetchall()
-
-    return render_template("admin_user.html", users=user)
-
-@app.context_processor
-def inject_user():
-    # هنا ممكن تجيبي المستخدم من session أو من قاعدة البيانات
-    # الآن مؤقتًا نستخدم user_data
-    return dict(user=user_data)
-
-
-@app.route('/admin/user/<int:id>')
-def view_user(id):
-    db = get_db()
-    cursor = db.cursor()
-
-    cursor.execute("SELECT id, username, email, role FROM user WHERE id=?", (id,))
-    user = cursor.fetchone()
-
-    return render_template("view_user.html", user=user)
-
-
-@app.route('/admin/delete_user/<int:id>', methods=['DELETE'])
-def delete_user(id):
-    db = get_db()
-    cursor = db.cursor()
-
-    cursor.execute("DELETE FROM user WHERE id=?", (id,))
-    db.commit()
-
-    return '', 204
-
-
-
 
 
 
@@ -150,58 +101,61 @@ def reset_password(token):
 
 @app.route('/profile')
 def profile():
-    return render_template('profile.html', user=user_data)
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect(url_for("login.login"))
+
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM user WHERE id = ?", (user_id,))
+    user = cursor.fetchone()  # يفترض أنك تستخدم row_factory = sqlite3.Row
+    if not user:
+        flash("المستخدم غير موجود")
+        return redirect(url_for("login.login"))
+
+    return render_template("profile.html", user=user)
 
 @app.route('/update_profile', methods=['POST'])
 def update_profile():
-    global user_data
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect(url_for("login.login"))
+
+    db = get_db()
+    cursor = db.cursor()
 
     username = request.form.get('username')
     file = request.files.get('avatar')
-
-    if username:
-        user_data['username'] = username
+    avatar_filename = None
 
     if file and allowed_file(file.filename):
-        try:
-            # تأكد من وجود المجلد
-            upload_folder = Path(app.config['UPLOAD_FOLDER'])
-            upload_folder.mkdir(parents=True, exist_ok=True)
-            
-            # حفظ الملف
-            filename = secure_filename(file.filename)
-            # إضافة علامة زمنية لتجنب تكرار الأسماء
-            from datetime import datetime
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            name_part = Path(filename).stem
-            ext = Path(filename).suffix
-            unique_filename = f"{name_part}_{timestamp}{ext}"
-            
-            filepath = upload_folder / unique_filename
-            file.save(filepath)
-            
-            # حذف الصورة القديمة إذا لم تكن default.png
-            if user_data['avatar'] != 'default.png':
-                old_file = upload_folder / user_data['avatar']
-                if old_file.exists():
-                    old_file.unlink()
-            
-            user_data['avatar'] = unique_filename
-            flash("تم تحديث الصورة الشخصية بنجاح!", "success")
-            
-        except Exception as e:
-            print(f" خطأ في حفظ الصورة: {e}")
-            flash("حدث خطأ أثناء حفظ الصورة", "error")
+        filename = secure_filename(file.filename)
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        name_part = Path(filename).stem
+        ext = Path(filename).suffix
+        avatar_filename = f"{name_part}_{timestamp}{ext}"
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], avatar_filename))
 
-    elif file and not allowed_file(file.filename):
-        flash("نوع الملف غير مسموح به. المسموح: PNG, JPG, JPEG, GIF", "error")
+        # حذف الصورة القديمة إذا لم تكن default
+        cursor.execute("SELECT avatar FROM user WHERE id = ?", (user_id,))
+        old_avatar = cursor.fetchone()["avatar"]
+        if old_avatar != 'default.png':
+            old_path = Path(app.config['UPLOAD_FOLDER']) / old_avatar
+            if old_path.exists():
+                old_path.unlink()
 
-    if username:
-        flash("تم تحديث اسم المستخدم بنجاح!", "success")
+    # تحديث قاعدة البيانات
+    if username and avatar_filename:
+        cursor.execute("UPDATE user SET username = ?, avatar = ? WHERE id = ?", (username, avatar_filename, user_id))
+    elif username:
+        cursor.execute("UPDATE user SET username = ? WHERE id = ?", (username, user_id))
+    elif avatar_filename:
+        cursor.execute("UPDATE user SET avatar = ? WHERE id = ?", (avatar_filename, user_id))
 
+    db.commit()
+    flash("تم تحديث البروفايل بنجاح!", "success")
     return redirect(url_for('profile'))
-
-
 
 
 
@@ -213,7 +167,6 @@ def search():
 @app.route('/reactants')
 def reactants():
     return render_template('reactants/reactants.html')
-
 
 
 
@@ -235,6 +188,3 @@ if __name__ == "__main__":
         create_tables()  # إنشاء الجداول إذا لم تكن موجودة
 
     app.run(debug=True, host='0.0.0.0', port=5000)
-
-
-
