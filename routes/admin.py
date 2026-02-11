@@ -59,7 +59,7 @@ def dashboard():
     db.close()
 
     return render_template(
-        "admin/admon-bord.html",
+        "admin/dashboard.html",
         user=user,
         users_count=users_count,
         ongoing_reactions=ongoing_reactions,

@@ -7,10 +7,11 @@ DB_PATH = os.path.join(BASE_DIR, "chemical.db")
 
 def get_db():
     if "db" not in g:
-        conn = sqlite3.connect(DB_PATH)
-        conn.row_factory = sqlite3.Row  # هذا يسمح بالوصول للأعمدة كـ dict
-    return conn
+        g.db = sqlite3.connect(DB_PATH)
+        g.db.row_factory = sqlite3.Row  # مهم جدًا ليعمل user["password"]
+    return g.db
 
-
-def close_db(conn):
-        conn.close()
+def close_db(e=None):
+    db = g.pop("db", None)
+    if db is not None:
+        db.close()
