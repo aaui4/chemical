@@ -1,0 +1,313 @@
+{% extends "base.html" %}
+
+{% block title %}Simulation History{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/simulation.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="overlay">
+    <div class="history-container">
+        <h1>
+            SIMULATION HISTORY
+            <span class="records-badge">{{ history|length }} Records</span>
+        </h1>
+        
+        <!-- إحصائيات سريعة -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ history|length }}</div>
+                <div class="stat-label">Total Simulations</div>
+            </div>
+            
+            <div class="stat-card">
+                {% set colors = [] %}
+                {% for sim in history %}
+                    {% if sim[4] not in colors %}
+                        {% if colors.append(sim[4]) %}{% endif %}
+                    {% endif %}
+                {% endfor %}
+                <div class="stat-value">{{ colors|length }}</div>
+                <div class="stat-label">Different Colors</div>
+            </div>
+            
+            <div class="stat-card">
+                {% set types = [] %}
+                {% for sim in history %}
+                    {% if sim[6] not in types %}
+                        {% if types.append(sim[6]) %}{% endif %}
+                    {% endif %}
+                {% endfor %}
+                <div class="stat-value">{{ types|length }}</div>
+                <div class="stat-label">Reaction Types</div>
+            </div>
+            
+            <div class="stat-card">
+                {% set total_temp = 0.0 %}
+                {% for sim in history %}
+                    {% set total_temp = total_temp + sim[2]|float %}
+                {% endfor %}
+                {% if history|length > 0 %}
+                    {% set avg_temp = (total_temp / history|length)|round(1) %}
+                {% else %}
+                    {% set avg_temp = 0 %}
+                {% endif %}
+                <div class="stat-value">{{ avg_temp }}°C</div>
+                <div class="stat-label">Avg Temperature</div>
+            </div>
+        </div>
+        
+        <!-- فلتر البحث -->
+        <div class="filter-section">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search by equation, color, type..." onkeyup="filterTable()">
+                <select class="filter-select" id="typeFilter" onchange="filterTable()">
+                    <option value="all">All Types</option>
+                    <option value="neutralization">Neutralization</option>
+                    <option value="precipitation">Precipitation</option>
+                    <option value="complex">Complex</option>
+                    <option value="acid-base">Acid-Base</option>
+                    <option value="gas">Gas</option>
+                    <option value="combustion">Combustion</option>
+                    <option value="indicator">Indicator</option>
+                </select>
+            </div>
+            
+            <div class="export-buttons">
+                <button class="export-btn" onclick="exportToCSV()">CSV</button>
+                <button class="export-btn" onclick="exportToJSON()">JSON</button>
+                <button class="export-btn" onclick="printTable()">Print</button>
+            </div>
+            
+            <button class="clear-filter" onclick="clearFilters()">Clear Filters</button>
+        </div>
+        
+        <!-- جدول التاريخ -->
+        <div class="table-container">
+            <table id="historyTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date & Time</th>
+                        <th>Equation</th>
+                        <th>Temperature</th>
+                        <th>Final Color</th>
+                        <th>Type</th>
+                        <th>Products</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if history %}
+                        {% for sim in history %}
+                        <tr>
+                            <td><strong>#{{ sim[0] }}</strong></td>
+                            <td>{{ sim[1] }}</td>
+                            <td>{{ sim[7] or sim[3] }}</td>
+                            <td>{{ sim[2] }}°C</td>
+                            <td>
+                                <div class="color-cell">
+                                    {{ sim[4] }}
+                                    <!-- تم تعديل الخطأ هنا: إزالة علامات الاقتباس -->
+                                    <span class="color-dot" style="background-color: '{{ sim[4] }}';"></span>
+                                </div>
+                            </td>
+                            <td>{{ sim[6] }}</td>
+                            <td>
+                                {% set type_lower = sim[6]|lower %}
+                                {% if 'gas' in type_lower %}
+                                    <span class="badge badge-gas">Gas</span>
+                                {% elif 'precipitation' in type_lower or 'precipitate' in type_lower %}
+                                    <span class="badge badge-precipitate">Precipitate</span>
+                                {% else %}
+                                    <span class="badge badge-solution">Solution</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button class="action-btn view-btn" onclick="viewSimulation('{{ sim[0] }}')">View</button>
+                                <button class="action-btn delete-btn" onclick="deleteSimulation('{{ sim[0] }}')">Delete</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="no-data">
+                                <div>No simulations found</div>
+                                <div>Start your first experiment!</div>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- روابط التنقل -->
+        <div class="nav-links">
+            <a href="{{ url_for('simulation.simulation_page') }}" class="btn">New Simulation</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function filterTable() {
+        const input = document.getElementById('searchInput');
+        const typeFilter = document.getElementById('typeFilter');
+        const filter = input.value.toLowerCase();
+        const type = typeFilter.value.toLowerCase();
+        const table = document.getElementById('historyTable');
+        const tr = table.getElementsByTagName('tr');
+        
+        // للتأكد من عمل البحث (يمكنك مشاهدتها في Console)
+        console.log("🔍 Searching for:", filter);
+        console.log("📋 Filter type:", type);
+        
+        let visibleCount = 0;
+        
+        for (let i = 1; i < tr.length; i++) {
+            // نتأكد أن هذا الصف ليس صف "No data"
+            if (tr[i].classList.contains('no-data')) continue;
+            
+            const tdEquation = tr[i].getElementsByTagName('td')[2];
+            const tdColor = tr[i].getElementsByTagName('td')[4];
+            const tdType = tr[i].getElementsByTagName('td')[5];
+            
+            if (tdEquation && tdColor && tdType) {
+                const equationText = tdEquation.textContent || tdEquation.innerText;
+                const colorText = tdColor.textContent || tdColor.innerText;
+                const typeText = tdType.textContent || tdType.innerText;
+                
+                const matchesSearch = equationText.toLowerCase().includes(filter) || 
+                                     colorText.toLowerCase().includes(filter);
+                const matchesType = type === 'all' || typeText.toLowerCase().includes(type);
+                
+                if (matchesSearch && matchesType) {
+                    tr[i].style.display = '';
+                    visibleCount++;
+                } else {
+                    tr[i].style.display = 'none';
+                }
+            }
+        }
+        
+        console.log(" Visible rows:", visibleCount);
+    }
+    
+    function clearFilters() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('typeFilter').value = 'all';
+        filterTable();
+        console.log(" Filters cleared");
+    }
+    
+    function viewSimulation(id) {
+        window.location.href = `/simulation/view/${id}`;
+    }
+    
+    function deleteSimulation(id) {
+        if (confirm('Are you sure you want to delete this simulation?')) {
+            fetch(`/simulation/delete/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Error deleting simulation');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error deleting simulation');
+            });
+        }
+    }
+    
+    function exportToCSV() {
+        const table = document.getElementById('historyTable');
+        const rows = table.querySelectorAll('tr');
+        let csv = [];
+        
+        for (let i = 0; i < rows.length; i++) {
+            const row = [], cols = rows[i].querySelectorAll('td, th');
+            
+            for (let j = 0; j < cols.length - 1; j++) {
+                let data = cols[j].innerText.replace(/,/g, ';');
+                row.push('"' + data + '"');
+            }
+            
+            csv.push(row.join(','));
+        }
+        
+        const csvContent = csv.join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'simulation_history.csv';
+        a.click();
+    }
+    
+    function exportToJSON() {
+        const table = document.getElementById('historyTable');
+        const rows = table.querySelectorAll('tbody tr');
+        const data = [];
+        
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].querySelectorAll('td');
+            if (cells.length > 0 && !cells[0].classList.contains('no-data')) {
+                data.push({
+                    id: cells[0].innerText.replace('#', ''),
+                    date: cells[1].innerText,
+                    equation: cells[2].innerText,
+                    temperature: cells[3].innerText,
+                    color: cells[4].innerText.trim(),
+                    type: cells[5].innerText,
+                    products: cells[6].innerText
+                });
+            }
+        }
+        
+        const jsonContent = JSON.stringify(data, null, 2);
+        const blob = new Blob([jsonContent], { type: 'application/json' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'simulation_history.json';
+        a.click();
+    }
+    
+    function printTable() {
+        const table = document.getElementById('historyTable');
+        const newWindow = window.open('', '_blank');
+        newWindow.document.write(`
+            <html>
+                <head>
+                    <title>Simulation History</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        table { border-collapse: collapse; width: 100%; }
+                        th { background: #34495e; color: white; padding: 10px; }
+                        td { padding: 8px; border-bottom: 1px solid #ddd; }
+                        .color-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-left: 5px; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Simulation History</h1>
+                    ${table.outerHTML}
+                </body>
+            </html>
+        `);
+        newWindow.document.close();
+        newWindow.print();
+    }
+
+    // تشغيل البحث عند تحميل الصفحة (للتأكد)
+    window.onload = function() {
+        console.log(" History page loaded, search is ready");
+    };
+</script>
+{% endblock %}

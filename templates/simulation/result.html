@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block title %}Simulation Result{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/simulation.css') }}">
+
+{% endblock %}
+
+{% block content %}
+<div class="overlay">
+    <div class="result-container">
+        <h1> CHEMICAL SIMULATOR</h1>
+        
+        <!-- معادلة التفاعل -->
+        <div class="equation-card">
+            <span class="equation-text">{{ equation }}</span>
+            {% if temperature %}
+            <span class="temp-badge">
+                🌡️ {{ temperature }}°C
+            </span>
+            {% endif %}
+        </div>
+        
+        <!-- مشهد المختبر -->
+        <div class="lab-container">
+            <div class="lab-scene">
+                <!-- سطح المختبر -->
+                <div class="lab-bench"></div>
+                
+                <!-- حامل الدورق -->
+                <div class="stand-base"></div>
+                <div class="stand"></div>
+                
+                <!-- الدورق الأيسر -->
+                <div class="beaker-left" id="beakerLeft">
+                    <div class="beaker-label">{{ reactant1_name }}</div>
+                    <div class="beaker-glass">
+                        <div class="liquid" id="liquidLeft" 
+                             style="height: '{{ quantity1 * 12 }}px'; background-color: '{{ reactant1_color }}';"></div>
+                    </div>
+                    <div class="quantity-badge">{{ quantity1 }} mol</div>
+                </div>
+                
+                <!-- تيار السائل -->
+                <div class="liquid-stream" id="liquidStream" 
+                     style="background: '{{ reactant1_color }}'; display: none;"></div>
+                
+                <!-- الدورق الأيمن -->
+                <div class="beaker-right" id="beakerRight">
+                    <div class="beaker-label">{{ reactant2_name }}</div>
+                    <div class="beaker-glass">
+                        <div class="liquid" id="liquidRight" 
+                             style="height: '{{ quantity2 * 12 }}px'; background-color: '{{ reactant2_color }}';"></div>
+                        
+                        {% if gas_produced == 1 %}
+                        <div class="bubble" style="left: 30%; width: 5px; height: 5px;"></div>
+                        <div class="bubble" style="left: 50%; width: 7px; height: 7px; animation-delay: 0.3s;"></div>
+                        <div class="bubble" style="left: 70%; width: 6px; height: 6px; animation-delay: 0.6s;"></div>
+                        {% endif %}
+                        
+                        {% if precipitate == 1 %}
+                        <div class="precipitate-layer" style="background-color: '{{ result_color }}';"></div>
+                        {% endif %}
+                    </div>
+                    <div class="quantity-badge">{{ quantity2 }} mol</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- رسالة درجة الحرارة المثالية -->
+        {% if temp_message %}
+        <div class="temp-message">
+            {{ temp_message }}
+        </div>
+        {% endif %}
+        
+        <!-- أزرار التحكم -->
+        <div class="control-panel">
+            <button class="btn" onclick="startPouring()" id="startBtn">
+                 Start Reaction
+            </button>
+            <button class="btn btn-secondary" onclick="resetSimulation()" id="resetBtn">
+                 Reset
+            </button>
+         </div>
+        
+        <!-- نتائج التفاعل -->
+        <div class="results-grid">
+            <div class="result-item">
+                <div class="result-label">FINAL COLOR</div>
+                <div class="result-value">
+                    {{ result_color }}
+                    <span class="color-dot" style="background-color: '{{ result_color }}';"></span>
+                </div>
+            </div>
+            
+            <div class="result-item">
+                <div class="result-label">REACTION TYPE</div>
+                <div class="result-value">{{ reaction_type }}</div>
+            </div>
+            
+            <div class="result-item">
+                <div class="result-label">TEMPERATURE</div>
+                <div class="result-value">{{ temperature }}°C</div>
+            </div>
+            
+            <div class="result-item">
+                <div class="result-label">PRODUCTS</div>
+                <div class="result-value">
+                    {% if gas_produced == 1 %}💨 Gas{% endif %}
+                    {% if precipitate == 1 %}⚪ Precipitate{% endif %}
+                    {% if gas_produced == 0 and precipitate == 0 %}💧 Solution{% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- وصف التفاعل -->
+        <div class="description-box">
+            📝 {{ description }}
+        </div>
+        
+        <!-- روابط التنقل -->
+        <div class="nav-links">
+            <a href="{{ url_for('simulation.simulation_page') }}" class="btn">
+                 New Simulation
+            </a>
+            <a href="{{ url_for('simulation.simulation_history') }}" class="btn btn-secondary">
+                 History
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    let isPouring = false;
+    let animationEnabled = true;
+    
+    function startPouring() {
+        if (isPouring || !animationEnabled) return;
+        
+        isPouring = true;
+        const beakerLeft = document.getElementById('beakerLeft');
+        const liquidLeft = document.getElementById('liquidLeft');
+        const liquidRight = document.getElementById('liquidRight');
+        const liquidStream = document.getElementById('liquidStream');
+        const startBtn = document.getElementById('startBtn');
+        
+        startBtn.innerHTML = ' Pouring...';
+        
+        const leftRect = beakerLeft.getBoundingClientRect();
+        const sceneRect = document.querySelector('.lab-scene').getBoundingClientRect();
+        
+        liquidStream.style.display = 'block';
+        liquidStream.style.left = (leftRect.right - sceneRect.left - 8) + 'px';
+        liquidStream.style.top = (leftRect.top - sceneRect.top + 60) + 'px';
+        liquidStream.style.height = '0px';
+        
+        let streamHeight = 0;
+        const streamInterval = setInterval(() => {
+            if (streamHeight < 80) {
+                streamHeight += 5;
+                liquidStream.style.height = streamHeight + 'px';
+            }
+        }, 50);
+        
+        setTimeout(() => {
+            const finalColor = "{{ result_color }}";
+            
+            let mixStep = 0;
+            let mixInterval = setInterval(() => {
+                mixStep += 0.1;
+                if (mixStep <= 1) {
+                    liquidRight.style.backgroundColor = finalColor;
+                    
+                    const newHeight = (parseFloat('{{ quantity2 }}') + parseFloat('{{ quantity1 }}') * mixStep) * 12;
+                    liquidRight.style.height = Math.min(newHeight, 150) + 'px';
+                } else {
+                    clearInterval(mixInterval);
+                    liquidLeft.style.height = '0px';
+                }
+            }, 100);
+        }, 1300);
+        
+        setTimeout(() => {
+            clearInterval(streamInterval);
+            liquidStream.style.display = 'none';
+            beakerLeft.style.transform = 'translateY(0)';
+            isPouring = false;
+            startBtn.innerHTML = '🔬 Start Reaction';
+            
+            if ( gas_produced  == 1) {
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        const bubble = document.createElement('div');
+                        bubble.className = 'bubble';
+                        bubble.style.left = Math.random() * 70 + 15 + '%';
+                        bubble.style.width = Math.random() * 6 + 3 + 'px';
+                        bubble.style.height = bubble.style.width;
+                        document.querySelector('#beakerRight .beaker-glass').appendChild(bubble);
+                        setTimeout(() => bubble.remove(), 1500);
+                    }, i * 300);
+                }
+            }
+        }, 2400);
+    }
+    
+    function resetSimulation() {
+        document.getElementById('liquidLeft').style.height = "{{ quantity1 * 12 }}px";
+        document.getElementById('liquidLeft').style.backgroundColor = "{{ reactant1_color }}";
+        document.getElementById('liquidRight').style.height = "{{ quantity2 * 12 }}px";
+        document.getElementById('liquidRight').style.backgroundColor = "{{ reactant2_color }}";
+        document.getElementById('liquidStream').style.display = 'none';
+        document.getElementById('beakerLeft').style.transform = 'translateY(0)';
+        document.getElementById('startBtn').innerHTML = '🔬 Start Reaction';
+        isPouring = false;
+    }
+    
+    function toggleAnimation() {
+        animationEnabled = !animationEnabled;
+        const btn = document.getElementById('toggleBtn');
+        btn.innerHTML = animationEnabled ? '⚡ Disable Animation' : '🔌 Enable Animation';
+    }
+    
+    window.onload = function() {
+        setTimeout(() => {
+            if (animationEnabled) startPouring();
+        }, 800);
+    };
+</script>
+{% endblock %}

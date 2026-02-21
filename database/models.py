@@ -40,7 +40,9 @@ CREATE TABLE IF NOT EXISTS logs (
         name TEXT NOT NULL,
         symbol TEXT NOT NULL,
         atomicNumber INTEGER,
-        atomicMass REAL
+        atomicMass REAL,
+        default_color TEXT,
+        state TEXT CHECK(state IN ('solid','liquid','gas'))
     )
     """)
 
@@ -57,7 +59,7 @@ CREATE TABLE IF NOT EXISTS logs (
 
     # ===== simulations =====
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS simulations (
+    CREATE TABLE IF NOT EXISTS simulation (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER NOT NULL,
         reaction_id INTEGER NOT NULL,
@@ -76,6 +78,7 @@ CREATE TABLE IF NOT EXISTS logs (
         products TEXT,
         energyReleased REAL,
         state TEXT,
+        color TEXT,
         FOREIGN KEY (simulation_id) REFERENCES simulations(id)
     )
     """)
@@ -85,6 +88,7 @@ CREATE TABLE IF NOT EXISTS logs (
     CREATE TABLE IF NOT EXISTS reaction_elements (
         reaction_id INTEGER NOT NULL,
         element_id INTEGER NOT NULL,
+        quantity REAL,
         PRIMARY KEY (reaction_id, element_id),
         FOREIGN KEY (reaction_id) REFERENCES chemical_reactions(id),
         FOREIGN KEY (element_id) REFERENCES chemical_elements(id)

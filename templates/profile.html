@@ -59,8 +59,9 @@
       </div>
 
       <div class="actions">
-        <a href="{{ url_for('reactants') }}" class="btn primary" >Start New Simulation</a>
+        <a href="{{ url_for('simulation.simulation_page') }}" class="btn primary" >Start New Simulation</a>
         <a href="{{ url_for('search') }}" class="btn secondary" >Browse Reactions</a>
+        <a href="{{ url_for('simulation.simulation_history') }}" class="btn primary" >My History</a>
       </div>
     </div>
   </body>

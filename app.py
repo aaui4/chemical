@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, redirect, url_for, session
+from flask import Blueprint, Flask, render_template, request, flash, redirect, url_for, session
 from flask_mail import Mail, Message
 from werkzeug.utils import secure_filename
 import secrets
@@ -12,11 +12,8 @@ from routes.register import register_bp
 from routes.check_email import check_email_bp
 from routes.check_username import check_username_bp
 from routes.admin import admin_bp
+from routes.simulation import simulation_bp
 from database.db import get_db, close_db
-
-
-
-
 
 
 
@@ -30,10 +27,7 @@ app.register_blueprint(register_bp)
 app.register_blueprint(check_email_bp)
 app.register_blueprint(check_username_bp)
 app.register_blueprint(admin_bp)
-
-
-
-
+app.register_blueprint(simulation_bp)
 
 
 mail = Mail(app)
@@ -58,9 +52,6 @@ def home():
 def go_home():
     # هنا نستخدم اسم الدالة home، وليس اسم الملف
     return redirect(url_for('home'))
-
-
-
 
 @app.route('/forgot', methods=["GET", "POST"])
 def forgot():
@@ -164,10 +155,10 @@ def search():
     return render_template('search/search.html')
 
 
-@app.route('/reactants')
-def reactants():
-    return render_template('reactants/reactants.html')
-
+simulation = Blueprint('simulation', __name__, template_folder='templates')
+@simulation.route("/simulation")
+def simulation_page():
+     return render_template('simulation/simulation.html')
 
 
 @app.route('/settings')
