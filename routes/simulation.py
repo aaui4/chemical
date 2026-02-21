@@ -120,7 +120,7 @@ def start_simulation():
         temp_message = f"ℹ️ Generic reaction at {temperature}°C"
         result_text = f"Generic reaction between {reactant1[1]} and {reactant2[1]}"
 
-    # حفظ المحاكاة في جدول simulations (مع result و temperature)
+    # حفظ المحاكاة في جدول simulation (مع result و temperature)
     cursor.execute("""
         INSERT INTO simulation (user_id, reaction_id, date, result, temperature)
         VALUES (?, ?, ?, ?, ?)
@@ -184,7 +184,7 @@ def view_simulation(simulation_id):
             rr.products, rr.state, rr.color,
             r.gas_produced, r.precipitate,
             r.equation as reaction_equation
-        FROM simulations s
+        FROM simulation s
         JOIN reaction_results rr ON s.id = rr.simulation_id
         LEFT JOIN chemical_reactions r ON s.reaction_id = r.id
         WHERE s.id = ? AND s.user_id = ?
@@ -234,7 +234,7 @@ def get_reaction_api(simulation_id):
     cursor.execute("""
         SELECT s.id, s.user_id, s.reaction_id, s.date, s.result, s.temperature,
                rr.products, rr.state, rr.color
-        FROM simulations s
+        FROM simulation s
         JOIN reaction_results rr ON s.id = rr.simulation_id
         WHERE s.id = ?
     """, (simulation_id,))
@@ -270,7 +270,7 @@ def simulation_history():
         SELECT s.id, s.date, s.result, s.temperature,
                rr.products, rr.color, rr.state,
                r.equation as reaction_equation
-        FROM simulations s
+        FROM simulation s
         JOIN reaction_results rr ON s.id = rr.simulation_id
         LEFT JOIN chemical_reactions r ON s.reaction_id = r.id
         WHERE s.user_id = ?
@@ -295,7 +295,7 @@ def delete_simulation(simulation_id):
     cursor.execute("DELETE FROM reaction_results WHERE simulation_id = ?", (simulation_id,))
     
     # ثم حذف من simulations
-    cursor.execute("DELETE FROM simulations WHERE id = ? AND user_id = ?", 
+    cursor.execute("DELETE FROM simulation WHERE id = ? AND user_id = ?", 
                   (simulation_id, session["user_id"]))
     
     db.commit()

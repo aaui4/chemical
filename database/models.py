@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS logs (
     )
     """)
 
-    # ===== simulations =====
+    # ===== simulation =====
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS simulation (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS logs (
         energyReleased REAL,
         state TEXT,
         color TEXT,
-        FOREIGN KEY (simulation_id) REFERENCES simulations(id)
+        FOREIGN KEY (simulation_id) REFERENCES simulation(id)
     )
     """)
 

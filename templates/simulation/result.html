@@ -216,12 +216,7 @@
         isPouring = false;
     }
     
-    function toggleAnimation() {
-        animationEnabled = !animationEnabled;
-        const btn = document.getElementById('toggleBtn');
-        btn.innerHTML = animationEnabled ? '⚡ Disable Animation' : '🔌 Enable Animation';
-    }
-    
+
     window.onload = function() {
         setTimeout(() => {
             if (animationEnabled) startPouring();
