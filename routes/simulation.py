@@ -122,7 +122,7 @@ def start_simulation():
 
     # حفظ المحاكاة في جدول simulations (مع result و temperature)
     cursor.execute("""
-        INSERT INTO simulations (user_id, reaction_id, date, result, temperature)
+        INSERT INTO simulation (user_id, reaction_id, date, result, temperature)
         VALUES (?, ?, ?, ?, ?)
     """, (
         session["user_id"], 
