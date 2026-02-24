@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, sessio
 from database.db import get_db
 from datetime import datetime
 import random
+from flask import flash
 
 simulation_bp = Blueprint("simulation", __name__, url_prefix="/simulation")
 
@@ -45,6 +46,11 @@ def start_simulation():
     # استلام البيانات من الفورم
     reactant1_id = request.form["reactant1"]
     reactant2_id = request.form["reactant2"]
+    # منع اختيار نفس المادة مرتين
+    if reactant1_id == reactant2_id:
+        flash("⚠️ You cannot select the same reactant twice.")
+        return redirect(url_for("simulation.simulation_page"))
+
     quantity1 = float(request.form.get("quantity1", 0))
     quantity2 = float(request.form.get("quantity2", 0))
     temperature = float(request.form.get("temperature", 25))
@@ -301,3 +307,11 @@ def delete_simulation(simulation_id):
     db.commit()
     
     return redirect(url_for("simulation.simulation_history"))
+
+@simulation_bp.route("/search")
+def reactions_list():
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT id, equation, type, result_color FROM chemical_reactions")
+    reactions = cursor.fetchall()
+    return render_template("search/search.html", reactions=reactions)

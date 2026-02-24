@@ -53,8 +53,7 @@ body {
   gap: 12px;
 }
 
-select,
-input {
+select, input {
   padding: 12px;
   border-radius: 30px;
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -62,6 +61,11 @@ input {
   outline: none;
   color: #fff;
 }
+/* فقط نص الخيارات الفعلية في القائمة المنسدلة بالأسود */
+select option {
+    color: #000; /* النص داخل القائمة عند فتحها */
+}
+
 
 input::placeholder {
   color: rgba(249, 244, 244, 0.85);
@@ -169,13 +173,12 @@ input::placeholder {
     }
     
     h1 {
-        color: #f0f0f3;
+        color: #fff;
         text-align: center;
         margin-bottom: 20px;
         font-size: 26px;
         font-weight: 600;
         letter-spacing: 1px;
-        text-shadow: 0 2px 5px rgba(255,255,255,0.5);
     }
     
     /* معادلة التفاعل */
@@ -538,39 +541,7 @@ input::placeholder {
         padding: 10px 25px;
     }
     
-    @media (max-width: 768px) {
-        .results-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-        
-        .beaker-left {
-            left: 15%;
-            width: 80px;
-            height: 105px;
-        }
-        
-        .beaker-right {
-            right: 15%;
-            width: 95px;
-            height: 125px;
-        }
-        
-        .stand {
-            width: 110px;
-        }
-        
-        .stand-base {
-            width: 170px;
-        }
-        
-        .equation-text {
-            font-size: 1.1em;
-        }
-        
-        .overlay {
-            top: 70px;
-        }
-    }
+
 
 
     /* تنسيقات ملف history.html */
@@ -623,7 +594,6 @@ body {
 }
 
 h1 {
-    color: #2c3e50;
     text-align: center;
     margin-bottom: 25px;
     font-size: 28px;
@@ -943,32 +913,11 @@ tbody tr:hover {
     background: #7f8c8d;
 }
 
-/* للشاشات الصغيرة */
-@media (max-width: 768px) {
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .filter-section {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .search-box {
-        flex-direction: column;
-    }
-    
-    .export-buttons {
-        margin-left: 0;
-        justify-content: center;
-    }
-    
-    .overlay {
-        top: 70px;
-    }
-    
-    th, td {
-        font-size: 12px;
-        padding: 10px 5px;
-    }
+.alert {
+    background-color: #ffe5e5;
+    color: #b30000;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-weight: 500;
 }

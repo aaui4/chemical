@@ -61,6 +61,27 @@ header .user-menu i {
   width: auto; /* يحافظ على نسبة الصورة */
   display: block;
 }
+/* إظهار Login/Register بنفس تنسيق الهيدر */
+.auth-links a {
+  color: #fff;
+  font-size: 1.6rem;
+}
+
+.auth-links a:hover {
+  color: #74ace4;
+}
+
+/* إظهار dropdown فقط عند hover */
+.user-menu:hover .user-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* تأكد أن الأيقونة بيضاء */
+.user-icon {
+  color: #fff !important;
+}
 
 /* ================= USER MENU ================= */
 .user-menu {

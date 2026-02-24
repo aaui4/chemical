@@ -13,25 +13,15 @@ def create_tables():
     # ===== user =====
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS user (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL,
-        email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL,
-        role TEXT CHECK(role IN ('admin', 'user')) NOT NULL
-    )
-    """)
-    columns = cursor.execute("PRAGMA table_info(user)").fetchall()
-    if not any(c[1] == "avatar" for c in columns):
-        cursor.execute("ALTER TABLE user ADD COLUMN avatar TEXT DEFAULT 'default.png'")
-        print("تم إضافة العمود avatar")
-
-    cursor.execute("""
-CREATE TABLE IF NOT EXISTS logs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    message TEXT NOT NULL,
+    username TEXT UNIQUE NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    role TEXT CHECK(role IN ('admin', 'user')) NOT NULL,
+    avatar TEXT DEFAULT 'default.png',
     created_at TEXT DEFAULT (datetime('now','localtime'))
 )
-""")
+    """)
 
     # ===== chemical_elements =====
     cursor.execute("""

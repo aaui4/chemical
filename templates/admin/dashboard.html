@@ -1,97 +1,102 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <title>Chemical Admin Panel</title>
 
+    <!-- CSS Stylesheets -->
     <link rel="stylesheet" href="/static/css/admin.css" />
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
-  </head>
-  
-  <body>
+</head>
+
+<body>
     <div class="container">
-      {% include 'sidebar.html' %}
-      <main class="main">
-        <div class="topbar">
-          <h3>Admin Control Panel</h3>
-          <div class="profile">
-    <i class="bx bxs-bell"></i>
-    <img 
-        src="{{ url_for('static', filename='uploads/' + (user.avatar if user.avatar else 'img/default.png')) }}" 
-        alt="Profile" 
-    />
-</div>
 
-        </div>
+        <!-- Sidebar -->
+        {% include 'sidebar.html' %}
 
-        <div class="cards">
-    <div class="card">
-        <h4>Users</h4>
-        <p>{{ users_count }}</p>
+        <!-- Main Content -->
+        <main class="main">
+
+            <!-- Topbar / Header -->
+            <div class="topbar">
+                <h3>Admin Control Panel</h3>
+                <div class="profile">
+                    <img src="{{ url_for('static', filename='uploads/' + (user.avatar if user.avatar else 'img/default.png')) }}" alt="Profile" />
+                </div>
+            </div>
+
+            <!-- Statistic Cards -->
+            <div class="cards">
+                <div class="card">
+                    <h4>Users</h4>
+                    <p>{{ users_count }}</p>
+                </div>
+                <div class="card">
+                    <h4>Ongoing Reactions</h4>
+                    <p>{{ ongoing_reactions }}</p>
+                </div>
+                <div class="card">
+                    <h4>Completed Reactions</h4>
+                    <p>{{ completed_reactions }}</p>
+                </div>
+            </div>
+
+            <!-- Chart Section -->
+            <div class="chart-box">
+                <h4>Experiment Activity</h4>
+                <div class="fake-chart"></div>
+            </div>
+
+            <!-- Recent Experiments Table -->
+            <div class="table-box">
+                <h4>Recent Experiments</h4>
+                <table>
+                    <tr>
+                        <th>Equation</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Energy</th>
+                    </tr>
+                    {% for r in reaction_results %}
+                    <tr>
+                        <td>{{ r.equation }}</td>
+                        <td class="{{ 'ongoing' if r.state == 'Ongoing' else 'done' }}">
+                            {{ r.state }}
+                        </td>
+                        <td>{{ r.date }}</td>
+                        <td>{{ r.energyReleased }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+        </main>
+
+        <!-- Right Panel / Sidebar -->
+        <aside class="right">
+
+            <!-- Active Reaction Card -->
+            <div class="reaction">
+                <h4>Active Reaction</h4>
+                <img src="https://images.unsplash.com/photo-1581091012184-5c0a4d48a05a?auto=format&fit=crop&w=400&q=80" />
+                <div class="buttons">
+                    <button class="start">Start Reaction</button>
+                    <button class="stop">Stop Reaction</button>
+                </div>
+            </div>
+
+            <!-- System Logs -->
+            <div class="logs">
+                <h4>System Logs</h4>
+                <ul>
+                    {% for log in logs %}
+                        <li>{{ log.message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </aside>
     </div>
-    <div class="card">
-        <h4>Ongoing Reactions</h4>
-        <p>{{ ongoing_reactions }}</p>
-    </div>
-    <div class="card">
-        <h4>Completed Reactions</h4>
-        <p>{{ completed_reactions }}</p>
-    </div>
-</div>
-
-
-        <div class="chart-box">
-          <h4>Experiment Activity</h4>
-          <div class="fake-chart"></div>
-        </div>
-
-        <div class="table-box">
-          <h4>Recent Experiments</h4>
-          <table>
-  <tr>
-    <th>Equation</th>
-    <th>Status</th>
-    <th>Date</th>
-    <th>Energy</th>
-  </tr>
-
-  {% for r in reaction_results %}
-  <tr>
-    <td>{{ r.equation }}</td>
-    <td class="{{ 'ongoing' if r.state == 'Ongoing' else 'done' }}">
-      {{ r.state }}
-    </td>
-    <td>{{ r.date }}</td>
-    <td>{{ r.energyReleased }}</td>
-  </tr>
-  {% endfor %}
-</table>
-
-        </div>
-      </main>
-
-      <aside class="right">
-        <div class="reaction">
-          <h4>Active Reaction</h4>
-          <img
-            src="https://images.unsplash.com/photo-1581091012184-5c0a4d48a05a?auto=format&fit=crop&w=400&q=80"
-          />
-          <div class="buttons">
-            <button class="start">Start Reaction</button>
-            <button class="stop">Stop Reaction</button>
-          </div>
-        </div>
-
-        <div class="logs">
-          <h4>System Logs</h4>
-          <ul>
-{% for log in logs %}
-    <li>{{ log.message }}</li>
-{% endfor %}
-</ul>
-
-        </div>
-      </aside>
-    </div>
-  </body>
+</body>
 </html>

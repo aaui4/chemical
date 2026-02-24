@@ -11,26 +11,37 @@
       <a href="#about" class="text-white mx-2">About</a>
     </nav>
 
-    <div class="user-menu position-relative">
-      <i class="bx bx-user" style="color: black"></i>
-      <ul class="user-dropdown position-absolute bg-white p-2 rounded shadow">
-        {% if session.get('user') %}
-        <li><a href="#" class="dropdown-item">Profile</a></li>
-        <li><a href="#" class="dropdown-item">Settings</a></li>
-        <li><hr /></li>
-        <li>
-          <a href="{{ url_for('logout') }}" class="dropdown-item text-danger">Logout</a>
-        </li>
-        {% else %}
-        <li>
-          <a href="{{ url_for('login.login') }}" class="dropdown-item">Login</a>
-        </li>
-        <li>
-          <a href="{{ url_for('register.register') }}" class="dropdown-item">Register</a>
-        </li>
-        {% endif %}
-      </ul>
-    </div>
+<div class="user-menu position-relative">
+
+  <!-- الأيقونة تظهر دائماً -->
+  <i class="bx bx-user user-icon"></i>
+
+  <ul class="user-dropdown position-absolute bg-white p-2 rounded shadow">
+    {% if session.get('username') %}
+      <li>
+        <a href="{{ url_for('profile') }}" class="dropdown-item">Profile</a>
+      </li>
+      <li><hr /></li>
+      <li>
+        <a href="{{ url_for('logout') }}" class="dropdown-item text-danger">
+          Logout
+        </a>
+      </li>
+    {% else %}
+      <li>
+        <a href="{{ url_for('login.login') }}" class="dropdown-item">Login</a>
+      </li>
+      <li>
+        <a href="{{ url_for('register.register') }}" class="dropdown-item">
+          Register
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+
+</div>
+
+
 
   </div>
 </header>
