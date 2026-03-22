@@ -63,6 +63,14 @@ def start_simulation():
     cursor.execute("SELECT id, name, symbol, default_color FROM chemical_elements WHERE id = ?", (reactant2_id,))
     reactant2 = cursor.fetchone()
 
+
+    # ===== إضافة التفاعل الغازي المحدد =====
+    gas_produced = 0
+    precipitate = 0
+    result_color = 'transparent'
+    reaction_type = 'default'
+    description = REACTION_DESCRIPTIONS['default']
+
     if not reactant1 or not reactant2:
         return "Error: Reactants not found", 404
 
@@ -84,10 +92,7 @@ def start_simulation():
     # متغيرات التفاعل
     reaction_id = None
     equation = f"{reactant1[2]} + {reactant2[2]} → Product"
-    reaction_type = 'default'
-    result_color = 'transparent'
-    gas_produced = 0
-    precipitate = 0
+
     min_temp = 20
     opt_temp = 25
     pressure = 1.0
@@ -172,7 +177,7 @@ def start_simulation():
         'has_reaction': reaction is not None
     }
 
-    return render_template("simulation/result.html", **reaction_data)
+    return render_template("simulation/simulation.html", **reaction_data)
 
 @simulation_bp.route("/view/<int:simulation_id>", methods=["GET"])
 def view_simulation(simulation_id):
@@ -229,7 +234,7 @@ def view_simulation(simulation_id):
     if sim[3] and 'Precipitate' in sim[3]:
         reaction_data['precipitate'] = 1
     
-    return render_template("simulation/result.html", **reaction_data)
+    return render_template("simulation/simulation.html", **reaction_data)
 
 @simulation_bp.route("/api/reaction/<int:simulation_id>", methods=["GET"])
 def get_reaction_api(simulation_id):

@@ -217,7 +217,7 @@ header .user-menu i {
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.06);
+  background: white;
   padding: 30px;
   border-radius: 12px;
   transition: 0.3s;
