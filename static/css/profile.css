@@ -304,45 +304,7 @@ body {
   box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
 }
 
-/* Stats Container */
-.stats-container {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-}
 
-.stat-card {
-  flex: 1;
-  max-width: 250px;
-  padding: 25px;
-  text-align: center;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 15px;
-  transition: all 0.3s;
-}
-
-.stat-card:hover {
-  transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-.stat-number {
-  font-size: 48px;
-  font-weight: 700;
-  margin-bottom: 5px;
-}
-
-.stat-text {
-  font-size: 24px;
-  font-weight: 500;
-  padding: 5px 15px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.1);
-}
 
 /* Action Buttons */
 .actions {

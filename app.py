@@ -15,10 +15,13 @@ from routes.admin import admin_bp
 from routes.simulation import simulation_bp
 from database.db import get_db, close_db
 
-from routes.profile_bp import profile_bp
 
-# مستخدم وهمي للتجربة
-user_data = {"username": "Asma", "avatar": "default.png"}
+
+
+
+
+
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -28,7 +31,7 @@ app.register_blueprint(check_email_bp)
 app.register_blueprint(check_username_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(simulation_bp)
-app.register_blueprint(profile_bp)
+
 
 
 
@@ -154,7 +157,7 @@ def update_profile():
 
 @app.route('/search')
 def search():
-    return render_template('search/search.html')
+    return redirect(url_for('simulation.reactions_list'))
 
 
 
@@ -169,6 +172,8 @@ def settings():
 def logout():
     session.clear()
     return redirect(url_for('home'))
+
+
 
 
 

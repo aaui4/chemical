@@ -6,22 +6,13 @@ let animationEnabled = true;
 console.log("✅ simulation.js loaded");
 console.log("Config:", window.simulationConfig);
 
-// اختبار تغيير اللون مباشرة
-window.addEventListener('load', function() {
-    console.log("Testing color change...");
-    const liquidRight = document.getElementById('liquidRight');
-    if (liquidRight) {
-        const testColor = window.simulationConfig?.resultColor || 'red';
-        liquidRight.style.backgroundColor = testColor;
-        console.log("Color changed to:", testColor);
-    } else {
-        console.error("liquidRight not found!");
-    }
-});
+
 
 // دالة بدء التفاعل
 
 function startPouring() {
+
+    
     // التحقق من التكرار والتفعيل
     if (isPouring || !animationEnabled) return;
     
@@ -45,6 +36,13 @@ function startPouring() {
     
     // بدء حركة السكب
     startPouringAnimation(liquidStream, liquidRight, liquidLeft, beakerLeft, startBtn);
+
+    // **هنا فقط نقوم بتشغيل الفقاعات إذا كان هناك غاز**
+    setTimeout(() => {
+        if (window.simulationConfig?.gasProduced == 1) {
+            createBubbles();  // ستظهر فقط بعد بدء المحاكاة
+        }
+    }, 1300); 
 }
 
 // دالة الحصول على العناصر
@@ -104,25 +102,45 @@ function startPouringAnimation(liquidStream, liquidRight, liquidLeft, beakerLeft
 
 // دالة تغيير لون السائل
 function changeLiquidColor(liquidRight, liquidLeft) {
+
     const config = window.simulationConfig;
+
     const finalColor = config?.resultColor || 'transparent';
     const quantity1 = config?.quantity1 || 0;
     const quantity2 = config?.quantity2 || 0;
-    
+
+    const totalQuantity = quantity1 + quantity2;
+
     let mixStep = 0;
+
     let mixInterval = setInterval(() => {
+
         mixStep += 0.1;
+
         if (mixStep <= 1) {
-            // تغيير اللون
-            liquidRight.style.backgroundColor = finalColor;
-            
-            // تغيير الارتفاع
-            const newHeight = (quantity2 + quantity1 * mixStep) * 12;
-            liquidRight.style.height = Math.min(newHeight, 150) + 'px';
+
+            // إنقاص مستوى الدورق الأيسر تدريجياً
+            liquidLeft.style.height =
+                (quantity1 * 12 * (1 - mixStep)) + 'px';
+
+            // زيادة مستوى الدورق الأيمن تدريجياً
+            const newHeight =
+                (quantity2 + quantity1 * mixStep) * 12;
+
+            liquidRight.style.height =
+                Math.min(newHeight, 150) + 'px';
+
         } else {
+
             clearInterval(mixInterval);
-            liquidLeft.style.height = '0px'; // تفريغ الدورق الأيسر
+
+            // الآن فقط نغيّر اللون مرة واحدة
+            liquidRight.style.backgroundColor = finalColor;
+
+            // نفرغ الدورق الأيسر
+            liquidLeft.style.height = '0px';
         }
+
     }, 100);
 }
 
@@ -130,41 +148,36 @@ function changeLiquidColor(liquidRight, liquidLeft) {
 // دالة إنهاء السكب
 
 function finishPouring(streamInterval, liquidStream, beakerLeft, startBtn, liquidRight) {
+
     clearInterval(streamInterval);
     liquidStream.style.display = 'none';
     beakerLeft.style.transform = 'translateY(0)';
     isPouring = false;
     startBtn.innerHTML = '🔬 Start Reaction';
-    
-    // إضافة فقاعات إذا كان هناك غاز
+
     const config = window.simulationConfig;
+
+    // غاز
     if (config?.gasProduced == 1) {
         createBubbles(liquidRight);
+    }
+
+    // راسب
+    if (config?.precipitate == 1) {
+        const layer = document.createElement('div');
+        layer.className = 'precipitate-layer';
+        layer.style.backgroundColor = config.resultColor;
+        document.querySelector('#beakerRight .beaker-glass').appendChild(layer);
     }
 }
 
 // دالة إنشاء الفقاعات
-function createBubbles(liquidRight) {
-    const beakerGlass = document.querySelector('#beakerRight .beaker-glass');
-    if (!beakerGlass) return;
-    
-    for (let i = 0; i < 5; i++) {
-        setTimeout(() => {
-            const bubble = document.createElement('div');
-            bubble.className = 'bubble';
-            bubble.style.left = Math.random() * 70 + 15 + '%';
-            bubble.style.width = Math.random() * 6 + 3 + 'px';
-            bubble.style.height = bubble.style.width;
-            beakerGlass.appendChild(bubble);
-            
-            setTimeout(() => bubble.remove(), 1500);
-        }, i * 300);
-    }
-}
+
 
 // دالة إعادة التشغيل
 
 function resetSimulation() {
+    
     const elements = getElements();
     if (!elements) return;
     
@@ -185,8 +198,6 @@ function resetSimulation() {
     // إعادة المتغيرات
     isPouring = false;
     
-    // إزالة الفقاعات الزائدة
-    document.querySelectorAll('#beakerRight .beaker-glass .bubble').forEach(b => b.remove());
 }
 
 // دالة تفعيل/تعطيل الحركة
@@ -198,16 +209,26 @@ function toggleAnimation() {
         toggleBtn.innerHTML = animationEnabled ? '⚡ Disable Animation' : '🔌 Enable Animation';
     }
 }
+const config = window.simulationConfig || {};
+
+
+document.addEventListener("DOMContentLoaded",function(){
+
+const startBtn=document.getElementById("startBtn");
+
+if(!startBtn) return;
+
+startBtn.addEventListener("click",function(){
+
+setTimeout(()=>{
+
+startGasIfNeeded();
+
+},1500);
+
+});
+
+});
 
 // تشغيل المحاكاة عند تحميل الصفحة
 
-window.addEventListener('load', function() {
-    console.log("✅ Page loaded, starting simulation...");
-    console.log("Config:", window.simulationConfig);
-    
-    setTimeout(() => {
-        if (animationEnabled) {
-            startPouring();
-        }
-    }, 800);
-});

@@ -53,25 +53,10 @@
             </div>
         </div>
 
-        <!-- Stats Cards -->
-  <div class="stats-container">
-    <div class="stat-card">
-        <h3>Saved Simulations</h3>
-        <p class="stat-number">{{ saved_simulations_count }}</p>
-    </div>
-
-    <div class="stat-card">
-        <h3>Last Reaction</h3>
-        <p class="stat-text">{{ last_reaction }}</p>
-    </div>
-
-    <div class="stat-card">
-        <h3>Total Experiments</h3>
-        <p class="stat-number">{{ total_experiments_count }}</p>
-    </div>
-</div>
+        
 
         <!-- Action Buttons -->
+
         <div class="actions">
             <a href="{{ url_for('simulation.simulation_page') }}" class="btn btn-primary">Start New Simulation</a>
             <a href="{{ url_for('search') }}" class="btn btn-secondary">Browse Reactions</a>
