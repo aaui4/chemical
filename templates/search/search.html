@@ -9,10 +9,18 @@ block head %}
 </div>
 
 <div class="box">
-  <i class="bxr bx-search" style="color: #000000"></i>
-  <input type="text" placeholder="Search chemical reaction..." />
-  <button>Search</button>
+  <form method="GET" action="{{ url_for('simulation.reactions_list') }}" class="search-form">
+    <i class="bxr bx-search search-icon"></i>
+    <input type="text" name="query" placeholder="Search chemical reaction..." />
+    <button type="submit">Search</button>
+  </form>
 </div>
+
+{% if error %}
+  <div class="error-message">
+    {{ error }}
+  </div>
+{% endif %}
 
 <div class="cards">
   {% for reaction in reactions %}

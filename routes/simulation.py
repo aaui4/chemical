@@ -300,7 +300,7 @@ def delete_simulation(simulation_id):
     # حذف من reaction_results أولاً (foreign key)
     cursor.execute("DELETE FROM reaction_results WHERE simulation_id = ?", (simulation_id,))
     
-    # ثم حذف من simulations
+    # ثم حذف من simulation
     cursor.execute("DELETE FROM simulation WHERE id = ? AND user_id = ?", 
                   (simulation_id, session["user_id"]))
     
@@ -308,10 +308,32 @@ def delete_simulation(simulation_id):
     
     return redirect(url_for("simulation.simulation_history"))
 
-@simulation_bp.route("/search")
+@simulation_bp.route("/search", methods=["GET"])
 def reactions_list():
     db = get_db()
     cursor = db.cursor()
-    cursor.execute("SELECT id, equation, type, result_color FROM chemical_reactions")
+
+    query = request.args.get("query")
+
+    # ✅ إذا البحث فارغ
+    if not query or query.strip() == "":
+        return render_template(
+            "search/search.html",
+            reactions=[],
+            error="⚠️ Please enter a reaction to search."
+        )
+
+    cursor.execute("""
+        SELECT id, equation, type, result_color 
+        FROM chemical_reactions
+        WHERE equation LIKE ?
+           OR type LIKE ?
+    """, (f"%{query}%", f"%{query}%"))
+
     reactions = cursor.fetchall()
-    return render_template("search/search.html", reactions=reactions)
+
+    return render_template(
+        "search/search.html",
+        reactions=reactions,
+        error=None
+    )
