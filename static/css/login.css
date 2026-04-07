@@ -70,28 +70,6 @@ body {
     font-size: 20px;
 }
 
-/*Remember Me & Forgot Password*/
-.wrapper .remember-forgot {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14.5px;
-    margin: -15px 0 15px;
-}
-
-.remember-forgot label input {
-    accent-color: #fff;
-    margin-right: 3px;
-}
-
-.remember-forgot a {
-    color: #fff;
-    text-decoration: none;
-}
-
-.remember-forgot a:hover {
-    text-decoration: underline;
-}
-
 /*Buttons*/
 .wrapper .btn {
     width: 100%;
@@ -149,5 +127,33 @@ input[type="password"] {
     font-size: 13px;
     color: #ff4d4d;
 }
+/* Flash Messages */
+.flashes {
+    position: absolute;
+    top: 60px;              /* المسافة من الأعلى */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 420px;           /* نفس عرض الفورم */
+    z-index: 1000;
+}
 
+/* شكل الرسالة */
+.alert {
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Error */
+.alert.error {
+    color: #ff4d4d;
+}
+
+/* Success */
+.alert.success {
+    background: rgba(0, 255, 0, 0.15);
+    color: #00aa00;
+}
 

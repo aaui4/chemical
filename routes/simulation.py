@@ -6,6 +6,7 @@ from flask import flash
 
 simulation_bp = Blueprint("simulation", __name__, url_prefix="/simulation")
 
+
 # قاموس الألوان حسب نوع التفاعل
 REACTION_COLORS = {
     'neutralization': 'transparent',
@@ -177,7 +178,14 @@ def start_simulation():
         'has_reaction': reaction is not None
     }
 
+    # جلب قائمة المتفاعلات لإعادة تعبئة القائمة في العمود الأيسر
+    cursor.execute("SELECT id, name, symbol, default_color FROM chemical_elements ORDER BY name")
+    reactants = cursor.fetchall()
+    reaction_data['reactants'] = reactants
+
     return render_template("simulation/simulation.html", **reaction_data)
+
+    
 
 @simulation_bp.route("/view/<int:simulation_id>", methods=["GET"])
 def view_simulation(simulation_id):

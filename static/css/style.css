@@ -237,3 +237,11 @@ header .user-menu i {
   line-height: 1.6;
   opacity: 0.9;
 }
+.footer {
+  background-color: #0d1b2a;
+  margin-top: 50px;
+}
+
+.footer p {
+  font-size: 14px;
+}

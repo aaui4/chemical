@@ -1,0 +1,123 @@
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}"/>
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+
+<title>Experiments</title>
+
+<!--  Main Layout  -->
+<div class="container">
+    {% include 'sidebar.html' %}
+
+    <main class="main">
+
+        <!-- Top Bar -->
+        <div class="topbar">
+            <h3>Experiments</h3>
+            <button type="button" class="add-btn" onclick="openModal()">
+                <i class='bx bx-plus'></i> Add Reaction
+            </button>
+        </div>
+
+        <!-- Experiments Table -->
+        <div class="table-box glass-table">
+            <h4>All Experiments</h4>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Equation</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in reactions %}
+                    <tr>
+                        <td class="equation-text">{{ r.equation }}</td>
+                        <td class="actions">
+
+                            <!-- Edit Button -->
+                            <a href="#"
+                               class="edit-btn"
+                               onclick="openEditModal({{ r.id }}, '{{ r.equation }}')">
+                                <i class='bx bx-edit'></i>
+                            </a>
+
+                            <!-- Delete Button -->
+                            <form method="POST"
+                                  action="{{ url_for('admin.delete_reaction', id=r.id) }}"
+                                  style="display: inline;">
+                                <button type="submit"
+                                        class="delete-btn"
+                                        onclick="return confirm('Are you sure?')">
+                                    <i class='bx bx-trash'></i>
+                                </button>
+                            </form>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+</div>
+
+
+<!--  Modal: Add Reaction  -->
+<div id="modal" class="modal-custom">
+    <div class="modal-box">
+        <form method="POST" action="{{ url_for('admin.add_reaction') }}">
+
+            <div class="modal-header">
+                <h5>Add Reaction</h5>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
+
+            <div class="modal-body">
+                <input type="text" name="equation"  placeholder="Equation"                          required>
+                <input type="text" name="reactant1" placeholder="Reactant 1">
+                <input type="text" name="color1"    placeholder="Reactant 1 Color (e.g. #ff0000)"   required>
+                <input type="text" name="reactant2" placeholder="Reactant 2">
+                <input type="text" name="color2"    placeholder="Reactant 2 Color (e.g. #ff0000)"   required>
+                <input type="text" name="product"   placeholder="Product">
+                <input type="text" name="color3"    placeholder="Product Color (e.g. #ff0000)"      required>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="add-reaction-btn">Save</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<!--  Modal: Edit Reaction  -->
+<div id="editModal" class="modal-custom">
+    <div class="modal-box">
+        <form method="POST" id="editForm">
+
+            <div class="modal-header">
+                <h5>Edit Reaction</h5>
+                <span class="close-btn" onclick="closeEditModal()">&times;</span>
+            </div>
+
+            <div class="modal-body">
+                <input type="text" name="equation" id="editEquation" required>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="add-reaction-btn">Update</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<!--  Scripts  -->
+<script src="{{ url_for('static', filename='js/experiments.js') }}"></script>
+
+{% endblock %}

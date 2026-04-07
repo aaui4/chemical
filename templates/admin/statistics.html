@@ -1,0 +1,50 @@
+{% block content %}
+
+<link rel="stylesheet" href="/static/css/admin.css" />
+
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+
+     <title>Statistics</title>
+
+
+<div class="container">
+
+    {% include 'sidebar.html' %}
+
+
+    <div class="main">
+        <div class="topbar">
+            <h3>Statistics</h3>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <i class='bx bx-info-circle'></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="chart-box">
+            <h4>Reactions Overview</h4>
+            <canvas id="statsChart"></canvas>
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+    window.chartLabels = {{ labels | tojson }};
+    window.chartData = {{ data | tojson }};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+ <script src="{{ url_for('static', filename='js/statistics.js') }}"></script>
+
+
+{% endblock %}

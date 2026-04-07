@@ -20,14 +20,14 @@ if (usernameInput) {
 
         // منع الحروف العربية
         if (!/^[\x00-\x7F]*$/.test(username)) {
-            usernameMsg.textContent = "اسم المستخدم يجب أن يحتوي على حروف لاتينية فقط";
+            usernameMsg.textContent ="Username must contain only Latin letters.";
             usernameMsg.style.color = "red";
             return;
         }
 
         // الطول والصيغة
         if (!/^[A-Za-z0-9_]{4,8}$/.test(username)) {
-            usernameMsg.textContent = "بين 4 و 8 أحرف (حروف/أرقام/_) فقط";
+            usernameMsg.textContent = "Between 4 and 8 characters (a..z/A..z,1..9,_)";
             usernameMsg.style.color = "red";
             return;
         }
@@ -41,10 +41,10 @@ if (usernameInput) {
         .then(res => res.json())
         .then(data => {
             if (data.exists) {
-                usernameMsg.textContent = "اسم المستخدم مستخدم بالفعل";
+                usernameMsg.textContent = "Username is already in use";
                 usernameMsg.style.color = "red";
             } else {
-                usernameMsg.textContent = "اسم المستخدم متاح ✔";
+                usernameMsg.textContent = " Username is available ✔";
                 usernameMsg.style.color = "green";
             }
         })
@@ -66,7 +66,7 @@ if (emailInput) {
         // تحقق صيغة البريد الإلكتروني
         const emailRegex = /^[\w\.-]+@[\w\.-]+\.\w+$/;
         if (!emailRegex.test(email)) {
-            emailMsg.textContent = "صيغة البريد الإلكتروني غير صحيحة";
+            emailMsg.textContent = "The email format is invalid";
             emailMsg.style.color = "red";
             return;
         }
@@ -80,10 +80,10 @@ if (emailInput) {
         .then(res => res.json())
         .then(data => {
             if (data.exists) {
-                emailMsg.textContent = "هذا البريد مستخدم بالفعل";
+                emailMsg.textContent = "This email is already in use";
                 emailMsg.style.color = "red";
             } else {
-                emailMsg.textContent = "البريد متاح ✔";
+                emailMsg.textContent = "Email is available ✔";
                 emailMsg.style.color = "green";
             }
         })
@@ -91,7 +91,6 @@ if (emailInput) {
     });
 }
 
-// ====== تحقق كلمة المرور ======
 // ====== تحقق كلمة المرور ======
 if (passwordInput) {
     passwordInput.addEventListener("input", () => {
@@ -104,19 +103,19 @@ if (passwordInput) {
 
         // الطول: أكثر من 5 أحرف/أرقام
         if (password.length < 6) {
-            passwordMsg.textContent = "كلمة المرور يجب أن تكون 6 أحرف على الأقل";
+            passwordMsg.textContent = "Password must be at least 6 characters long";
             passwordMsg.style.color = "red";
             return;
         }
 
         // فقط أحرف وأرقام
         if (!/^[A-Za-z0-9]+$/.test(password)) {
-            passwordMsg.textContent = "كلمة المرور يمكن أن تحتوي على أحرف وأرقام فقط";
+            passwordMsg.textContent = "Password can contain only letters and numbers.";
             passwordMsg.style.color = "red";
             return;
         }
 
-        passwordMsg.textContent = "كلمة المرور صالحة ✔";
+        passwordMsg.textContent = " Password is valid ✔";
         passwordMsg.style.color = "green";
     });
 }
