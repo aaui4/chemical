@@ -368,3 +368,20 @@ body {
 .user-color {
     color: #2196F3;
 }
+.btn-delete-avatar {
+    background: transparent;
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+}
+.btn-delete-avatar:hover {
+    background: #e74c3c;
+    color: #fff;
+}

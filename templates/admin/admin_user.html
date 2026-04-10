@@ -1,91 +1,77 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
-    <title>Chemical Admin Panel</title>
+    <title>Users</title>
 
     <link rel="stylesheet" href="/static/css/admin.css" />
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
-  </head>
-  
-  <body>
+</head>
+
+<body>
     <div class="container">
-      {% include 'sidebar.html' %}
-      <main class="main">
-        <!-- Top Bar -->
-        <div class="topbar">
-          <h3>Admin Control Panel</h3>
-          <div class="profile">
-            <i class="bx bxs-bell"></i>
-            <img src="{{ url_for('static', filename='uploads/' + (user.avatar if user.avatar else 'img/default.png')) }}" alt="Profile" />
-          </div>
-        </div>
 
-        <!-- Users Table (دمج جدول المستخدمين هنا) -->
-        <div class="table-box glass-table">
-          <h4>All Users</h4>
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for user_item in users %}
-              <tr>
-                <td>{{ user_item[0] }}</td>
-                <td>{{ user_item[1] }}</td>
-                <td>{{ user_item[2] }}</td>
-                <td>{{ user_item[3] }}</td>
-                <td class="actions">
-                  <a href="/admin/user/{{ user_item[0] }}" class="view-btn">
-                    <i class='bx bx-show'></i>
-                  </a>
-                  <form method="POST"
-      action="/admin/user/{{ user_item[0] }}/delete"
-      style="display:inline;"
-      onsubmit="return confirm('Are you sure you want to delete this user?');">
+        {% include 'sidebar.html' %}
 
-    <button type="submit" class="delete-btn">
-        <i class='bx bx-trash'></i>
-    </button>
-</form>
+        <main class="main">
 
+            <!-- Top Bar -->
+            <div class="topbar">
+                <h3>Admin Control Panel</h3>
+            </div>
 
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
+            <!-- Users Table -->
+            <div class="table-box glass-table">
+                <h4>All Users</h4>
 
-      </main>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
 
-      <!-- Right Sidebar -->
-      <aside class="right">
-        <div class="reaction">
-          <h4>Active Reaction</h4>
-          <img src="https://images.unsplash.com/photo-1581091012184-5c0a4d48a05a?auto=format&fit=crop&w=400&q=80" />
-          <div class="buttons">
-            <button class="start">Start Reaction</button>
-            <button class="stop">Stop Reaction</button>
-          </div>
-        </div>
+                    <tbody>
+                        {% for user_item in users %}
+                        <tr>
+                            <td>{{ user_item[0] }}</td>
+                            <td>{{ user_item[1] }}</td>
+                            <td>{{ user_item[2] }}</td>
+                            <td>{{ user_item[3] }}</td>
 
-        <div class="logs">
-          <h4>System Logs</h4>
-          <ul>
-            {% for log in logs %}
-              <li>{{ log.message }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-      </aside>
+                            <td class="actions">
+
+                                <!-- View -->
+                                <a href="/admin/user/{{ user_item[0] }}" class="view-btn">
+                                    <i class="bx bx-show"></i>
+                                </a>
+
+                                <!-- Delete -->
+                                <form 
+                                    method="POST"
+                                    action="/admin/user/{{ user_item[0] }}/delete"
+                                    style="display:inline;"
+                                    onsubmit="return confirm('Are you sure you want to delete this user?');"
+                                >
+                                    <button type="submit" class="delete-btn">
+                                        <i class="bx bx-trash"></i>
+                                    </button>
+                                </form>
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+
+        </main>
+
     </div>
-
-  </body>
+</body>
 </html>

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Encyclopedia{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="hero-text">
+  <h1 class="title-main">Chemical</h1>
+  <h2 class="title-sub">Encyclopedia</h2>
+</div>
+
+<div class="box">
+  <input type="text" placeholder="Search compound..." />
+  <button>Search</button>
+</div>
+
+<div class="cards-search">
+
+  {% for compound in compounds %}
+  <div class="card-search">
+    <h3>{{ compound.name }}</h3>
+    <p>{{ compound.formula }}</p>
+
+    <a href="{{ url_for('compound.compound_page', name=compound.name) }}">
+      <button>View More</button>
+    </a>
+
+  </div>
+  {% endfor %}
+
+</div>
+
+{% endblock %}

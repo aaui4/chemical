@@ -72,7 +72,7 @@
       
       <!-- المعادلة -->
       <div class="equation-card">
-        <span class="equation-text">{{ equation|default('') }}</span> 
+        <span class="equation-text">\( \ce{ {{ equation }} } \)</span>
         {% if temperature %}<span class="temp-badge">🌡️ {{ temperature }}°C</span>{% endif %}
       </div>
       
@@ -138,10 +138,8 @@
 <div class="scale-number" style="top:108px">50</div>
 
 </div>
-              <div class="liquid" id="liquidRight"
-                   style="height: {{ (quantity2|default(0)) * 12 }}px;
-                          background-color: {{ reactant2_color|default('#ccc') }};">
-              </div>
+              <div class="liquid" id="liquidRight" style="height: {{ (quantity2|default(0)) * 12 }}px; background-color: {{ reactant2_color|default('#ccc') }};"></div>
+              <div class="precipitate" id="precipitate"></div>
               <div class="bubbles-container" id="bubblesContainer"></div>
             </div>
             <div class="quantity-badge">{{ quantity2|default(0) }} mol</div>
@@ -240,28 +238,33 @@ function startPouring() {
     }, 50);
 
     setTimeout(() => {
-        const finalColor = "{{ result_color|default('#ccc') }}";
-        const quantity1 = parseFloat("{{ quantity1|default(0) }}");
-        const quantity2 = parseFloat("{{ quantity2|default(0) }}");
+    const finalColor = "{{ result_color|default('#ccc') }}";
+    const quantity1 = parseFloat("{{ quantity1|default(0) }}");
+    const quantity2 = parseFloat("{{ quantity2|default(0) }}");
 
-        let mixStep = 0;
-        let mixInterval = setInterval(() => {
-            mixStep += 0.1;
-            if (mixStep <= 1) {
-                liquidLeft.style.height = (quantity1 * 12 * (1 - mixStep)) + 'px';
-                liquidRight.style.height = ((quantity2 + quantity1 * mixStep) * 12) + 'px';
-            } else {
-                clearInterval(mixInterval);
-                liquidRight.style.backgroundColor = finalColor;
-                liquidLeft.style.height = '0px';
-            }
-        }, 100);
-
-        // إنشاء الفقاعات إذا كان هناك غاز
-        {% if gas_produced == 1 %}
-        createBubbles();
-        {% endif %}
-    }, 1300);
+    let mixStep = 0;
+    let mixInterval = setInterval(() => {
+        mixStep += 0.1;
+        if (mixStep <= 1) {
+            liquidLeft.style.height = (quantity1 * 12 * (1 - mixStep)) + 'px';
+            liquidRight.style.height = ((quantity2 + quantity1 * mixStep) * 12) + 'px';
+        } else {
+            clearInterval(mixInterval);
+            liquidRight.style.backgroundColor = finalColor;
+            liquidLeft.style.height = '0px';
+            
+            // ===== إظهار الراسب بعد اكتمال السكب =====
+            {% if precipitate == 1 %}
+            showPrecipitate();
+            {% endif %}
+            
+            // ===== إظهار الفقاعات =====
+            {% if gas_produced == 1 %}
+            createBubbles();
+            {% endif %}
+        }
+    }, 100);
+}, 1300);
 
     setTimeout(() => {
         clearInterval(streamInterval);
@@ -272,22 +275,7 @@ function startPouring() {
     }, 2400);
 }
 
-function resetSimulation() {
-    const liquidLeft = document.getElementById('liquidLeft');
-    const liquidRight = document.getElementById('liquidRight');
-    const liquidStream = document.getElementById('liquidStream');
-    const startBtn = document.getElementById('startBtn');
 
-    liquidLeft.style.height = "{{ (quantity1|default(0)) * 12 }}px";
-    liquidLeft.style.backgroundColor = "{{ reactant1_color|default('#ccc') }}";
-    liquidRight.style.height = "{{ (quantity2|default(0)) * 12 }}px";
-    liquidRight.style.backgroundColor = "{{ reactant2_color|default('#ccc') }}";
-    liquidStream.style.display = 'none';
-    startBtn.innerHTML = '🔬 Start Reaction';
-
-    // إزالة أي فقاعات موجودة
-    document.querySelectorAll('#bubblesContainer .bubble').forEach(b => b.remove());
-}
 
 // إنشاء الفقاعات
 function createBubbles() {
@@ -307,7 +295,61 @@ function createBubbles() {
     }
 }
 
+function showPrecipitate() {
+    const precipitateDiv = document.getElementById('precipitate');
+    const liquidRight = document.getElementById('liquidRight');
+    
+    if (precipitateDiv && liquidRight) {
+        // جلب ارتفاع السائل الحالي
+        let liquidHeight = parseFloat(liquidRight.style.height);
+        
+        // إذا كان السائل موجود
+        if (liquidHeight > 0) {
+            // الراسب يكون 20-25px فقط بغض النظر عن كمية السائل
+            // هذا يضمن شكله جميل ومتناسب
+            const precipitateHeight = Math.min(25, liquidHeight * 0.3);
+            
+            precipitateDiv.style.setProperty('--precipitate-height', precipitateHeight + 'px');
+            precipitateDiv.style.display = 'block';
+            precipitateDiv.classList.remove('show');
+            void precipitateDiv.offsetWidth;
+            precipitateDiv.classList.add('show');
+        }
+    }
+}
+function resetSimulation() {
+    const liquidLeft = document.getElementById('liquidLeft');
+    const liquidRight = document.getElementById('liquidRight');
+    const liquidStream = document.getElementById('liquidStream');
+    const startBtn = document.getElementById('startBtn');
+    const precipitateDiv = document.getElementById('precipitate');
+
+    liquidLeft.style.height = "{{ (quantity1|default(0)) * 12 }}px";
+    liquidLeft.style.backgroundColor = "{{ reactant1_color|default('#ccc') }}";
+    liquidRight.style.height = "{{ (quantity2|default(0)) * 12 }}px";
+    liquidRight.style.backgroundColor = "{{ reactant2_color|default('#ccc') }}";
+    liquidStream.style.display = 'none';
+    startBtn.innerHTML = '🔬 Start Reaction';
+    
+    // إخفاء الراسب وإعادة تعيينه
+    if (precipitateDiv) {
+        precipitateDiv.classList.remove('show');
+        precipitateDiv.style.display = 'none';
+    }
+
+    // إزالة أي فقاعات موجودة
+    document.querySelectorAll('#bubblesContainer .bubble').forEach(b => b.remove());
+}
+
 document.getElementById("startBtn").addEventListener("click", startPouring);
 document.getElementById("resetBtn").addEventListener("click", resetSimulation);
+
+
+
+
+
 </script>
+ <script src="{{ url_for('static', filename='js/simulation.js') }}"></script>
+
+
 {% endblock %}

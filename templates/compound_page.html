@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Compound{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/compound.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="compound-wrapper">
+
+    <div class="compound-card">
+
+        <div class="compound-header">
+            <h1>{{ compound.name }}</h1>
+        </div>
+
+        <div class="compound-body">
+
+            {% if compound.image %}
+            <div class="image-container">
+                <img src="{{ compound.image }}" alt="{{ compound.name }}">
+            </div>
+            {% endif %}
+
+            <div class="info">
+                <p><strong>Formula:</strong> {{ compound.formula }}</p>
+                <p><strong>Molecular Weight:</strong> {{ compound.weight }}</p>
+
+                <p><strong>Description:</strong></p>
+               <p>{{ compound.description or 'No description available.' }}</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <a href="{{ url_for('compound.encyclopedia') }}">
+        <button class="back-btn">← Back</button>
+    </a>
+
+</div>
+
+{% endblock %}

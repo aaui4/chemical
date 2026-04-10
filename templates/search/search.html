@@ -15,12 +15,13 @@
     <button type="submit">Search</button>
   </form>
 </div>
-
+ 
 <div class="cards-search">
   {% for reaction in reactions %}
   <div class="card-search">
     <h3>{{ reaction['type'] }}</h3>
     <p>{{ reaction['equation'] }}</p>
+    
     <a href="{{ url_for('simulation.simulation_page', reaction_id=reaction['id']) }}">
         <button>Simulate</button>
     </a>
