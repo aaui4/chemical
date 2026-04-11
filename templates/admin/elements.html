@@ -19,7 +19,7 @@
 
   <div class="modal-header">
     <h5>Edit Element</h5>
-    <span class="close-btn" onclick="closeEditElementModal()">&times;</span>
+    <span class="close-btn" onclick="closeEditElementModal()">&times</span>
   </div>
 
   <div class="modal-body">
@@ -73,7 +73,7 @@
                             <!-- Edit -->
                             <a href="#" class="edit-btn"
                                onclick="openEditElementModal(
-                                   {{ e.id }},
+                                   '{{ e.id }}',
                                    '{{ e.name }}',
                                    '{{ e.symbol }}',
                                    '{{ e.state }}',

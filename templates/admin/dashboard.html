@@ -85,15 +85,12 @@
                 </div>
             </div>
 
-        </main>
-
-
-
     <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
-<script>
-    window.chartLabels = {{ chart_labels | tojson }};
-    window.chartData = {{ chart_data | tojson }};
+    <script>
+    window.chartLabels = JSON.parse('{{ chart_labels | tojson | safe }}');
+    window.chartData = JSON.parse('{{ chart_data | tojson | safe }}');
 </script>
-<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</main>
 </body>
 </html>

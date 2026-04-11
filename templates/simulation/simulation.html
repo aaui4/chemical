@@ -106,10 +106,15 @@
   <div class="scale-number" style="top:104px">50</div>
 
 </div>
-              <div class="liquid" id="liquidLeft" 
-                   style="height: {{ (quantity1|default(0)) * 12 }}px; 
-                          background-color: {{ reactant1_color|default('#ccc') }};">
-              </div>
+              <div class="liquid" id="liquidLeft"></div>
+
+               <script>
+                     const quantity = JSON.parse('{{ quantity1 | default(0) | tojson }}');
+                     const color = JSON.parse('{{ reactant1_color | default("#ccc") | tojson }}');
+
+                     document.getElementById("liquidLeft").style.height = (quantity * 12) + "px";
+                     document.getElementById("liquidLeft").style.backgroundColor = color;
+              </script>
             </div>
             <div class="quantity-badge">{{ quantity1|default(0) }} mol</div>
           </div>
