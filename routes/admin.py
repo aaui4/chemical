@@ -1,17 +1,17 @@
 from flask import Blueprint, render_template, session, redirect, url_for, request, flash
 from database.db import get_db
 from flask import jsonify
+from flask_babel import gettext as _
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
-# =========================
+
 # DASHBOARD
-# =========================
+
 @admin_bp.route("/dashboard")
 def dashboard():
     if session.get("role") != "admin":
         return redirect(url_for("login.login"))
-
     db = get_db()
 
     user_id = session.get("user_id")
@@ -23,7 +23,7 @@ def dashboard():
 
     users_count = db.execute("SELECT COUNT(*) as count FROM user").fetchone()["count"]
 
-       # ✅ هذا السطر الجديد
+       
     total_experiments = db.execute("""
        SELECT COUNT(*) as count FROM simulation
        """).fetchone()["count"]
@@ -66,9 +66,8 @@ def dashboard():
     )
 
 
-# =========================
 # USERS
-# =========================
+
 @admin_bp.route("/users")
 def users():
     if session.get("role") != "admin":
@@ -88,9 +87,8 @@ def users():
     return render_template("admin/admin_user.html", users=users, user=user)
 
 
-# =========================
 # USER PROFILE
-# =========================
+
 @admin_bp.route("/user/<int:user_id>")
 def user_profile(user_id):
     if session.get("role") != "admin":
@@ -111,9 +109,8 @@ def user_profile(user_id):
     return render_template("admin/view_user.html", user=user)
 
 
-# =========================
 # CHANGE ROLE
-# =========================
+
 @admin_bp.route("/user/<int:user_id>/change-role", methods=["POST"])
 def change_role(user_id):
     if session.get("role") != "admin":
@@ -128,9 +125,8 @@ def change_role(user_id):
     return redirect(url_for("admin.user_profile", user_id=user_id))
 
 
-# =========================
 # DELETE USER
-# =========================
+
 @admin_bp.route("/user/<int:user_id>/delete", methods=["POST"])
 def delete_user(user_id):
     if session.get("role") != "admin":
@@ -211,11 +207,11 @@ def add_reaction():
         db.commit()
         db.close()
 
-        flash("Reaction added successfully", "success")
+        flash(_("Reaction added successfully"), "success")
 
     except Exception as e:
         print(e)
-        flash(f"Error adding reaction: {str(e)}", "error")
+        flash(_("Error adding reaction: %(error)s", error=str(e)), "error")
 
     return redirect(url_for("admin.experiments"))
 
@@ -248,7 +244,7 @@ def experiments():
 
     return render_template(
         "admin/experiments.html",
-        user=user,   # ✅ لازم
+        user=user,   # لازم
         reactions=reactions,
         logs=logs
     )
@@ -322,70 +318,3 @@ def statistics():
         labels=labels,
         data=data
     )
-
-
-@admin_bp.route("/elements")
-def elements():
-    db = get_db()
-    elements = db.execute("SELECT * FROM chemical_elements").fetchall()
-    db.close()
-    return render_template("admin/elements.html", elements=elements)
-
-
-
-@admin_bp.route("/add_element", methods=["POST"])
-def add_element():
-    db = get_db()
-
-    state = request.form.get("state", "").lower().strip()
-
-    if state not in ["solid", "liquid", "gas"]:
-        return "Invalid state value", 400
-
-    db.execute("""
-        INSERT INTO chemical_elements (name, symbol, state, default_color)
-        VALUES (?, ?, ?, ?)
-    """, (
-        request.form["name"],
-        request.form["symbol"],
-        state,
-        request.form["color"]
-    ))
-
-    db.commit()
-    return redirect(url_for("admin.elements"))
-
-@admin_bp.route("/delete_element/<int:id>", methods=["POST"])
-def delete_element(id):
-    db = get_db()
-    db.execute("DELETE FROM chemical_elements WHERE id=?", (id,))
-    db.commit()
-    db.close()
-    return redirect(url_for("admin.elements"))
-
-@admin_bp.route("/elements/<int:id>", methods=["POST"])
-def update_element(id):
-    db = get_db()
-
-    name = request.form["name"]
-    symbol = request.form["symbol"]
-    state = request.form["state"]
-    color = request.form["color"]   
-
-    db.execute("""
-        UPDATE chemical_elements
-        SET name=?, symbol=?, state=?, default_color=?
-        WHERE id=?
-    """, (name, symbol, state, color, id))
-
-    db.commit()
-    db.close()
-
-    return jsonify({
-        "success": True,
-        "id": id,
-        "name": name,
-        "symbol": symbol,
-        "state": state,
-        "color": color   
-    })

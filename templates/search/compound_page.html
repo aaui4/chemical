@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('Compound') }}{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="compound-wrapper">
+
+    <div class="compound-card">
+
+        <div class="compound-header">
+            <h1>{{ compound.name }}</h1>
+        </div>
+
+        <div class="compound-body">
+
+            {% if compound.image %}
+            <div class="image-container">
+                <img src="{{ compound.image }}" alt="{{ compound.name }}">
+            </div>
+            {% else %}
+            <div class="image-container">
+                <p>{{ _('No image available') }}</p>
+            </div>
+            {% endif %}
+
+            <div class="info">
+
+                <div class="info-row">
+                    <span>{{ _('Formula') }}:</span>
+                    <strong>{{ compound.formula }}</strong>
+                </div>
+
+                <div class="info-row">
+                    <span>{{ _('Molecular Weight') }}:</span>
+                    <strong>{{ compound.weight }}</strong>
+                </div>
+
+                <div class="description-box">
+                    <h3>{{ _('Description') }}</h3>
+                    <p>
+                        {% if compound.description %}
+                            {{ compound.description }}
+                        {% else %}
+                            {{ _('No description available.') }}
+                        {% endif %}
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <a href="{{ url_for('compound.encyclopedia') }}">
+        <button class="back-btn">{{ _('← Back') }}</button>
+    </a>
+
+</div>
+
+{% endblock %}

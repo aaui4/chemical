@@ -339,7 +339,7 @@ tbody tr:hover {
 
 .delete-reaction-btn:hover {
     background: rgba(255, 59, 59, 0.4);
-    transform: scale(1.05);
+    transform: scale(1.1);
 }
 
 
@@ -595,4 +595,20 @@ tbody tr:hover {
     font-size: 3rem;
     margin-bottom: 10px;
     opacity: 0.5;
+}
+
+.pending-link {
+    margin-left: 20px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.pending-link .badge {
+    background: red;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 50%;
+    margin-left: 5px;
+    font-size: 12px;
 }

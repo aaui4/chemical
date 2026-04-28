@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}"/>
 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
 
-<title>Experiments</title>
+<title>{{ _('Experiments') }}</title>
 
 <!--  Main Layout  -->
 <div class="container">
@@ -13,21 +13,21 @@
 
         <!-- Top Bar -->
         <div class="topbar">
-            <h3>Experiments</h3>
+            <h3>{{ _('Experiments') }}</h3>
             <button type="button" class="add-btn" onclick="openModal()">
-                <i class='bx bx-plus'></i> Add Reaction
+                <i class='bx bx-plus'></i> {{ _('Add Reaction') }}
             </button>
         </div>
 
         <!-- Experiments Table -->
         <div class="table-box glass-table">
-            <h4>All Experiments</h4>
+            <h4>{{ _('All Experiments') }}</h4>
 
             <table>
                 <thead>
                     <tr>
-                        <th>Equation</th>
-                        <th>Actions</th>
+                        <th>{{ _('Equation') }}</th>
+                        <th>{{ _('Actions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,20 +38,22 @@
 
                             <!-- Edit Button -->
                             <a href="#"
-                               class="edit-btn"
-                               onclick="openEditModal({{ r.id }}, '{{ r.equation }}')">
-                                <i class='bx bx-edit'></i>
+                              class="edit-btn"
+                              data-id="{{ r.id }}"
+                              data-equation="{{ r.equation }}"
+                              onclick="openEditModal(this)">
+                              <i class='bx bx-edit'></i>
                             </a>
 
                             <!-- Delete Button -->
-                            <form method="POST"
-                                  action="{{ url_for('admin.delete_reaction', id=r.id) }}"
-                                  style="display: inline;">
-                                <button type="submit"
-                                        class="delete-btn"
-                                        onclick="return confirm('Are you sure?')">
-                                    <i class='bx bx-trash'></i>
-                                </button>
+                           <form method="POST"
+                              action="{{ url_for('admin.delete_reaction', id=r.id) }}"
+                               style="display: inline;">
+                             <button type="submit"
+                               class="delete-btn"
+                               onclick="return confirm(`{{ _('Are you sure?') }}`);">
+                               <i class='bx bx-trash'></i> {{ _('Delete') }}
+                             </button>
                             </form>
 
                         </td>
@@ -71,22 +73,30 @@
         <form method="POST" action="{{ url_for('admin.add_reaction') }}">
 
             <div class="modal-header">
-                <h5>Add Reaction</h5>
+                <h5>{{ _('Add Reaction') }}</h5>
                 <span class="close-btn" onclick="closeModal()">&times;</span>
             </div>
 
             <div class="modal-body">
-                <input type="text" name="equation"  placeholder="Equation"                          required>
-                <input type="text" name="reactant1" placeholder="Reactant 1">
-                <input type="text" name="color1"    placeholder="Reactant 1 Color (e.g. #ff0000)"   required>
-                <input type="text" name="reactant2" placeholder="Reactant 2">
-                <input type="text" name="color2"    placeholder="Reactant 2 Color (e.g. #ff0000)"   required>
-                <input type="text" name="product"   placeholder="Product">
-                <input type="text" name="color3"    placeholder="Product Color (e.g. #ff0000)"      required>
+
+                <input type="text" name="equation" placeholder="{{ _('Equation') }}" required>
+
+                <input type="text" name="reactant1" placeholder="{{ _('Reactant 1') }}">
+
+                <input type="text" name="color1" placeholder="{{ _('Reactant 1 Color (e.g. #ff0000)') }}" required>
+
+                <input type="text" name="reactant2" placeholder="{{ _('Reactant 2') }}">
+
+                <input type="text" name="color2" placeholder="{{ _('Reactant 2 Color (e.g. #ff0000)') }}" required>
+
+                <input type="text" name="product" placeholder="{{ _('Product') }}">
+
+                <input type="text" name="color3" placeholder="{{ _('Product Color (e.g. #ff0000)') }}" required>
+
             </div>
 
             <div class="modal-footer">
-                <button type="submit" class="add-reaction-btn">Save</button>
+                <button type="submit" class="add-reaction-btn">{{ _('Save') }}</button>
             </div>
 
         </form>
@@ -100,7 +110,7 @@
         <form method="POST" id="editForm">
 
             <div class="modal-header">
-                <h5>Edit Reaction</h5>
+                <h5>{{ _('Edit Reaction') }}</h5>
                 <span class="close-btn" onclick="closeEditModal()">&times;</span>
             </div>
 
@@ -109,7 +119,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="submit" class="add-reaction-btn">Update</button>
+                <button type="submit" class="add-reaction-btn">{{ _('Update') }}</button>
             </div>
 
         </form>
@@ -118,6 +128,41 @@
 
 
 <!--  Scripts  -->
+<script>
+    function openModal() {
+        var modal = document.getElementById('modal');
+        if (modal) modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        var modal = document.getElementById('modal');
+        if (modal) modal.style.display = 'none';
+    }
+
+    function openEditModal(id, equation) {
+        var modal = document.getElementById('editModal');
+        var editEquation = document.getElementById('editEquation');
+        var editForm = document.getElementById('editForm');
+        
+        if (modal && editEquation && editForm) {
+            editEquation.value = equation;
+            editForm.action = '/admin/update_reaction/' + id;
+            modal.style.display = 'flex';
+        }
+    }
+
+    function closeEditModal() {
+        var modal = document.getElementById('editModal');
+        if (modal) modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        var addModal = document.getElementById('modal');
+        var editModal = document.getElementById('editModal');
+        if (event.target == addModal) closeModal();
+        if (event.target == editModal) closeEditModal();
+    }
+</script>
 <script src="{{ url_for('static', filename='js/experiments.js') }}"></script>
 
 {% endblock %}

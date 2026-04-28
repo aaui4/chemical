@@ -3,6 +3,8 @@ from database.db import get_db
 from datetime import datetime
 import random
 from flask import flash
+from flask_babel import gettext as _
+
 
 simulation_bp = Blueprint("simulation", __name__, url_prefix="/simulation")
 
@@ -17,7 +19,7 @@ REACTION_COLORS = {
     'default': 'transparent'
 }
 
-# أوصاف النتائج حسب نوع التفاعل
+# أوصاف النتائج حسب نوع التفاعل (سيتم استخدامها فقط إذا لم يوجد وصف في قاعدة البيانات)
 REACTION_DESCRIPTIONS = {
     'neutralization': 'Neutralization reaction completed - clear solution',
     'precipitation': 'Precipitate formed',
@@ -49,7 +51,7 @@ def start_simulation():
     reactant2_id = request.form["reactant2"]
     # منع اختيار نفس المادة مرتين
     if reactant1_id == reactant2_id:
-        flash("⚠️ You cannot select the same reactant twice.")
+        flash("⚠️ " + _("You cannot select the same reactant twice."), "error")
         return redirect(url_for("simulation.simulation_page"))
 
     quantity1 = float(request.form.get("quantity1", 0))
@@ -107,19 +109,28 @@ def start_simulation():
         
         # التحقق من تأثير درجة الحرارة
         if temperature < min_temp:
-            temp_message = f"⚠️ Temperature too low! Reaction needs at least {min_temp}°C"
-            result_text = f"Slow reaction at {temperature}°C"
+            temp_message = _("⚠️ Temperature too low! Reaction needs at least %(temp)s°C", temp=min_temp)
+            result_text = _("Slow reaction at %(temp)s°C", temp=temperature)
         elif temperature > opt_temp + 30:
-            temp_message = f"⚠️ Temperature too high! Optimal temperature is {opt_temp}°C"
-            result_text = f"Fast reaction at {temperature}°C"
+            temp_message = _("⚠️ Temperature too high! Optimal temperature is %(temp)s°C", temp=opt_temp)
+            result_text = _("Fast reaction at %(temp)s°C", temp=temperature)
         else:
-            temp_message = f"✅ Optimal temperature ({temperature}°C)"
-            result_text = f"Normal reaction at {temperature}°C"
+            temp_message = _("✅ Optimal temperature (%(temp)s°C)", temp=temperature)
+            result_text = _("Normal reaction at %(temp)s°C", temp=temperature)
         
-        # الحصول على الوصف المناسب
-        description = REACTION_DESCRIPTIONS.get(reaction_type, f"{reaction_type} reaction occurred")
+        # ===== التعديل هنا: جلب الوصف من قاعدة البيانات =====
+        cursor.execute("SELECT description FROM chemical_reactions WHERE id = ?", (reaction_id,))
+        db_description = cursor.fetchone()
         
-        # إضافة معلومات إضافية للوصف
+        if db_description and db_description[0]:
+            # استخدام الوصف المخزن في قاعدة البيانات
+            description = db_description[0]
+        else:
+            # استخدام الوصف من القاموس إذا لم يوجد وصف في قاعدة البيانات
+            description = REACTION_DESCRIPTIONS.get(reaction_type, _("{} reaction occurred").format(reaction_type))
+        # ===== انتهى التعديل =====
+        
+        # إضافة معلومات إضافية للوصف (اختياري - يمكنك حذف هذين السطرين إذا أردت)
         if precipitate:
             description += " with precipitate"
             result_text += " - Precipitate formed"
@@ -128,9 +139,13 @@ def start_simulation():
             result_text += " - Gas produced"
     else:
         # لا يوجد تفاعل محدد
-        description = f"No predefined reaction found for {reactant1[1]} and {reactant2[1]}"
-        temp_message = f"ℹ️ Generic reaction at {temperature}°C"
-        result_text = f"Generic reaction between {reactant1[1]} and {reactant2[1]}"
+        description = _("No predefined reaction found for %(r1)s and %(r2)s",
+                r1=reactant1[1],
+                r2=reactant2[1])
+        temp_message ="ℹ️ " + _("Generic reaction at %(temp)s°C", temp=temperature)
+        result_text =_("Generic reaction between %(r1)s and %(r2)s",
+                r1=reactant1[1],
+                r2=reactant2[1])
 
     # حفظ المحاكاة في جدول simulation (مع result و temperature)
     cursor.execute("""
@@ -202,7 +217,8 @@ def view_simulation(simulation_id):
             s.id, s.date, s.temperature, s.result,
             rr.products, rr.state, rr.color,
             r.gas_produced, r.precipitate,
-            r.equation as reaction_equation
+            r.equation as reaction_equation,
+            r.description as reaction_description
         FROM simulation s
         JOIN reaction_results rr ON s.id = rr.simulation_id
         LEFT JOIN chemical_reactions r ON s.reaction_id = r.id
@@ -214,6 +230,16 @@ def view_simulation(simulation_id):
     if not sim:
         return "Simulation not found", 404
     
+    # ===== التعديل هنا: استخدام الوصف من قاعدة البيانات =====
+    # جلب الوصف من قاعدة البيانات إذا موجود
+    db_description = sim[10] if len(sim) > 10 else None
+    
+    if db_description:
+        final_description = db_description
+    else:
+        final_description = sim[3] or 'Reaction completed'
+    # ===== انتهى التعديل =====
+    
     # تجهيز البيانات للعرض
     reaction_data = {
         'simulation_id': sim[0],
@@ -222,7 +248,7 @@ def view_simulation(simulation_id):
         'result_text': sim[3] or '',
         'equation': sim[9] or sim[4] or 'Unknown Reaction',
         'result_color': sim[6] or 'transparent',
-        'description': sim[3] or 'Reaction completed',
+        'description': final_description,
         'reaction_type': sim[5] or 'unknown',
         'gas_produced': sim[7] or 0,
         'precipitate': sim[8] or 0,
@@ -328,12 +354,12 @@ def reactions_list():
 
     query = request.args.get("query")
 
-    # ✅ إذا البحث فارغ
+    #  إذا البحث فارغ
     if not query or query.strip() == "":
         return render_template(
             "search/search.html",
             reactions=[],
-            error="⚠️ Please enter a reaction to search."
+             error="⚠️ " + _("Please enter a reaction to search.")
         )
 
     cursor.execute("""

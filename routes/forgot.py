@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, flash, redirect, url_for
+from flask_babel import gettext as _
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key_here"
@@ -7,6 +8,6 @@ app.secret_key = "your_secret_key_here"
 def forgot():
     if request.method == "POST":
         email = request.form["email"]
-        flash("If this email exists, a reset link will be sent ")
+        flash(_("If this email exists, a reset link will be sent"), "info")
         return redirect(url_for("forgot"))
     return render_template("login/forgot.html")

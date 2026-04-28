@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/reaction.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="pending-container">
+    <h2>⏳{{ _(' Pending Reactions') }}</h2>
+    
+    {% if reactions %}
+    <div class="table-responsive">
+        <table class="pending-table">
+            <thead>
+                <tr>
+                    <th>🧪{{ _(' Equation') }}</th>
+                    <th>📝{{ _(' Description') }}</th>
+                    <th>🏷️{{ _(' Type') }}</th>
+                    <th>🌡️{{ _(' Temp (°C)') }}</th>
+                    <th>💨{{ _(' Pressure (atm)') }}</th>
+                    <th>🎨{{ _(' Color') }}</th>
+                    <th>👤{{ _(' Submitted by') }}</th>
+                    <th>📅{{ _(' Date') }}</th>
+                    <th>⚙️{{ _(' Actions') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reaction in reactions %}
+                <tr data-color="{{ reaction[8] or '#ffffff' }}">
+                    <td class="equation-cell">{{ reaction[1] }}</td>
+                    <td class="description-cell"> {{ reaction[2] or _('No description') }}</td>
+                    <td>{{ reaction[3] or _('N/A') }}</td>
+                    <td>{{ reaction[4] or _('N/A') }}</td>
+                    <td>{{ reaction[5] or _('N/A') }}</td>
+
+                    <td class="color-cell">
+                        <div class="color-preview" id="color-{{ loop.index }}"></div>
+                        <span class="color-value">{{ reaction[8] or _('Not set') }}</span>
+                    </td>
+                    <td>{{ reaction[7] }}</td>
+                    <td>{{ reaction[6] }}</td>
+                    <td class="actions-cell">
+                        <a href="{{ url_for('reaction.accept', id=reaction[0]) }}" class="btn-accept">✓{{ _(' Accept') }}</a>
+                        <a href="{{ url_for('reaction.reject', id=reaction[0]) }}" class="btn-reject">✗{{ _(' Reject') }}</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <div class="empty-message">📭{{ _(' No pending reactions to review') }}</div>
+    {% endif %}
+</div>
+
+<script src="{{ url_for('static', filename='js/reaction.js') }}"></script>
+
+{% endblock %}

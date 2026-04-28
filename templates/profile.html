@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Profile{% endblock %}
+{% block title %}{{ _('Profile') }}{% endblock %}
 
 {% block content %}
 
@@ -15,7 +15,7 @@
 
     <!-- Welcome Header -->
     <div class="welcome-header">
-        <h1>Welcome, {{ user.username if user else '' }}</h1>
+        <h1>{{ _('Welcome') }} {{ user.username if user else '' }}</h1>
     </div>
 
     <!-- Profile Section -->
@@ -36,7 +36,7 @@
             {% if user and user.avatar %}
             <form action="{{ url_for('delete_avatar') }}" method="POST" style="margin-top: 8px;">
                 <button type="submit" class="btn-delete-avatar">
-                    <i class='bx bx-trash'></i> Delete Picture
+                    <i class='bx bx-trash'></i>{{ _('Delete Picture') }}
                 </button>
             </form>
             {% endif %}
@@ -45,9 +45,9 @@
 
             <span class="profile-role">
                 {% if user and user.role == 'admin' %}
-                    <span class="admin-color">Admin</span>
+                    <span class="admin-color">{{ _('Admin') }}</span>
                 {% else %}
-                    <span class="user-color">User</span>
+                    <span class="user-color">{{ _('User') }}</span>
                 {% endif %}
             </span>
 
@@ -58,7 +58,7 @@
             <form action="{{ url_for('update_profile') }}" method="POST" enctype="multipart/form-data">
 
                 <div class="form-group">
-                    <label>Username :</label>
+                    <label>{{ _('Username') }} :</label>
                     <input type="text" id="username" name="username"
                            placeholder="Username"
                            value="{{ user.username if user else '' }}">
@@ -66,7 +66,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Email :</label>
+                    <label>{{ _('Email') }} :</label>
                     <input type="email" id="email" name="email"
                            placeholder="example@gmail.com"
                            value="{{ user.email if user else '' }}">
@@ -74,12 +74,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="avatar">Profile Picture:</label>
+                    <label for="avatar">{{ _('Profile Picture') }}:</label>
                     <input type="file" id="avatar" name="avatar" accept="image/*">
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn-save">Save Changes</button>
+                    <button type="submit" class="btn-save">{{ _('Save Changes') }}</button>
                 </div>
 
             </form>
@@ -89,9 +89,8 @@
 
     <!-- Action Buttons -->
     <div class="actions">
-        <a href="{{ url_for('simulation.simulation_page') }}" class="btn btn-primary">Start New Simulation</a>
-        <a href="{{ url_for('search') }}" class="btn btn-secondary">Browse Reactions</a>
-        <a href="{{ url_for('simulation.simulation_history') }}" class="btn primary">My History</a>
+        <a href="{{ url_for('simulation.simulation_page') }}" class="btn btn-primary">{{ _('Start New Simulation') }}</a>
+        <a href="{{ url_for('simulation.simulation_history') }}" class="btn btn-primary">{{ _('My History') }}</a>
     </div>
 
 </div>

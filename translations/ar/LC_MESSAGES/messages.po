@@ -1,0 +1,1221 @@
+# Arabic translations for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-04-25 11:35+0100\n"
+"PO-Revision-Date: 2026-04-25 11:31+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ar\n"
+"Language-Team: ar <LL@li.org>\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : "
+"n%100>=3 && n%100<=10 ? 3 : n%100>=0 && n%100<=2 ? 4 : 5);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: routes/admin.py:210
+msgid "Reaction added successfully"
+msgstr "تمت إضافة التفاعل بنجاح"
+
+#: routes/admin.py:214
+#, python-format
+msgid "Error adding reaction: %(error)s"
+msgstr "خطأ في إضافة التفاعل"
+
+#: routes/forgot.py:11
+msgid "If this email exists, a reset link will be sent"
+msgstr ""
+"إذا كان هذا البريد الإلكتروني موجودًا، سيتم إرسال رابط إعادة تعيين كلمة "
+"المرور"
+
+#: routes/login.py:50
+msgid "Incorrect username or password"
+msgstr "اسم المستخدم أو كلمة المرور غير صحيحة"
+
+#: routes/reaction.py:37
+msgid "Reaction submitted for review"
+msgstr "تم إرسال التفاعل للمراجعة"
+
+#: routes/reaction.py:92
+msgid "Reaction accepted successfully!"
+msgstr "تم قبول التفاعل بنجاح"
+
+#: routes/reaction.py:94
+msgid "Reaction not found or already processed"
+msgstr "التفاعل غير موجود أو تم معالجته مسبقًا"
+
+#: routes/reaction.py:111
+msgid "Reaction rejected"
+msgstr "تم رفض التفاعل"
+
+#: routes/simulation.py:54
+msgid "You cannot select the same reactant twice."
+msgstr "لا يمكنك اختيار نفس المتفاعل مرتين"
+
+#: routes/simulation.py:112
+#, python-format
+msgid "⚠️ Temperature too low! Reaction needs at least %(temp)s°C"
+msgstr "⚠️ درجة الحرارة منخفضة جدًا! التفاعل يحتاج على الأقل %(temp)s°C"
+
+#: routes/simulation.py:113
+#, python-format
+msgid "Slow reaction at %(temp)s°C"
+msgstr "تفاعل بطيء عند درجة حرارة %(temp)s°C"
+
+#: routes/simulation.py:115
+#, python-format
+msgid "⚠️ Temperature too high! Optimal temperature is %(temp)s°C"
+msgstr "⚠️ درجة الحرارة مرتفعة جدًا! درجة الحرارة المثلى هي %(temp)s°C"
+
+#: routes/simulation.py:116
+#, python-format
+msgid "Fast reaction at %(temp)s°C"
+msgstr "تفاعل سريع عند درجة حرارة %(temp)s°C"
+
+#: routes/simulation.py:118
+#, python-format
+msgid "✅ Optimal temperature (%(temp)s°C)"
+msgstr "✅ درجة حرارة مثالية (%(temp)s°C"
+
+#: routes/simulation.py:119
+#, python-format
+msgid "Normal reaction at %(temp)s°C"
+msgstr "تفاعل عادي عند درجة حرارة %(temp)s°C"
+
+#: routes/simulation.py:130
+#, python-brace-format
+msgid "{} reaction occurred"
+msgstr "حدث تفاعل {}"
+
+#: routes/simulation.py:142
+#, python-format
+msgid "No predefined reaction found for %(r1)s and %(r2)s"
+msgstr "لم يتم العثور على تفاعل محدد مسبقًا بين %(r1)s و %(r2)s"
+
+#: routes/simulation.py:145
+#, fuzzy, python-format
+msgid "Generic reaction at %(temp)s°C"
+msgstr "تفاعل عادي عند درجة حرارة %(temp)s°C"
+
+#: routes/simulation.py:146
+#, python-format
+msgid "Generic reaction between %(r1)s and %(r2)s"
+msgstr "تفاعل عام بين %(r1)s و %(r2)s"
+
+#: routes/simulation.py:362
+msgid "Please enter a reaction to search."
+msgstr "الرجاء إدخال تفاعل للبحث"
+
+#: templates/base.html:6 templates/search/encyclopedia.html:12
+msgid "Chemical"
+msgstr "كيميائي"
+
+#: templates/footer.html:3
+msgid "© 2026 Chemical Simulation Project"
+msgstr ""
+
+#: templates/footer.html:5
+msgid "Developed by L3 Students | All rights reserved"
+msgstr ""
+
+#: templates/header.html:8
+msgid "Home"
+msgstr "الرئيسية"
+
+#: templates/header.html:9 templates/search/encyclopedia.html:3
+#: templates/search/encyclopedia.html:13
+msgid "Encyclopedia"
+msgstr "الموسوعة"
+
+#: templates/header.html:10
+msgid "Simulation"
+msgstr "المحاكاة"
+
+#: templates/header.html:11
+msgid "About"
+msgstr "حول"
+
+#: templates/header.html:22 templates/profile.html:3
+msgid "Profile"
+msgstr "الملف الشخصي"
+
+#: templates/header.html:27 templates/sidebar.html:44
+msgid "Logout"
+msgstr "تسجيل الخروج"
+
+#: templates/header.html:32 templates/login/forgot.html:37
+#: templates/login/login.html:2 templates/login/login.html:8
+#: templates/login/login.html:34 templates/login/register.html:39
+msgid "Login"
+msgstr "تسجيل الدخول"
+
+#: templates/header.html:36 templates/login/login.html:39
+#: templates/login/register.html:3 templates/login/register.html:9
+#: templates/login/register.html:35
+msgid "Register"
+msgstr "إنشاء حساب"
+
+#: templates/home.html:7
+msgid "Chemical Supply"
+msgstr "توريد المواد الكيميائية"
+
+#: templates/home.html:28
+msgid "Welcome to the Chemical Reaction Simulation website."
+msgstr "مرحبًا بك في موقع محاكاة التفاعلات الكيميائية"
+
+#: templates/home.html:30
+msgid ""
+"This platform offers an interactive and visual way to understand chemical"
+" reactions,\n"
+"                 making chemical concepts easier and more enjoyable to "
+"learn."
+msgstr ""
+"توفر هذه المنصة طريقة تفاعلية ومرئية لفهم التفاعلات الكيميائية، مما يجعل "
+"المفاهيم الكيميائية أسهل وأكثر متعة في التعلم"
+
+#: templates/home.html:36 templates/simulation/simulation.html:105
+msgid "Start Simulation"
+msgstr "ابدأ المحاكاة"
+
+#: templates/home.html:45
+msgid "About This Project"
+msgstr "حول هذا المشروع"
+
+#: templates/home.html:47
+msgid ""
+"The Chemical Reaction Simulation Website is an educational platform\n"
+"              designed to help students understand chemical reactions "
+"through\n"
+"              interactive and visual simulations."
+msgstr ""
+"موقع محاكاة التفاعلات الكيميائية هو منصة تعليمية مصممة لمساعدة الطلاب على"
+" فهم التفاعلات الكيميائية من خلال محاكاة تفاعلية ومرئية."
+
+#: templates/home.html:53
+msgid "Project Goal"
+msgstr "هدف المشروع"
+
+#: templates/home.html:55
+msgid ""
+"To simplify chemical concepts and make learning chemistry more\n"
+"            engaging and accessible for students."
+msgstr ""
+"تبسيط المفاهيم الكيميائية وجعل تعلم الكيمياء أكثر تشويقًا وسهولة في "
+"الوصول للطلاب."
+
+#: templates/home.html:61
+msgid "What You Can Do"
+msgstr "ما يمكنك فعله"
+
+#: templates/home.html:63
+msgid ""
+"Browse chemical reactions, explore equations, and simulate reactions\n"
+"            by selecting reactants and conditions."
+msgstr ""
+"تصفح التفاعلات الكيميائية، استكشاف المعادلات، ومحاكاة التفاعلات من خلال "
+"اختيار المتفاعلات والظروف."
+
+#: templates/home.html:69
+msgid "Academic Context"
+msgstr "السياق الأكاديمي"
+
+#: templates/home.html:71
+msgid ""
+"This project is developed as a university-level (L3) academic\n"
+"            project combining chemistry and web development."
+msgstr "تم تطوير هذا المشروع كمشروع جامعي (L3) يجمع بين الكيمياء وتطوير الويب"
+
+#: templates/profile.html:18
+msgid "Welcome"
+msgstr "مرحبًا"
+
+#: templates/profile.html:39
+msgid "Delete Picture"
+msgstr "حذف الصورة"
+
+#: templates/admin/view_user.html:86 templates/profile.html:48
+#: templates/sidebar.html:2
+msgid "Admin"
+msgstr "المسؤول "
+
+#: templates/admin/view_user.html:85 templates/profile.html:50
+msgid "User"
+msgstr "المستخدم"
+
+#: templates/admin/admin_user.html:31 templates/login/login.html:23
+#: templates/login/register.html:16 templates/profile.html:61
+msgid "Username"
+msgstr "اسم المستخدم"
+
+#: templates/admin/admin_user.html:32 templates/admin/view_user.html:57
+#: templates/login/forgot.html:28 templates/login/register.html:23
+#: templates/profile.html:69
+msgid "Email"
+msgstr "البريد الالكتروني"
+
+#: templates/profile.html:77
+msgid "Profile Picture"
+msgstr "صورة الملف الشخصي"
+
+#: templates/profile.html:82
+msgid "Save Changes"
+msgstr "حفظ التغييرات"
+
+#: templates/profile.html:92
+msgid "Start New Simulation"
+msgstr "ابدأ محاكاة جديدة"
+
+#: templates/profile.html:93
+msgid "My History"
+msgstr "سجلّي"
+
+#: templates/admin/dashboard.html:5 templates/sidebar.html:7
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+#: templates/sidebar.html:13
+msgid "User Management"
+msgstr "إدارة المستخدمين"
+
+#: templates/admin/experiments.html:6 templates/admin/experiments.html:16
+#: templates/sidebar.html:21
+msgid "Experiments"
+msgstr "التجارب"
+
+#: templates/admin/statistics.html:7 templates/admin/statistics.html:17
+#: templates/sidebar.html:29
+msgid "Statistics"
+msgstr "الإحصائيات"
+
+#: templates/sidebar.html:37
+msgid "Pending Reactions"
+msgstr "التفاعلات المعلقة"
+
+#: templates/admin/admin_user.html:5 templates/admin/dashboard.html:44
+msgid "Users"
+msgstr "المستخدمون"
+
+#: templates/admin/admin_user.html:20 templates/admin/dashboard.html:24
+msgid "Admin Control Panel"
+msgstr "لوحة تحكم الإدارة"
+
+#: templates/admin/admin_user.html:25
+msgid "All Users"
+msgstr "جميع المستخدمين"
+
+#: templates/admin/admin_user.html:30 templates/simulation/history.html:90
+msgid "ID"
+msgstr "المعرف (ID)"
+
+#: templates/admin/admin_user.html:33
+msgid "Role"
+msgstr "الدور"
+
+#: templates/admin/admin_user.html:34 templates/admin/experiments.html:30
+#: templates/simulation/history.html:97
+msgid "Actions"
+msgstr "الإجراءات"
+
+#: templates/admin/admin_user.html:58 templates/admin/view_user.html:96
+msgid "Are you sure you want to delete this user? This cannot be undone."
+msgstr "هل أنت متأكد أنك تريد حذف هذا المستخدم؟ لا يمكن التراجع عن هذا الإجراء."
+
+#: templates/admin/dashboard.html:49
+msgid "Total Experiments"
+msgstr "إجمالي التجارب"
+
+#: templates/admin/dashboard.html:56
+msgid "Experiment Activity"
+msgstr "نشاط التجارب"
+
+#: templates/admin/dashboard.html:62
+msgid "Recent Experiments"
+msgstr "آخر التجارب"
+
+#: templates/admin/dashboard.html:67 templates/admin/experiments.html:29
+#: templates/admin/experiments.html:82 templates/simulation/history.html:92
+msgid "Equation"
+msgstr "المعادلة"
+
+#: templates/admin/dashboard.html:68
+msgid "Status"
+msgstr "الحالة"
+
+#: templates/admin/dashboard.html:69
+msgid "Date"
+msgstr "التاريخ"
+
+#: templates/admin/experiments.html:18 templates/admin/experiments.html:76
+msgid "Add Reaction"
+msgstr "إضافة تفاعل"
+
+#: templates/admin/experiments.html:24
+msgid "All Experiments"
+msgstr "جميع التجارب"
+
+#: templates/admin/experiments.html:54
+msgid "Are you sure?"
+msgstr "هل أنت متأكد؟"
+
+#: templates/admin/experiments.html:55 templates/simulation/history.html:128
+msgid "Delete"
+msgstr "حذف"
+
+#: templates/admin/experiments.html:84 templates/simulation/simulation.html:134
+msgid "Reactant 1"
+msgstr "المتفاعل 1"
+
+#: templates/admin/experiments.html:86
+msgid "Reactant 1 Color (e.g. #ff0000)"
+msgstr "لون المتفاعل 1 (مثال: ‎#ff0000)"
+
+#: templates/admin/experiments.html:88 templates/simulation/simulation.html:162
+msgid "Reactant 2"
+msgstr "المتفاعل 2"
+
+#: templates/admin/experiments.html:90
+msgid "Reactant 2 Color (e.g. #ff0000)"
+msgstr "لون المتفاعل 2 (مثال: ‎#ff0000)"
+
+#: templates/admin/experiments.html:92
+msgid "Product"
+msgstr "الناتج"
+
+#: templates/admin/experiments.html:94
+msgid "Product Color (e.g. #ff0000)"
+msgstr "لون الناتج (مثال: ‎#ff0000)"
+
+#: templates/admin/experiments.html:99
+msgid "Save"
+msgstr "حفظ"
+
+#: templates/admin/experiments.html:113
+msgid "Edit Reaction"
+msgstr "تعديل التفاعل"
+
+#: templates/admin/experiments.html:122
+msgid "Update"
+msgstr "تحديث"
+
+#: templates/admin/statistics.html:32
+msgid "Reactions Overview"
+msgstr "نظرة عامة على التفاعلات"
+
+#: templates/admin/view_user.html:8
+msgid "User Profile - Admin"
+msgstr "ملف المستخدم - المسؤول"
+
+#: templates/admin/view_user.html:24
+#, python-format
+msgid "Admin View: %(username)s"
+msgstr "عرض المسؤول: %(username)s"
+
+#: templates/admin/view_user.html:26
+msgid "Back to Users"
+msgstr "العودة إلى المستخدمين"
+
+#: templates/admin/view_user.html:52
+msgid "User ID"
+msgstr "معرّف المستخدم"
+
+#: templates/admin/view_user.html:62
+msgid "Account Type"
+msgstr "نوع الحساب"
+
+#: templates/admin/view_user.html:74
+msgid "Admin Controls"
+msgstr "أدوات الإدارة"
+
+#: templates/admin/view_user.html:82
+msgid "Change User Role"
+msgstr "تغيير دور المستخدم"
+
+#: templates/admin/view_user.html:89
+msgid "Update Role"
+msgstr "تحديث الدور"
+
+#: templates/admin/view_user.html:97
+msgid "Danger Zone"
+msgstr "منطقة الخطر"
+
+#: templates/admin/view_user.html:98
+msgid "Delete this user account permanently."
+msgstr "حذف هذا الحساب نهائيًا"
+
+#: templates/admin/view_user.html:100
+msgid "Delete User"
+msgstr "حذف المستخدم"
+
+#: templates/login/forgot.html:6 templates/login/forgot.html:21
+msgid "Forgot Password"
+msgstr "نسيت كلمة المرور"
+
+#: templates/login/forgot.html:24
+msgid "Enter your email to reset your password"
+msgstr "أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور"
+
+#: templates/login/forgot.html:32
+msgid "Send Reset Link"
+msgstr "إرسال رابط إعادة التعيين"
+
+#: templates/login/forgot.html:36
+msgid "Remember your password?"
+msgstr "هل تتذكر كلمة المرور؟"
+
+
+msgid "Click the following link to reset your password (valid for 1 hour):"
+msgstr "اضغطي على الرابط التالي لإعادة تعيين كلمة المرور (صالح لمدة ساعة واحدة):"
+
+msgid "If you did not request this, please ignore this email."
+msgstr "إذا لم تطلبي هذا الطلب، يرجى تجاهل هذه الرسالة."
+
+msgid "A password reset link has been sent to your email"
+msgstr "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني"
+
+msgid "An error occurred while sending the email. Please try again later"
+msgstr "حدث خطأ أثناء إرسال البريد، يرجى المحاولة لاحقًا"
+
+msgid "If this email exists, a reset link will be sent"
+msgstr "إذا كان هذا البريد موجودًا، سيتم إرسال رابط إعادة التعيين"
+
+msgid "Invalid or expired reset link. Please request a new one."
+msgstr "رابط إعادة التعيين غير صالح أو منتهي الصلاحية. يرجى طلب رابط جديد"
+
+msgid "Password updated successfully! Please login with your new password."
+msgstr "تم تحديث كلمة المرور بنجاح! يرجى تسجيل الدخول باستخدام كلمة المرور الجديدة"
+
+#: templates/login/login.html:28 templates/login/register.html:30
+msgid "Password"
+msgstr "كلمة المرور"
+
+#: templates/login/login.html:38
+msgid "Don't have an account?"
+msgstr "ليس لديك حساب؟"
+
+#: templates/login/register.html:38
+msgid "Already have an account?"
+msgstr "لديك حساب بالفعل؟"
+
+#: templates/reaction/add_reaction.html:9
+msgid " Add New Reaction"
+msgstr "إضافة تفاعل جديد"
+
+#: templates/reaction/add_reaction.html:23
+#: templates/reaction/pending_reactions.html:16
+msgid " Equation"
+msgstr "المعادلة"
+
+#: templates/reaction/add_reaction.html:28
+#: templates/reaction/pending_reactions.html:17
+msgid " Description"
+msgstr "الوصف"
+
+#: templates/reaction/add_reaction.html:34
+msgid " Reaction Properties"
+msgstr "خصائص التفاعل"
+
+#: templates/reaction/add_reaction.html:38
+msgid " Reaction Type"
+msgstr "نوع التفاعل"
+
+#: templates/reaction/add_reaction.html:40 templates/simulation/history.html:68
+msgid "Neutralization"
+msgstr "تعادل حمضي-قاعدي"
+
+#: templates/reaction/add_reaction.html:41 templates/simulation/history.html:69
+msgid "Precipitation"
+msgstr "ترسيب"
+
+#: templates/reaction/add_reaction.html:42
+msgid "Complexation"
+msgstr "تكوين معقد"
+
+#: templates/reaction/add_reaction.html:43 templates/simulation/history.html:74
+msgid "Indicator"
+msgstr ""
+
+#: templates/reaction/add_reaction.html:44 templates/simulation/history.html:73
+msgid "Combustion"
+msgstr "احتراق"
+
+#: templates/reaction/add_reaction.html:45
+msgid "Default"
+msgstr "افتراضي"
+
+#: templates/reaction/add_reaction.html:52
+msgid " Temperature (°C)"
+msgstr "درجة الحرارة (°C)"
+
+#: templates/reaction/add_reaction.html:53
+msgid "e.g., 25"
+msgstr "مثال: 25"
+
+#: templates/reaction/add_reaction.html:56
+#: templates/reaction/pending_reactions.html:20
+msgid " Pressure (atm)"
+msgstr "الضغط (atm)"
+
+#: templates/reaction/add_reaction.html:57
+msgid "e.g., 1"
+msgstr "مثال: 1"
+
+#: templates/reaction/add_reaction.html:63
+msgid " Result Color"
+msgstr "لون الناتج"
+
+#: templates/reaction/add_reaction.html:66
+msgid "Color (e.g. #ff0000)"
+msgstr "لون (مثال: ‎#ff0000)"
+
+#: templates/reaction/add_reaction.html:71
+msgid " Add Reaction"
+msgstr "إضافة تفاعل"
+
+#: templates/reaction/pending_reactions.html:9
+msgid " Pending Reactions"
+msgstr "التفاعلات المعلقة"
+
+#: templates/reaction/pending_reactions.html:18
+msgid " Type"
+msgstr "النوع"
+
+#: templates/reaction/pending_reactions.html:19
+msgid " Temp (°C)"
+msgstr "درجة الحرارة (°C)"
+
+#: templates/reaction/pending_reactions.html:21
+msgid " Color"
+msgstr "اللون"
+
+#: templates/reaction/pending_reactions.html:22
+msgid " Submitted by"
+msgstr "أُرسل بواسطة"
+
+#: templates/reaction/pending_reactions.html:23
+msgid " Date"
+msgstr "التاريخ"
+
+#: templates/reaction/pending_reactions.html:24
+msgid " Actions"
+msgstr "الإجراءات"
+
+#: templates/reaction/pending_reactions.html:31
+msgid "No description"
+msgstr "لا يوجد وصف"
+
+#: templates/reaction/pending_reactions.html:32
+#: templates/reaction/pending_reactions.html:33
+#: templates/reaction/pending_reactions.html:34
+msgid "N/A"
+msgstr "غير متوفر"
+
+#: templates/reaction/pending_reactions.html:38
+msgid "Not set"
+msgstr "غير محدد"
+
+#: templates/reaction/pending_reactions.html:43
+msgid " Accept"
+msgstr "قبول"
+
+#: templates/reaction/pending_reactions.html:44
+msgid " Reject"
+msgstr "رفض"
+
+#: templates/reaction/pending_reactions.html:52
+msgid " No pending reactions to review"
+msgstr "لا توجد تفاعلات معلقة للمراجعة"
+
+#: templates/search/compound_page.html:3
+msgid "Compound"
+msgstr "المركب"
+
+#: templates/search/compound_page.html:27
+msgid "No image available"
+msgstr "لا توجد صورة متاحة"
+
+#: templates/search/compound_page.html:34
+msgid "Formula"
+msgstr "الصيغة"
+
+#: templates/search/compound_page.html:39
+msgid "Molecular Weight"
+msgstr "الكتلة المولية"
+
+#: templates/search/compound_page.html:44
+msgid "Description"
+msgstr "الوصف"
+
+#: templates/search/compound_page.html:49
+msgid "No description available."
+msgstr "لا يوجد وصف متاح"
+
+#: templates/search/compound_page.html:61
+msgid "← Back"
+msgstr "← رجوع"
+
+#: templates/search/encyclopedia.html:18
+msgid "Search compound or reaction..."
+msgstr "ابحث عن مركب أو تفاعل..."
+
+#: templates/search/encyclopedia.html:19
+msgid "Search"
+msgstr "البحث "
+
+#: templates/search/encyclopedia.html:25
+#, python-format
+msgid "No results found for \"%(query)s\""
+msgstr "لم يتم العثور على نتائج لـ \"%(query)s\""
+
+#: templates/search/encyclopedia.html:31
+msgid "All"
+msgstr "الكل"
+
+#: templates/search/encyclopedia.html:32
+msgid "Compounds"
+msgstr "المركبات"
+
+#: templates/search/encyclopedia.html:33
+msgid "Reactions"
+msgstr "التفاعلات"
+
+#: templates/search/encyclopedia.html:48
+msgid "View More"
+msgstr "عرض المزيد"
+
+#: templates/search/encyclopedia.html:63
+msgid "No description available"
+msgstr "لا يوجد وصف متاح"
+
+#: templates/simulation/history.html:3
+msgid "SIMULATION History"
+msgstr "سجل المحاكاة"
+
+#: templates/simulation/history.html:14
+msgid "SIMULATION HISTORY"
+msgstr "سجل المحاكاة"
+
+#: templates/simulation/history.html:15
+msgid "Records"
+msgstr "السجلات"
+
+#: templates/simulation/history.html:22
+msgid "Total Simulations"
+msgstr "إجمالي المحاكاة"
+
+#: templates/simulation/history.html:33
+msgid "Different Colors"
+msgstr "ألوان مختلفة"
+
+#: templates/simulation/history.html:44
+msgid "Reaction Types"
+msgstr "أنواع التفاعلات"
+
+#: templates/simulation/history.html:58
+msgid "Avg Temperature"
+msgstr "متوسط درجة الحرارة"
+
+#: templates/simulation/history.html:65
+msgid "Search by equation, color, type..."
+msgstr "البحث حسب المعادلة، اللون، النوع..."
+
+#: templates/simulation/history.html:67
+msgid "All Types"
+msgstr "جميع الأنواع"
+
+#: templates/simulation/history.html:70
+msgid "Complex"
+msgstr "معقد"
+
+#: templates/simulation/history.html:71
+msgid "Acid-Base"
+msgstr "حمض-قاعدة"
+
+#: templates/simulation/history.html:72 templates/simulation/history.html:119
+#: templates/simulation/simulation.html:218
+msgid "Gas"
+msgstr "غاز"
+
+#: templates/simulation/history.html:79
+msgid "Print"
+msgstr "طباعة"
+
+#: templates/simulation/history.html:82
+msgid "Clear Filters"
+msgstr "مسح عوامل التصفية"
+
+#: templates/simulation/history.html:91
+msgid "Date & Time"
+msgstr "التاريخ و الوقت"
+
+#: templates/simulation/history.html:93
+msgid "Temperature"
+msgstr "درجة الحرارة"
+
+#: templates/simulation/history.html:94
+msgid "Final Color"
+msgstr "اللون النهائي"
+
+#: templates/simulation/history.html:95
+msgid "Type"
+msgstr "النوع"
+
+#: templates/simulation/history.html:96
+msgid "Products"
+msgstr "النواتج"
+
+#: templates/simulation/history.html:121
+#: templates/simulation/simulation.html:219
+msgid "Precipitate"
+msgstr "راسب"
+
+#: templates/simulation/history.html:123
+#: templates/simulation/simulation.html:221
+msgid "Solution"
+msgstr "محلول"
+
+#: templates/simulation/history.html:127
+msgid "View"
+msgstr "عرض"
+
+#: templates/simulation/history.html:135
+msgid "No simulations found"
+msgstr "لا توجد عمليات محاكاة"
+
+#: templates/simulation/history.html:136
+msgid "Start your first experiment!"
+msgstr "ابدأ أول تجربة لك!"
+
+#: templates/simulation/history.html:146
+#: templates/simulation/simulation.html:231
+msgid "New Simulation"
+msgstr "محاكاة جديدة"
+
+#: templates/simulation/simulation.html:1
+msgid "Simulation Result"
+msgstr "نتيجة المحاكاة"
+
+#: templates/simulation/simulation.html:64
+msgid "CHEMICAL SIMULATOR"
+msgstr "محاكي كيميائي"
+
+#: templates/simulation/simulation.html:66
+msgid "+ Add Reaction"
+msgstr "إضافة تفاعل"
+
+#: templates/simulation/simulation.html:71
+msgid "Select the first reactant"
+msgstr "اختر المتفاعل الأول"
+
+#: templates/simulation/simulation.html:80
+#: templates/simulation/simulation.html:95
+msgid "Quantity (mol)"
+msgstr "الكمية (مول)"
+
+#: templates/simulation/simulation.html:86
+msgid "Select the second reactant"
+msgstr "اختر المتفاعل الثاني"
+
+#: templates/simulation/simulation.html:103
+msgid "Temperature °C"
+msgstr "درجة الحرارة (°C)"
+
+#: templates/simulation/simulation.html:191
+msgid "Start Reaction"
+msgstr "ابدأ التفاعل"
+
+#: templates/simulation/simulation.html:194
+msgid "Reset"
+msgstr "إعادة تعيين"
+
+#: templates/simulation/simulation.html:201
+msgid "FINAL COLOR"
+msgstr "اللون النهائي"
+
+#: templates/simulation/simulation.html:208
+msgid "REACTION TYPE"
+msgstr "نوع التفاعل "
+
+#: templates/simulation/simulation.html:212
+msgid "TEMPERATURE"
+msgstr "درجة الحرارة"
+
+#: templates/simulation/simulation.html:216
+msgid "PRODUCTS"
+msgstr "النواتج"
+
+#: templates/simulation/simulation.html:235
+msgid "History"
+msgstr "السجل"
+
+#: templates/simulation/simulation.html:243
+msgid "No Active Simulation"
+msgstr "لا توجد محاكاة نشطة"
+
+#: templates/simulation/simulation.html:244
+msgid ""
+"Select reactants and quantities from the left panel to start a new "
+"simulation."
+msgstr "اختر المتفاعلات والكميات من اللوحة اليسرى لبدء محاكاة جديدة"
+
+#: venv/Lib/site-packages/click/_termui_impl.py:613
+#, python-brace-format
+msgid "{editor}: Editing failed"
+msgstr ""
+
+#: venv/Lib/site-packages/click/_termui_impl.py:617
+#, python-brace-format
+msgid "{editor}: Editing failed: {e}"
+msgstr ""
+
+#: venv/Lib/site-packages/click/core.py:1114
+#: venv/Lib/site-packages/click/core.py:1151
+#, python-brace-format
+msgid "{text} {deprecated_message}"
+msgstr ""
+
+#: venv/Lib/site-packages/click/core.py:1170
+msgid "Options"
+msgstr "خيارات"
+
+#: venv/Lib/site-packages/click/core.py:1245
+#, python-brace-format
+msgid "Got unexpected extra argument ({args})"
+msgid_plural "Got unexpected extra arguments ({args})"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#: venv/Lib/site-packages/click/core.py:1264
+#, python-brace-format
+msgid "DeprecationWarning: The command {name!r} is deprecated.{extra_message}"
+msgstr ""
+
+#: venv/Lib/site-packages/click/core.py:1448
+msgid "Aborted!"
+msgstr "تم الإلغاء!"
+
+#: venv/Lib/site-packages/click/core.py:1822
+msgid "Commands"
+msgstr "الأوامر"
+
+#: venv/Lib/site-packages/click/core.py:1853
+msgid "Missing command."
+msgstr "أمر مفقود"
+
+#: venv/Lib/site-packages/click/core.py:1931
+#, python-brace-format
+msgid "No such command {name!r}."
+msgstr ""
+
+#: venv/Lib/site-packages/click/core.py:2355
+msgid "Value must be an iterable."
+msgstr "يجب أن تكون القيمة قابلة للتكرار"
+
+#: venv/Lib/site-packages/click/core.py:2378
+#, python-brace-format
+msgid "Takes {nargs} values but 1 was given."
+msgid_plural "Takes {nargs} values but {len} were given."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#: venv/Lib/site-packages/click/core.py:2567
+#, python-brace-format
+msgid ""
+"DeprecationWarning: The {param_type} {name!r} is "
+"deprecated.{extra_message}"
+msgstr ""
+
+#: venv/Lib/site-packages/click/core.py:3015
+#, python-brace-format
+msgid "env var: {var}"
+msgstr ""
+
+#: venv/Lib/site-packages/click/core.py:3018
+#, python-brace-format
+msgid "default: {default}"
+msgstr ""
+
+#: venv/Lib/site-packages/click/core.py:3022
+msgid "required"
+msgstr "مطلوب"
+
+#: venv/Lib/site-packages/click/core.py:3082
+msgid "(dynamic)"
+msgstr "(ديناميكي)"
+
+#: venv/Lib/site-packages/click/decorators.py:465
+#, python-format
+msgid "%(prog)s, version %(version)s"
+msgstr ""
+
+#: venv/Lib/site-packages/click/decorators.py:522
+msgid "Show the version and exit."
+msgstr "عرض الإصدار والخروج"
+
+#: venv/Lib/site-packages/click/decorators.py:548
+msgid "Show this message and exit."
+msgstr "عرض هذه الرسالة والخروج"
+
+#: venv/Lib/site-packages/click/exceptions.py:50
+#: venv/Lib/site-packages/click/exceptions.py:89
+#, python-brace-format
+msgid "Error: {message}"
+msgstr "خطأ"
+
+#: venv/Lib/site-packages/click/exceptions.py:81
+#, python-brace-format
+msgid "Try '{command} {option}' for help."
+msgstr "جرّب '{command} {option}' للحصول على المساعدة"
+
+#: venv/Lib/site-packages/click/exceptions.py:130
+#, python-brace-format
+msgid "Invalid value: {message}"
+msgstr "قيمة غير صالحة: {message}"
+
+#: venv/Lib/site-packages/click/exceptions.py:132
+#, python-brace-format
+msgid "Invalid value for {param_hint}: {message}"
+msgstr "قيمة غير صالحة لـ {param_hint}: {message}"
+
+#: venv/Lib/site-packages/click/exceptions.py:190
+msgid "Missing argument"
+msgstr "وسيط مفقود"
+
+#: venv/Lib/site-packages/click/exceptions.py:192
+msgid "Missing option"
+msgstr "خيار مفقود"
+
+#: venv/Lib/site-packages/click/exceptions.py:194
+msgid "Missing parameter"
+msgstr "معامل مفقود"
+
+#: venv/Lib/site-packages/click/exceptions.py:196
+#, python-brace-format
+msgid "Missing {param_type}"
+msgstr "{param_type} مفقود"
+
+#: venv/Lib/site-packages/click/exceptions.py:203
+#, python-brace-format
+msgid "Missing parameter: {param_name}"
+msgstr "معامل مفقود: {param_name}"
+
+#: venv/Lib/site-packages/click/exceptions.py:223
+#, python-brace-format
+msgid "No such option: {name}"
+msgstr "لا يوجد خيار باسم {name}"
+
+#: venv/Lib/site-packages/click/exceptions.py:235
+#, python-brace-format
+msgid "Did you mean {possibility}?"
+msgid_plural "(Possible options: {possibilities})"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#: venv/Lib/site-packages/click/exceptions.py:282
+msgid "unknown error"
+msgstr "خطأ غير معروف "
+
+#: venv/Lib/site-packages/click/exceptions.py:289
+#, python-brace-format
+msgid "Could not open file {filename!r}: {message}"
+msgstr "تعذّر فتح الملف {filename!r}: {message}"
+
+#: venv/Lib/site-packages/click/formatting.py:156
+msgid "Usage:"
+msgstr "الاستخدام:"
+
+#: venv/Lib/site-packages/click/parser.py:199
+#, python-brace-format
+msgid "Argument {name!r} takes {nargs} values."
+msgstr ""
+
+#: venv/Lib/site-packages/click/parser.py:381
+#, python-brace-format
+msgid "Option {name!r} does not take a value."
+msgstr ""
+
+#: venv/Lib/site-packages/click/parser.py:444
+#, python-brace-format
+msgid "Option {name!r} requires an argument."
+msgid_plural "Option {name!r} requires {nargs} arguments."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#: venv/Lib/site-packages/click/shell_completion.py:332
+msgid "Shell completion is not supported for Bash versions older than 4.4."
+msgstr "إكمال الأوامر غير مدعوم لإصدارات Bash الأقدم من 4.4"
+
+#: venv/Lib/site-packages/click/shell_completion.py:339
+msgid "Couldn't detect Bash version, shell completion is not supported."
+msgstr "تعذّر تحديد إصدار Bash، إكمال الأوامر غير مدعوم"
+
+#: venv/Lib/site-packages/click/termui.py:165
+msgid "Repeat for confirmation"
+msgstr "كرر للتأكيد"
+
+#: venv/Lib/site-packages/click/termui.py:181
+msgid "Error: The value you entered was invalid."
+msgstr "خطأ: القيمة التي أدخلتها غير صالحة"
+
+#: venv/Lib/site-packages/click/termui.py:183
+#, python-brace-format
+msgid "Error: {e.message}"
+msgstr "خطأ"
+
+#: venv/Lib/site-packages/click/termui.py:194
+msgid "Error: The two entered values do not match."
+msgstr "خطأ: القيمتان المدخلتان غير متطابقتين"
+
+#: venv/Lib/site-packages/click/termui.py:253
+msgid "Error: invalid input"
+msgstr "خطأ: إدخال غير صالح"
+
+#: venv/Lib/site-packages/click/termui.py:872
+msgid "Press any key to continue..."
+msgstr "اضغط أي مفتاح للمتابعة..."
+
+#: venv/Lib/site-packages/click/types.py:332
+#, python-brace-format
+msgid ""
+"Choose from:\n"
+"\t{choices}"
+msgstr ""
+
+#: venv/Lib/site-packages/click/types.py:369
+#, python-brace-format
+msgid "{value!r} is not {choice}."
+msgid_plural "{value!r} is not one of {choices}."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#: venv/Lib/site-packages/click/types.py:460
+#, python-brace-format
+msgid "{value!r} does not match the format {format}."
+msgid_plural "{value!r} does not match the formats {formats}."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#: venv/Lib/site-packages/click/types.py:482
+#, python-brace-format
+msgid "{value!r} is not a valid {number_type}."
+msgstr ""
+
+#: venv/Lib/site-packages/click/types.py:538
+#, python-brace-format
+msgid "{value} is not in the range {range}."
+msgstr ""
+
+#: venv/Lib/site-packages/click/types.py:719
+#, python-brace-format
+msgid "{value!r} is not a valid boolean. Recognized values: {states}"
+msgstr ""
+
+#: venv/Lib/site-packages/click/types.py:747
+#, python-brace-format
+msgid "{value!r} is not a valid UUID."
+msgstr ""
+
+#: venv/Lib/site-packages/click/types.py:937
+msgid "file"
+msgstr "ملف"
+
+#: venv/Lib/site-packages/click/types.py:939
+msgid "directory"
+msgstr "مجلد"
+
+#: venv/Lib/site-packages/click/types.py:941
+msgid "path"
+msgstr "مسار"
+
+#: venv/Lib/site-packages/click/types.py:988
+#, python-brace-format
+msgid "{name} {filename!r} does not exist."
+msgstr ""
+
+#: venv/Lib/site-packages/click/types.py:997
+#, python-brace-format
+msgid "{name} {filename!r} is a file."
+msgstr ""
+
+#: venv/Lib/site-packages/click/types.py:1005
+#, python-brace-format
+msgid "{name} {filename!r} is a directory."
+msgstr ""
+
+#: venv/Lib/site-packages/click/types.py:1014
+#, python-brace-format
+msgid "{name} {filename!r} is not readable."
+msgstr ""
+
+#: venv/Lib/site-packages/click/types.py:1023
+#, python-brace-format
+msgid "{name} {filename!r} is not writable."
+msgstr ""
+
+#: venv/Lib/site-packages/click/types.py:1032
+#, python-brace-format
+msgid "{name} {filename!r} is not executable."
+msgstr ""
+
+#: venv/Lib/site-packages/click/types.py:1099
+#, python-brace-format
+msgid "{len_type} values are required, but {len_value} was given."
+msgid_plural "{len_type} values are required, but {len_value} were given."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#~ msgid "Generic reaction at %(temp)s°Cند %(temp)s°C"
+#~ msgstr "تفاعل عام عند %(temp)s°C"
+
+#~ msgid "Password Reset"
+#~ msgstr "إعادة تعيين كلمة المرور"
+
+#~ msgid ""
+#~ "Click the following link to reset your password:\n"
+#~ "%(link)s"
+#~ msgstr ""
+#~ "اضغطي على الرابط التالي لإعادة تعيين كلمة المرور:\n"
+#~ "%(link)s"
+
+#~ msgid "A password reset link has been sent to your email"
+#~ msgstr "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني"
+
+#~ msgid "An error occurred while sending the email. Please try again later"
+#~ msgstr "حدث خطأ أثناء إرسال البريد، يرجى المحاولة لاحقًا"
+
+#~ msgid "Password updated successfully!"
+#~ msgstr "تم تحديث كلمة المرور بنجاح!"
+

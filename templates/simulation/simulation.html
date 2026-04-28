@@ -1,67 +1,108 @@
-{% extends "base.html" %}
-
-{% block title %}Simulation Result{% endblock %}
-
-{% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/simulation.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}">
+{% extends "base.html" %} {% block title %}{{ _('Simulation Result') }}{% endblock %} {%
+block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/simulation.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/results.css') }}"
+/>
 
 <style>
-/* ===== فقاعات ===== */
-.bubbles-container {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-}
+  /* ===== فقاعات ===== */
+  .bubbles-container {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+  }
 
-.bubble {
-  position: absolute;
-  bottom: 0;
-  background: white;
-  border-radius: 50%;
-  opacity: 0.8;
-  animation: bubbleRise 3s linear forwards;
-}
+  .bubble {
+    position: absolute;
+    bottom: 0;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: bubbleRise 3s linear forwards;
+  }
 
-@keyframes bubbleRise {
-  0% { transform: translateY(0); opacity: 0; }
-  30% { opacity: 1; }
-  100% { transform: translateY(-120px); opacity: 0; }
-}
+  @keyframes bubbleRise {
+    0% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    30% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-120px);
+      opacity: 0;
+    }
+  }
 </style>
 
-{% endblock %}
-
-{% block content %}
-<div class="overlay">
+{% endblock %} {% block content %}
+<!-- تخزين القيم في data attributes -->
+<div
+  class="overlay"
+  data-quantity1="{{ quantity1|default(0) }}"
+  data-quantity2="{{ quantity2|default(0) }}"
+  data-reactant1-color="{{ reactant1_color|default('#cccccc') }}"
+  data-reactant2-color="{{ reactant2_color|default('#cccccc') }}"
+  data-result-color="{{ result_color|default('#999999') }}"
+  data-precipitate="{{ precipitate|default(0) }}"
+  data-gas="{{ gas_produced|default(0) }}"
+  data-reactant1-name="{{ reactant1_name|default('Reactant 1') }}"
+  data-reactant2-name="{{ reactant2_name|default('Reactant 2') }}"
+>
   <div class="result-container result-container-split">
-    
     <!-- ===== العمود الأيسر: نموذج الإدخال ===== -->
     <div class="sidebar-form">
-      <h1>CHEMICAL SIMULATOR</h1>
+      <h1>{{ _('CHEMICAL SIMULATOR') }}</h1>
+      <a href="{{ url_for('reaction.add_reaction') }}">
+        <button class="add-btn" type="button">{{ _('+ Add Reaction') }}</button>
+      </a>
       <form method="POST" action="{{ url_for('simulation.start_simulation') }}">
         <div class="form">
           <select name="reactant1" required>
-            <option value="">Select the first reactant</option>
+            <option value="">{{ _('Select the first reactant') }}</option>
             {% for reactant in reactants %}
             <option value="{{ reactant[0] }}">{{ reactant[1] }}</option>
             {% endfor %}
           </select>
-          <input type="number" name="quantity1" step="0.1" placeholder="Quantity (mol)" min="0" required/>
-          
+          <input
+            type="number"
+            name="quantity1"
+            step="0.1"
+            placeholder="{{ _('Quantity (mol)') }}"
+            min="0"
+            required
+          />
+
           <select name="reactant2" required>
-            <option value="">Select the second reactant</option>
+            <option value="">{{ _('Select the second reactant') }}</option>
             {% for reactant in reactants %}
             <option value="{{ reactant[0] }}">{{ reactant[1] }}</option>
             {% endfor %}
           </select>
-          <input type="number" name="quantity2" step="0.1" placeholder="Quantity (mol)" min="0" required/>
-          
-          <input type="number" name="temperature" placeholder="Temperature °C"/>
-          <button type="submit" class="start">Start Simulation</button>
+          <input
+            type="number"
+            name="quantity2"
+            step="0.1"
+            placeholder="{{ _('Quantity (mol)') }}"
+            min="0"
+            required
+          />
+
+          <input
+            type="number"
+            name="temperature"
+            placeholder="{{ _('Temperature °C') }}"
+          />
+          <button type="submit" class="start">{{ _('Start Simulation') }}</button>
         </div>
       </form>
     </div>
@@ -69,13 +110,15 @@
     <!-- ===== العمود الأيمن: نتائج المحاكاة ===== -->
     <div class="lab-results">
       {% if equation %}
-      
+
       <!-- المعادلة -->
       <div class="equation-card">
         <span class="equation-text">\( \ce{ {{ equation }} } \)</span>
-        {% if temperature %}<span class="temp-badge">🌡️ {{ temperature }}°C</span>{% endif %}
+        {% if temperature %}
+        <span class="temp-badge">🌡️ {{ temperature }}°C</span>
+        {% endif %}
       </div>
-      
+
       <!-- المختبر -->
       <div class="lab-container">
         <div class="lab-scene">
@@ -87,105 +130,95 @@
 
           <!-- الدورق الأيسر -->
           <div class="beaker-left" id="beakerLeft">
-            <div class="beaker-label">{{ reactant1_name|default('Reactant 1') }}</div>
+            <div class="beaker-label">
+              {{ reactant1_name|default(_('Reactant 1')) }}
+            </div>
             <div class="beaker-glass">
               <div class="scale">
-                
-
-  <div class="scale-line big" style="top:10px"></div>
-  <div class="scale-number" style="top:4px">150</div>
-
-  <div class="scale-line small" style="top:35px"></div>
-
-  <div class="scale-line big" style="top:60px"></div>
-  <div class="scale-number" style="top:54px">100</div>
-
-  <div class="scale-line small" style="top:85px"></div>
-
-  <div class="scale-line big" style="top:110px"></div>
-  <div class="scale-number" style="top:104px">50</div>
-
-</div>
+                <div class="scale-line big" style="top: 10px"></div>
+                <div class="scale-number" style="top: 4px">150</div>
+                <div class="scale-line small" style="top: 35px"></div>
+                <div class="scale-line big" style="top: 60px"></div>
+                <div class="scale-number" style="top: 54px">100</div>
+                <div class="scale-line small" style="top: 85px"></div>
+                <div class="scale-line big" style="top: 110px"></div>
+                <div class="scale-number" style="top: 104px">50</div>
+              </div>
               <div class="liquid" id="liquidLeft"></div>
-
-               <script>
-                     const quantity = JSON.parse('{{ quantity1 | default(0) | tojson }}');
-                     const color = JSON.parse('{{ reactant1_color | default("#ccc") | tojson }}');
-
-                     document.getElementById("liquidLeft").style.height = (quantity * 12) + "px";
-                     document.getElementById("liquidLeft").style.backgroundColor = color;
-              </script>
             </div>
             <div class="quantity-badge">{{ quantity1|default(0) }} mol</div>
           </div>
 
           <!-- تيار السائل -->
-          <div class="liquid-stream" id="liquidStream" 
-               style="background: {{ reactant1_color|default('#ccc') }}; display: none;"></div>
+          <div
+            class="liquid-stream"
+            id="liquidStream"
+            style="display: none"
+          ></div>
 
           <!-- الدورق الأيمن -->
           <div class="beaker-right" id="beakerRight">
-            <div class="beaker-label">{{ reactant2_name|default('Reactant 2') }}</div>
+            <div class="beaker-label">
+              {{ reactant2_name|default(_('Reactant 2')) }}
+            </div>
             <div class="beaker-glass">
               <div class="scale">
-
-<div class="scale-line big" style="top:15px"></div>
-<div class="scale-number" style="top:8px">150</div>
-
-<div class="scale-line small" style="top:40px"></div>
-
-<div class="scale-line big" style="top:65px"></div>
-<div class="scale-number" style="top:58px">100</div>
-
-<div class="scale-line small" style="top:90px"></div>
-
-<div class="scale-line big" style="top:115px"></div>
-<div class="scale-number" style="top:108px">50</div>
-
-</div>
-              <div class="liquid" id="liquidRight" style="height: {{ (quantity2|default(0)) * 12 }}px; background-color: {{ reactant2_color|default('#ccc') }};"></div>
+                <div class="scale-line big" style="top: 15px"></div>
+                <div class="scale-number" style="top: 8px">150</div>
+                <div class="scale-line small" style="top: 40px"></div>
+                <div class="scale-line big" style="top: 65px"></div>
+                <div class="scale-number" style="top: 58px">100</div>
+                <div class="scale-line small" style="top: 90px"></div>
+                <div class="scale-line big" style="top: 115px"></div>
+                <div class="scale-number" style="top: 108px">50</div>
+              </div>
+              <div class="liquid" id="liquidRight"></div>
               <div class="precipitate" id="precipitate"></div>
               <div class="bubbles-container" id="bubblesContainer"></div>
             </div>
             <div class="quantity-badge">{{ quantity2|default(0) }} mol</div>
           </div>
-
-          
-
         </div>
       </div>
 
-      {% if temp_message %}<div class="temp-message">{{ temp_message }}</div>{% endif %}
+      {% if temp_message %}
+      <div class="temp-message">{{ temp_message }}</div>
+      {% endif %}
 
       <!-- أزرار التحكم -->
       <div class="control-panel">
-        <button class="btn" id="startBtn">🔬 Start Reaction</button>
-        <button class="btn btn-secondary" id="resetBtn">Reset</button>
+        <button class="btn" id="startBtn" type="button">
+          🔬 {{ _('Start Reaction') }}
+        </button>
+        <button class="btn btn-secondary" id="resetBtn" type="button">
+          {{ _('Reset') }}
+        </button>
       </div>
 
       <!-- النتائج -->
       <div class="results-grid">
         <div class="result-item">
-          <div class="result-label">FINAL COLOR</div>
-          <div class="result-value">
-            {{ result_color|default('#999') }}
-            <span class="color-dot" style="background-color: {{ result_color|default('#999') }};"></span>
+          <div class="result-label">{{ _('FINAL COLOR') }}</div>
+          <div class="result-value" id="resultColorValue">
+            {{ result_color|default('#999999') }}
+            <span class="color-dot" id="colorDot"></span>
           </div>
         </div>
         <div class="result-item">
-          <div class="result-label">REACTION TYPE</div>
+          <div class="result-label">{{ _('REACTION TYPE') }}</div>
           <div class="result-value">{{ reaction_type|default('N/A') }}</div>
         </div>
         <div class="result-item">
-          <div class="result-label">TEMPERATURE</div>
+          <div class="result-label">{{ _('TEMPERATURE') }}</div>
           <div class="result-value">{{ temperature|default('0') }}°C</div>
         </div>
         <div class="result-item">
-          <div class="result-label">PRODUCTS</div>
+          <div class="result-label">{{ _('PRODUCTS') }}</div>
           <div class="result-value">
-            {% if gas_produced|default(0) == 1 %}💨 Gas{% endif %}
-            {% if precipitate|default(0) == 1 %}⚪ Precipitate{% endif %}
-            {% if gas_produced|default(0) == 0 and precipitate|default(0) == 0 %}💧 Solution{% endif %}
+            {% if gas_produced|default(0) == 1 %}💨 {{ _('Gas') }}{% endif %} {% if
+            precipitate|default(0) == 1 %}⚪ {{ _('Precipitate') }}{% endif %} {% if
+            gas_produced|default(0) == 0 and precipitate|default(0) == 0 %}💧
+            {{ _('Solution') }}{% endif %}
           </div>
         </div>
       </div>
@@ -194,16 +227,21 @@
 
       <!-- روابط التنقل -->
       <div class="nav-links">
-        <a href="{{ url_for('simulation.simulation_page') }}" class="btn"> New Simulation</a>
-        <a href="{{ url_for('simulation.simulation_history') }}" class="btn btn-secondary"> History</a>
+        <a href="{{ url_for('simulation.simulation_page') }}" class="btn"
+         >{{ _('New Simulation') }}</a>
+        <a
+          href="{{ url_for('simulation.simulation_history') }}"
+          class="btn btn-secondary"
+          >{{ _('History') }}</a
+        >
       </div>
 
       {% else %}
       <div class="empty-simulation-message">
-        <div style="text-align:center; padding:50px 20px; color:#2c3e50">
-          <span style="font-size:60px">🧪</span>
-          <h3>No Active Simulation</h3>
-          <p>Select reactants and quantities from the left panel to start</p>
+        <div style="text-align: center; padding: 50px 20px; color: #2c3e50">
+          <span style="font-size: 60px">🧪</span>
+          <h3>{{ _('No Active Simulation') }}</h3>
+          <p>{{ _('Select reactants and quantities from the left panel to start a new simulation.') }}</p>
         </div>
       </div>
       {% endif %}
@@ -212,149 +250,213 @@
 </div>
 
 <script>
-let isPouring = false;
+  (function () {
+    // قراءة القيم من data attributes
+    var overlay = document.querySelector(".overlay");
+    if (!overlay) return;
 
-function startPouring() {
-    if (isPouring) return;
-    isPouring = true;
+    var quantity1Value = parseFloat(overlay.dataset.quantity1) || 0;
+    var quantity2Value = parseFloat(overlay.dataset.quantity2) || 0;
+    var reactant1ColorValue = overlay.dataset.reactant1Color || "#cccccc";
+    var reactant2ColorValue = overlay.dataset.reactant2Color || "#cccccc";
+    var resultColorValue = overlay.dataset.resultColor || "#999999";
+    var precipitateFlagValue = parseInt(overlay.dataset.precipitate) || 0;
+    var gasFlagValue = parseInt(overlay.dataset.gas) || 0;
 
-    const beakerLeft = document.getElementById('beakerLeft');
-    const liquidLeft = document.getElementById('liquidLeft');
-    const liquidRight = document.getElementById('liquidRight');
-    const liquidStream = document.getElementById('liquidStream');
-    const startBtn = document.getElementById('startBtn');
+    // تعيين الارتفاعات الأولية
+    var liquidLeft = document.getElementById("liquidLeft");
+    var liquidRight = document.getElementById("liquidRight");
+    var liquidStream = document.getElementById("liquidStream");
+    var colorDot = document.getElementById("colorDot");
 
-    startBtn.innerHTML = '⏳ Pouring...';
+    if (liquidLeft) {
+      liquidLeft.style.height = quantity1Value * 12 + "px";
+      liquidLeft.style.backgroundColor = reactant1ColorValue;
+    }
 
-    const leftRect = beakerLeft.getBoundingClientRect();
-    const sceneRect = document.querySelector('.lab-scene').getBoundingClientRect();
+    if (liquidRight) {
+      liquidRight.style.height = quantity2Value * 12 + "px";
+      liquidRight.style.backgroundColor = reactant2ColorValue;
+    }
 
-    liquidStream.style.display = 'block';
-    liquidStream.style.left = (leftRect.right - sceneRect.left - 8) + 'px';
-    liquidStream.style.top = (leftRect.top - sceneRect.top + 60) + 'px';
-    liquidStream.style.height = '0px';
+    if (liquidStream) {
+      liquidStream.style.backgroundColor = reactant1ColorValue;
+    }
 
-    let streamHeight = 0;
-    const streamInterval = setInterval(() => {
+    if (colorDot) {
+      colorDot.style.backgroundColor = resultColorValue;
+    }
+
+    var isPouring = false;
+    var precipitateFlag = precipitateFlagValue;
+    var gasFlag = gasFlagValue;
+
+    window.startPouring = function () {
+      if (isPouring) return;
+      isPouring = true;
+
+      var beakerLeft = document.getElementById("beakerLeft");
+      var liquidLeftElem = document.getElementById("liquidLeft");
+      var liquidRightElem = document.getElementById("liquidRight");
+      var liquidStreamElem = document.getElementById("liquidStream");
+      var startBtn = document.getElementById("startBtn");
+
+      if (!startBtn) return;
+      startBtn.innerHTML = "⏳ Pouring...";
+
+      var leftRect = beakerLeft.getBoundingClientRect();
+      var sceneRect = document
+        .querySelector(".lab-scene")
+        .getBoundingClientRect();
+
+      liquidStreamElem.style.display = "block";
+      liquidStreamElem.style.left = leftRect.right - sceneRect.left - 8 + "px";
+      liquidStreamElem.style.top = leftRect.top - sceneRect.top + 60 + "px";
+      liquidStreamElem.style.height = "0px";
+
+      var streamHeight = 0;
+      var streamInterval = setInterval(function () {
         if (streamHeight < 80) {
-            streamHeight += 5;
-            liquidStream.style.height = streamHeight + 'px';
+          streamHeight += 5;
+          liquidStreamElem.style.height = streamHeight + "px";
         }
-    }, 50);
+      }, 50);
 
-    setTimeout(() => {
-    const finalColor = "{{ result_color|default('#ccc') }}";
-    const quantity1 = parseFloat("{{ quantity1|default(0) }}");
-    const quantity2 = parseFloat("{{ quantity2|default(0) }}");
+      setTimeout(function () {
+        var finalColor = resultColorValue;
+        var quantity1 = quantity1Value;
+        var quantity2 = quantity2Value;
 
-    let mixStep = 0;
-    let mixInterval = setInterval(() => {
-        mixStep += 0.1;
-        if (mixStep <= 1) {
-            liquidLeft.style.height = (quantity1 * 12 * (1 - mixStep)) + 'px';
-            liquidRight.style.height = ((quantity2 + quantity1 * mixStep) * 12) + 'px';
-        } else {
+        var mixStep = 0;
+        var mixInterval = setInterval(function () {
+          mixStep += 0.1;
+          if (mixStep <= 1) {
+            if (liquidLeftElem) {
+              liquidLeftElem.style.height =
+                quantity1 * 12 * (1 - mixStep) + "px";
+            }
+            if (liquidRightElem) {
+              liquidRightElem.style.height =
+                (quantity2 + quantity1 * mixStep) * 12 + "px";
+            }
+          } else {
             clearInterval(mixInterval);
-            liquidRight.style.backgroundColor = finalColor;
-            liquidLeft.style.height = '0px';
-            
-            // ===== إظهار الراسب بعد اكتمال السكب =====
-            {% if precipitate == 1 %}
-            showPrecipitate();
-            {% endif %}
-            
-            // ===== إظهار الفقاعات =====
-            {% if gas_produced == 1 %}
-            createBubbles();
-            {% endif %}
-        }
-    }, 100);
-}, 1300);
+            if (liquidRightElem) {
+              liquidRightElem.style.backgroundColor = finalColor;
+            }
+            if (liquidLeftElem) {
+              liquidLeftElem.style.height = "0px";
+            }
 
-    setTimeout(() => {
+            if (precipitateFlag == 1) {
+              window.showPrecipitate();
+            }
+
+            if (gasFlag == 1) {
+              window.createBubbles();
+            }
+          }
+        }, 100);
+      }, 1300);
+
+      setTimeout(function () {
         clearInterval(streamInterval);
-        liquidStream.style.display = 'none';
-        beakerLeft.style.transform = 'translateY(0)';
-        startBtn.innerHTML = '🔬 Start Reaction';
+        liquidStreamElem.style.display = "none";
+        beakerLeft.style.transform = "translateY(0)";
+        startBtn.innerHTML = "🔬 Start Reaction";
         isPouring = false;
-    }, 2400);
-}
+      }, 2400);
+    };
 
+    window.createBubbles = function () {
+      var container = document.getElementById("bubblesContainer");
+      if (!container) return;
 
-
-// إنشاء الفقاعات
-function createBubbles() {
-    const container = document.getElementById("bubblesContainer");
-    if (!container) return;
-
-    for (let i = 0; i < 6; i++) {
-        const bubble = document.createElement("div");
+      for (var i = 0; i < 6; i++) {
+        var bubble = document.createElement("div");
         bubble.className = "bubble";
-        bubble.style.width = (Math.random() * 6 + 4) + "px";
+        bubble.style.width = Math.random() * 6 + 4 + "px";
         bubble.style.height = bubble.style.width;
-        bubble.style.left = (Math.random() * 80 + 10) + "%";
-        bubble.style.animationDuration = (Math.random() * 2 + 2) + "s";
+        bubble.style.left = Math.random() * 80 + 10 + "%";
+        bubble.style.animationDuration = Math.random() * 2 + 2 + "s";
         container.appendChild(bubble);
 
-        setTimeout(() => bubble.remove(), 4000);
-    }
-}
+        setTimeout(
+          (function (b) {
+            return function () {
+              if (b && b.remove) b.remove();
+            };
+          })(bubble),
+          4000,
+        );
+      }
+    };
 
-function showPrecipitate() {
-    const precipitateDiv = document.getElementById('precipitate');
-    const liquidRight = document.getElementById('liquidRight');
-    
-    if (precipitateDiv && liquidRight) {
-        // جلب ارتفاع السائل الحالي
-        let liquidHeight = parseFloat(liquidRight.style.height);
-        
-        // إذا كان السائل موجود
+    window.showPrecipitate = function () {
+      var precipitateDiv = document.getElementById("precipitate");
+      var liquidRightElem = document.getElementById("liquidRight");
+
+      if (precipitateDiv && liquidRightElem) {
+        var liquidHeight = parseFloat(liquidRightElem.style.height);
         if (liquidHeight > 0) {
-            // الراسب يكون 20-25px فقط بغض النظر عن كمية السائل
-            // هذا يضمن شكله جميل ومتناسب
-            const precipitateHeight = Math.min(25, liquidHeight * 0.3);
-            
-            precipitateDiv.style.setProperty('--precipitate-height', precipitateHeight + 'px');
-            precipitateDiv.style.display = 'block';
-            precipitateDiv.classList.remove('show');
-            void precipitateDiv.offsetWidth;
-            precipitateDiv.classList.add('show');
+          var precipitateHeight = Math.min(25, liquidHeight * 0.3);
+          precipitateDiv.style.setProperty(
+            "--precipitate-height",
+            precipitateHeight + "px",
+          );
+          precipitateDiv.style.display = "block";
+          precipitateDiv.classList.remove("show");
+          setTimeout(function () {
+            precipitateDiv.classList.add("show");
+          }, 10);
         }
+      }
+    };
+
+    window.resetSimulation = function () {
+      var liquidLeftElem = document.getElementById("liquidLeft");
+      var liquidRightElem = document.getElementById("liquidRight");
+      var liquidStreamElem = document.getElementById("liquidStream");
+      var startBtn = document.getElementById("startBtn");
+      var precipitateDiv = document.getElementById("precipitate");
+
+      if (liquidLeftElem) {
+        liquidLeftElem.style.height = quantity1Value * 12 + "px";
+        liquidLeftElem.style.backgroundColor = reactant1ColorValue;
+      }
+      if (liquidRightElem) {
+        liquidRightElem.style.height = quantity2Value * 12 + "px";
+        liquidRightElem.style.backgroundColor = reactant2ColorValue;
+      }
+      if (liquidStreamElem) {
+        liquidStreamElem.style.display = "none";
+      }
+      if (startBtn) {
+        startBtn.innerHTML = "🔬 Start Reaction";
+      }
+
+      if (precipitateDiv) {
+        precipitateDiv.classList.remove("show");
+        precipitateDiv.style.display = "none";
+      }
+
+      var bubbles = document.querySelectorAll("#bubblesContainer .bubble");
+      for (var i = 0; i < bubbles.length; i++) {
+        if (bubbles[i] && bubbles[i].remove) bubbles[i].remove();
+      }
+    };
+
+    var startBtn = document.getElementById("startBtn");
+    var resetBtn = document.getElementById("resetBtn");
+
+    if (startBtn) {
+      startBtn.addEventListener("click", window.startPouring);
     }
-}
-function resetSimulation() {
-    const liquidLeft = document.getElementById('liquidLeft');
-    const liquidRight = document.getElementById('liquidRight');
-    const liquidStream = document.getElementById('liquidStream');
-    const startBtn = document.getElementById('startBtn');
-    const precipitateDiv = document.getElementById('precipitate');
-
-    liquidLeft.style.height = "{{ (quantity1|default(0)) * 12 }}px";
-    liquidLeft.style.backgroundColor = "{{ reactant1_color|default('#ccc') }}";
-    liquidRight.style.height = "{{ (quantity2|default(0)) * 12 }}px";
-    liquidRight.style.backgroundColor = "{{ reactant2_color|default('#ccc') }}";
-    liquidStream.style.display = 'none';
-    startBtn.innerHTML = '🔬 Start Reaction';
-    
-    // إخفاء الراسب وإعادة تعيينه
-    if (precipitateDiv) {
-        precipitateDiv.classList.remove('show');
-        precipitateDiv.style.display = 'none';
+    if (resetBtn) {
+      resetBtn.addEventListener("click", window.resetSimulation);
     }
-
-    // إزالة أي فقاعات موجودة
-    document.querySelectorAll('#bubblesContainer .bubble').forEach(b => b.remove());
-}
-
-document.getElementById("startBtn").addEventListener("click", startPouring);
-document.getElementById("resetBtn").addEventListener("click", resetSimulation);
-
-
-
-
-
+  })();
 </script>
- <script src="{{ url_for('static', filename='js/simulation.js') }}"></script>
-
+<script src="{{ url_for('static', filename='js/simulation.js') }}"></script>
 
 {% endblock %}
