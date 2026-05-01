@@ -19,6 +19,6 @@ class Config:
     #  Allowed extensions
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-    # 🌍 Babel (إضافة فقط)
+    #  Babel (إضافة فقط)
     BABEL_DEFAULT_LOCALE = 'en'
     BABEL_SUPPORTED_LOCALES = ['en', 'ar']

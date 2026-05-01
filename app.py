@@ -258,7 +258,7 @@ def profile():
         flash("User not found")
         return redirect(url_for("login.login"))
 
-    return render_template("profile.html", user=user)
+    return render_template("profile/profile.html", user=user)
 
 @app.route('/update_profile', methods=['POST'])
 def update_profile():

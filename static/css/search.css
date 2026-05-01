@@ -134,7 +134,7 @@ body {
 
 /* ===== REACTION STYLE ===== */
 .reaction {
-  border-left: 4px solid orange;
+  border-left: 4px solid #3b82f6;
 }
 
 /* ===== EMPTY STATE ===== */
@@ -256,6 +256,27 @@ body {
   color: #2f6bff;
 }
 
+/* ===== SIMPLE BACK BUTTON ===== */
+.back-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 8px 20px;
+  background: #ffffff;
+  color: #2f6bff; /* النص أزرق */
+  border: 1px solid #e0e6f5;
+  border-radius: 25px; /* شكل بيضوي */
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+/* hover خفيف فقط */
+.back-btn:hover {
+  background: #f5f8ff;
+}
+
 /* ============================================================
    ⭐ FIX مهم لمشكل RTL في صفحة البحث (هذا هو الحل الحقيقي)
    ============================================================ */
@@ -282,4 +303,3 @@ html[dir="rtl"] input {
   direction: ltr;
   text-align: left;
 }
-
