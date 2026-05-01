@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Simulation History{% endblock %}
+{% block title %}{{ _('SIMULATION History') }}{% endblock %}
 
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
@@ -11,15 +11,15 @@
 <div class="overlay">
     <div class="history-container">
         <h1>
-            SIMULATION HISTORY
-            <span class="records-badge">{{ history|length }} Records</span>
+            {{ _('SIMULATION HISTORY') }}
+            <span class="records-badge">{{ history|length }} {{ _('Records') }}</span>
         </h1>
         
         <!-- إحصائيات سريعة -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-value">{{ history|length }}</div>
-                <div class="stat-label">Total Simulations</div>
+                <div class="stat-label">{{ _('Total Simulations') }}</div>
             </div>
             
             <div class="stat-card">
@@ -30,7 +30,7 @@
                     {% endif %}
                 {% endfor %}
                 <div class="stat-value">{{ colors|length }}</div>
-                <div class="stat-label">Different Colors</div>
+                <div class="stat-label">{{ _('Different Colors') }}</div>
             </div>
             
             <div class="stat-card">
@@ -41,7 +41,7 @@
                     {% endif %}
                 {% endfor %}
                 <div class="stat-value">{{ types|length }}</div>
-                <div class="stat-label">Reaction Types</div>
+                <div class="stat-label">{{ _('Reaction Types') }}</div>
             </div>
             
             <div class="stat-card">
@@ -55,33 +55,30 @@
                     {% set avg_temp = 0 %}
                 {% endif %}
                 <div class="stat-value">{{ avg_temp }}°C</div>
-                <div class="stat-label">Avg Temperature</div>
+                <div class="stat-label">{{ _('Avg Temperature') }}</div>
             </div>
         </div>
         
         <!-- فلتر البحث -->
         <div class="filter-section">
             <div class="search-box">
-                <input type="text" class="search-input" id="searchInput" placeholder="Search by equation, color, type..." onkeyup="filterTable()">
+                <input type="text" class="search-input" id="searchInput" placeholder="{{ _('Search by equation, color, type...') }}" onkeyup="filterTable()">
                 <select class="filter-select" id="typeFilter" onchange="filterTable()">
-                    <option value="all">All Types</option>
-                    <option value="neutralization">Neutralization</option>
-                    <option value="precipitation">Precipitation</option>
-                    <option value="complex">Complex</option>
-                    <option value="acid-base">Acid-Base</option>
-                    <option value="gas">Gas</option>
-                    <option value="combustion">Combustion</option>
-                    <option value="indicator">Indicator</option>
+                    <option value="all">{{ _('All Types') }}</option>
+                    <option value="neutralization">{{ _('Neutralization') }}</option>
+                    <option value="precipitation">{{ _('Precipitation') }}</option>
+                    <option value="complex">{{ _('Complex') }}</option>
+                    <option value="acid-base">{{ _('Acid-Base') }}</option>
+                    <option value="gas">{{ _('Gas') }}</option>
+                    <option value="combustion">{{ _('Combustion') }}</option>
                 </select>
             </div>
             
             <div class="export-buttons">
-                <button class="export-btn" onclick="exportToCSV()">CSV</button>
-                <button class="export-btn" onclick="exportToJSON()">JSON</button>
-                <button class="export-btn" onclick="printTable()">Print</button>
+                <button class="export-btn" onclick="printTable()">{{ _('Print') }}</button>
             </div>
             
-            <button class="clear-filter" onclick="clearFilters()">Clear Filters</button>
+            <button class="clear-filter" onclick="clearFilters()">{{ _('Clear Filters') }}</button>
         </div>
         
         <!-- جدول التاريخ -->
@@ -89,14 +86,14 @@
             <table id="historyTable">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Date & Time</th>
-                        <th>Equation</th>
-                        <th>Temperature</th>
-                        <th>Final Color</th>
-                        <th>Type</th>
-                        <th>Products</th>
-                        <th>Actions</th>
+                        <th>{{ _('ID') }}</th>
+                        <th>{{ _('Date & Time') }}</th>
+                        <th>{{ _('Equation') }}</th>
+                        <th>{{ _('Temperature') }}</th>
+                        <th>{{ _('Final Color') }}</th>
+                        <th>{{ _('Type') }}</th>
+                        <th>{{ _('Products') }}</th>
+                        <th>{{ _('Actions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -118,24 +115,24 @@
                             <td>
                                 {% set type_lower = sim[6]|lower %}
                                 {% if 'gas' in type_lower %}
-                                    <span class="badge badge-gas">Gas</span>
+                                    <span class="badge badge-gas">{{ _('Gas') }}</span>
                                 {% elif 'precipitation' in type_lower or 'precipitate' in type_lower %}
-                                    <span class="badge badge-precipitate">Precipitate</span>
+                                    <span class="badge badge-precipitate">{{ _('Precipitate') }}</span>
                                 {% else %}
-                                    <span class="badge badge-solution">Solution</span>
+                                    <span class="badge badge-solution">{{ _('Solution') }}</span>
                                 {% endif %}
                             </td>
                             <td>
-                                <button class="action-btn view-btn" onclick="viewSimulation('{{ sim[0] }}')">View</button>
-                                <button class="action-btn delete-btn" onclick="deleteSimulation('{{ sim[0] }}')">Delete</button>
+                                <button class="action-btn view-btn" onclick="viewSimulation('{{ sim[0] }}')">{{ _('View') }}</button>
+                                <button class="action-btn delete-btn" onclick="deleteSimulation('{{ sim[0] }}')">{{ _('Delete') }}</button>
                             </td>
                         </tr>
                         {% endfor %}
                     {% else %}
                         <tr>
                             <td colspan="8" class="no-data">
-                                <div>No simulations found</div>
-                                <div>Start your first experiment!</div>
+                                <div>{{ _('No simulations found') }}</div>
+                                <div>{{ _('Start your first experiment!') }}</div>
                             </td>
                         </tr>
                     {% endif %}
@@ -145,7 +142,7 @@
         
         <!-- روابط التنقل -->
         <div class="nav-links">
-            <a href="{{ url_for('simulation.simulation_page') }}" class="btn">New Simulation</a>
+            <a href="{{ url_for('simulation.simulation_page') }}" class="btn">{{ _('New Simulation') }}</a>
         </div>
     </div>
 </div>

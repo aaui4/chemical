@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Forgot Password</title>
+    <title>{{ _('Forgot Password') }}</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
@@ -17,27 +17,53 @@
 
   <body>
     <div class="wrapper">
+      <!-- عرض رسائل الفلاش -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
       <form action="{{ url_for('forgot') }}" method="POST">
-        <h1>Forgot Password</h1>
+        <h1>{{ _('Forgot Password') }}</h1>
 
         <p style="text-align: center; font-size: 14px; margin-bottom: 20px">
-          Enter your email to reset your password
+          {{ _('Enter your email to reset your password') }}
         </p>
 
         <div class="input-box">
-          <input type="email" name="email" placeholder="Email" required />
+          <input type="email" name="email" placeholder="{{ _('Email') }}" required />
           <i class="bx bxs-envelope"></i>
         </div>
 
-        <button type="submit" class="btn">Send Reset Link</button>
+        <button type="submit" class="btn">{{ _('Send Reset Link') }}</button>
 
         <div class="register-link">
           <p>
-            Remember your password?
-            <a href="{{url_for('login.login')}}">Login</a>
+            {{ _('Remember your password?') }}
+            <a href="{{url_for('login.login')}}">{{ _('Login') }}</a>
           </p>
         </div>
       </form>
     </div>
+
+    <!-- إضافة JavaScript لاختفاء الرسائل تلقائياً -->
+    <script>
+      setTimeout(function() {
+        let alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+          alert.classList.remove('show');
+          alert.classList.add('fade');
+          setTimeout(function() {
+            alert.remove();
+          }, 500);
+        });
+      }, 5000);
+    </script>
   </body>
 </html>

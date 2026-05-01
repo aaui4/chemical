@@ -8,39 +8,39 @@ def register_user(username, email, password, role="user"):
     email = (email or "").strip()
     password = (password or "").strip()
 
-    # 1️⃣ الحقول مطلوبة
+    #  الحقول مطلوبة
     if not username or not email or not password:
-        return False, "جميع الحقول مطلوبة"
+        return False, "All fields are required"
 
-    # 2️⃣ اسم المستخدم
+    #  اسم المستخدم
     if not username.isascii():
-        return False, "اسم المستخدم يجب أن يحتوي على حروف لاتينية فقط"
+        return False, "Username must contain only ASCII characters"
     if username.isdigit():
-        return False, "اسم المستخدم لا يمكن أن يكون أرقام فقط"
+        return False, "Username cannot contain only numbers"
     if not re.fullmatch(r'[A-Za-z0-9_]{4,8}', username):
-        return False, "اسم المستخدم يجب أن يكون بين 4 و 8 أحرف ويحتوي فقط على حروف وأرقام و _"
+        return False, "Username must be between 4 and 8 characters long and can only contain letters, numbers, and underscores"
 
-    # 3️⃣ البريد الإلكتروني
+    #  البريد الإلكتروني
     email_regex = r'^[\w\.-]+@[\w\.-]+\.\w+$'
     if not re.fullmatch(email_regex, email):
-        return False, "البريد الإلكتروني غير صالح"
+        return False, "Email is invalid"
 
-    # 4️⃣ كلمة المرور
+    #  كلمة المرور
     if len(password) < 6:
-        return False, "كلمة المرور يجب أن تكون 6 أحرف على الأقل"
+        return False, "The password must be at least 6 characters long."
     if not re.fullmatch(r'[A-Za-z0-9]+', password):
-        return False, "كلمة المرور يمكن أن تحتوي على أحرف وأرقام فقط"
+        return False, "The password can only contain letters and numbers."
 
     db = get_db()
 
-    # 5️⃣ التحقق من التكرار
+    #  التحقق من التكرار
     if db.execute("SELECT 1 FROM user WHERE username = ?", (username,)).fetchone():
-        return False, "اسم المستخدم موجود مسبقًا"
+        return False, "Username already exists"
     
     if db.execute("SELECT 1 FROM user WHERE email = ?", (email,)).fetchone():
-        return False, "البريد الإلكتروني موجود مسبقًا"
+        return False, "Email already exists"
 
-    # 6️⃣ تشفير كلمة المرور وإدخال المستخدم
+    # 6️ تشفير كلمة المرور وإدخال المستخدم
     hashed_password = generate_password_hash(password)
 
     try:
@@ -52,5 +52,5 @@ def register_user(username, email, password, role="user"):
         return True, None
     except Exception as e:
         print("REGISTER ERROR:", e)
-        return False, "حدث خطأ أثناء التسجيل"
+        return False, "An error occurred during registration"
     

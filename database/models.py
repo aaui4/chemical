@@ -36,17 +36,23 @@ def create_tables():
     )
     """)
 
-    # ===== chemical_reactions =====
+   # ===== chemical_reactions =====
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS chemical_reactions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         equation TEXT NOT NULL,
+        description TEXT,
         type TEXT,
         temperature REAL,
-        pressure REAL
-    )
-    """)
-
+        pressure REAL,
+        result_color TEXT,
+        gas_produced INTEGER DEFAULT 0,
+        precipitate INTEGER DEFAULT 0,
+        min_temp REAL DEFAULT 20.0,
+        created_at TEXT DEFAULT (datetime('now', 'localtime'))
+)
+""")
+    
     # ===== simulation =====
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS simulation (
@@ -82,6 +88,23 @@ def create_tables():
         PRIMARY KEY (reaction_id, element_id),
         FOREIGN KEY (reaction_id) REFERENCES chemical_reactions(id),
         FOREIGN KEY (element_id) REFERENCES chemical_elements(id)
+    )
+    """)
+    
+    # ===== pending_reactions =====
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS pending_reactions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        equation TEXT NOT NULL,
+        description TEXT,
+        type TEXT,
+        temperature REAL,
+        pressure REAL,
+        result_color TEXT,
+        status TEXT DEFAULT 'pending',
+        created_at TEXT DEFAULT (datetime('now', 'localtime')),
+        FOREIGN KEY (user_id) REFERENCES user(id)
     )
     """)
 

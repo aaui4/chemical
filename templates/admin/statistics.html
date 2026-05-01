@@ -4,17 +4,17 @@
 
 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
 
-     <title>Statistics</title>
+     <title>{{ _('Statistics') }}</title>
 
 
 <div class="container">
 
-    {% include 'sidebar.html' %}
+    {% include 'admin/sidebar.html' %}
 
 
     <div class="main">
         <div class="topbar">
-            <h3>Statistics</h3>
+            <h3>{{ _('Statistics') }}</h3>
         </div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -29,7 +29,7 @@
         {% endwith %}
 
         <div class="chart-box">
-            <h4>Reactions Overview</h4>
+            <h4>{{ _('Reactions Overview') }}</h4>
             <canvas id="statsChart"></canvas>
         </div>
 
@@ -38,8 +38,8 @@
 </div>
 
 <script>
-    window.chartLabels = {{ labels | tojson }};
-    window.chartData = {{ data | tojson }};
+   window.chartLabels = JSON.parse('{{ labels | tojson | safe }}');
+    window.chartData = JSON.parse('{{ data | tojson | safe }}');
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

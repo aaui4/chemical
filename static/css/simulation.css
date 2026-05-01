@@ -123,6 +123,7 @@ input::placeholder {
   );
 }
 
+
 /* تنسيقات ملف results.html */
 
 
@@ -269,4 +270,42 @@ z-index:1;
     height: var(--precipitate-height, 25px);
     opacity: 0.9;
   }
+}
+
+/* ===== AUTH DROPDOWN FIX RTL/LTR ===== */
+
+.auth-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.auth-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;   /* default for LTR */
+  left: auto;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  min-width: 160px;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+/* لما تكون عربي */
+html[dir="rtl"] .auth-dropdown {
+  right: auto;
+  left: 0;
+}
+
+.auth-dropdown a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #2f6bff;
+  font-size: 14px;
+}
+
+.auth-dropdown a:hover {
+  background: #f2f6ff;
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Dashboard</title>
+    <title>{{ _('Dashboard') }}</title>
 
     <!-- CSS Stylesheets -->
     <link rel="stylesheet" href="/static/css/admin.css" />
@@ -14,15 +14,15 @@
     <div class="container">
 
         <!-- Sidebar -->
-        {% include 'sidebar.html' %}
+        {% include 'admin/sidebar.html' %}
 
         <!-- Main Content -->
         <main class="main">
 
             <!-- Topbar / Header -->
             <div class="topbar">
-                <h3>Admin Control Panel</h3>
-                
+                <h3>{{ _('Admin Control Panel') }}</h3>
+
             </div>
 
             <!-- Flash Messages -->
@@ -41,33 +41,32 @@
             <div class="cards">
                 <div class="card">
                     <i class='bx bx-user'></i>
-                    <h4>Users</h4>
+                    <h4>{{ _('Users') }}</h4>
                     <p>{{ users_count }}</p>
                 </div>
                 <div class="card">
                     <i class='bx bx-loader-circle'></i>
-                    <h4>Total Experiments </h4>
+                    <h4>{{ _('Total Experiments') }}</h4>
                     <p>{{ total_experiments }}</p>
                 </div>
-                
             </div>
 
             <!-- Chart Section -->
             <div class="chart-box">
-                <h4>Experiment Activity</h4>
+                <h4>{{ _('Experiment Activity') }}</h4>
                 <canvas id="reactionsChart"></canvas>
             </div>
 
             <!-- Recent Experiments Table -->
             <div class="table-box">
-                <h4>Recent Experiments</h4>
+                <h4>{{ _('Recent Experiments') }}</h4>
                 <div class="table-responsive">
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Equation</th>
-                                <th>Status</th>
-                                <th>Date</th>
+                                <th>{{ _('Equation') }}</th>
+                                <th>{{ _('Status') }}</th>
+                                <th>{{ _('Date') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -85,15 +84,13 @@
                 </div>
             </div>
 
-        </main>
-
-
-
     <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
-<script>
-    window.chartLabels = {{ chart_labels | tojson }};
-    window.chartData = {{ chart_data | tojson }};
-</script>
-<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <script>
+    window.chartLabels = JSON.parse('{{ chart_labels | tojson | safe }}');
+    window.chartData = JSON.parse('{{ chart_data | tojson | safe }}');
+    </script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+</main>
 </body>
 </html>
