@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/reaction.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="reaction-form-container">
+    <h2>🧪{{ _(' Add New Reaction') }}</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('reaction.add_reaction') }}">
+        <div class="form-group">
+            <label>⚡{{ _(' Equation') }}</label>
+            <input type="text" name="equation" placeholder="Example: HCl + NaOH → NaCl + H2O" required>
+        </div>
+
+        <div class="form-group">
+            <label>📝{{ _(' Description') }}</label>
+            <textarea name="description" placeholder="Enter detailed description of the reaction..."></textarea>
+        </div>
+
+        <hr>
+
+        <div class="section-title">⚙️{{ _(' Reaction Properties') }}</div>
+
+        <div class="reactants-row">
+            <div class="form-group">
+                <label>🏷️{{ _(' Reaction Type') }}</label>
+                <select name="reaction_type">
+                    <option value="neutralization">{{ _('Neutralization') }}</option>
+                    <option value="precipitation">{{ _('Precipitation') }}</option>
+                    <option value="complex">{{ _('Complexation') }}</option>
+                    <option value="gas">{{ _('Gas') }}</option>
+                    <option value="combustion">{{ _('Combustion') }}</option>
+                    <option value="default">{{ _('Default') }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="reactants-row">
+            <div class="form-group">
+                <label>🌡️{{ _(' Temperature (°C)') }}</label>
+                <input type="number" name="temperature" step="0.1" placeholder="{{ _('e.g., 25') }}">
+            </div>
+            <div class="form-group">
+                <label>💨{{ _(' Pressure (atm)') }}</label>
+                <input type="number" name="pressure" step="0.1" placeholder="{{ _('e.g., 1') }}">
+            </div>
+        </div>
+
+        <!-- ===== حقل لون النتيجة المضاف ===== -->
+        <div class="form-group">
+            <label>🎨{{ _(' Result Color') }}</label>
+            <div class="color-input-wrapper">
+                <input type="color" name="result_color" value="#ffffff">
+                <input type="text" name="result_color_text" placeholder="{{ _('Color (e.g. #ff0000)') }}">
+            </div>
+        </div>
+        <!-- ===== انتهى ===== -->
+
+        <button type="submit" class="submit-btn">{{ _(' Add Reaction') }}</button>
+    </form>
+</div>
+{% endblock %}

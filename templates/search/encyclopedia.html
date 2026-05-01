@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %} {{ _('Encyclopedia') }} {% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="hero-text">
+  <h1 class="title-main">{{ _('Chemical') }}</h1>
+  <h2 class="title-sub">{{ _('Encyclopedia') }}</h2>
+</div>
+
+<!-- SEARCH -->
+<form class="box" method="GET" action="{{ url_for('compound.encyclopedia') }}">
+ <input type="text" name="q" placeholder="{{ _('Search compound or reaction...') }}" value="{{ query or '' }}" />
+  <button type="submit">{{ _('Search') }}</button>
+</form>
+
+<!-- EMPTY STATE -->
+{% if query and compounds|length == 0 and reactions|length == 0 %}
+  <div class="empty-state">
+    <p>{{ _('No results found for "%(query)s"', query=query) }}</p>
+  </div>
+{% endif %}
+
+<!-- FILTERS -->
+<div class="filters">
+  <button onclick="showAll()">{{ _('All') }}</button>
+  <button onclick="showCompounds()">{{ _('Compounds') }}</button>
+  <button onclick="showReactions()">{{ _('Reactions') }}</button>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="layout">
+
+ <!-- COMPOUNDS -->
+<div id="compounds-section" class="cards-search">
+
+  {% for compound in compounds %}
+  <div class="card-search">
+    <h3>{{ compound.name }}</h3>
+    <p class="formula">{{ compound.formula }}</p>
+
+    <a href="{{ url_for('compound.compound_page', name=compound.name) }}">
+      <button>{{ _('View More') }}</button>
+    </a>
+  </div>
+  {% endfor %}
+
+</div>
+
+<!-- REACTIONS -->
+<div id="reactions-section" class="cards-search">
+
+  {% for r in reactions %}
+  <div class="card-search reaction">
+    <h3>{{ r.equation }}</h3>
+
+    <p>
+      {{ r.description or _('No description available') }}
+    </p>
+
+    <small>
+      {{ _(r.type) }}
+    </small>
+  </div>
+  {% endfor %}
+
+</div>
+<!-- FILTER SCRIPT -->
+
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+
+{% endblock %}
