@@ -51,6 +51,11 @@
                 {% endif %}
             </span>
 
+            <!-- زر تغيير كلمة المرور -->
+            <button type="button" class="btn-change-password" onclick="openPasswordModal()">
+                <i class='bx bx-key'></i> {{ _('Change Password') }}
+            </button>
+
         </div>
 
         <!-- Edit Profile Form -->
@@ -93,6 +98,71 @@
         <a href="{{ url_for('simulation.simulation_history') }}" class="btn btn-primary">{{ _('My History') }}</a>
     </div>
 
+</div>
+
+<!-- Modal (لافتة) لتغيير كلمة المرور -->
+<div id="passwordModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class='bx bx-key'></i> {{ _('Change Password') }}</h3>
+            <span class="close" onclick="closePasswordModal()">&times;</span>
+        </div>
+        
+        <form id="changePasswordForm" action="{{ url_for('change_password') }}" method="POST">
+            <div class="modal-body">
+
+              <!-- Current Password -->
+             <div class="form-group">
+                  <label for="current_password">{{ _('Current Password') }}:</label>
+
+                 <div class="password-box">
+                   <input type="password" id="current_password" name="current_password" required>
+                   <i class='bx bx-show toggle-password'
+                   onclick="togglePassword('current_password', this)"></i>
+                 </div>
+
+                 <small id="current-password-msg" class="error-message"></small>
+              </div>
+
+               <!-- New Password -->
+               <div class="form-group">
+                 <label for="new_password">{{ _('New Password') }}:</label>
+
+                  <div class="password-box">
+                     <input type="password" id="new_password" name="new_password" required>
+                     <i class='bx bx-show toggle-password'
+                     onclick="togglePassword('new_password', this)"></i>
+                  </div>
+
+                    <small id="new-password-msg" class="error-message"></small>
+                    <small class="hint-message">
+                     {{ _('Password must contain only letters and numbers, at least 6 characters') }}
+                   </small>
+                </div>
+
+                 <!-- Confirm Password -->
+                <div class="form-group">
+                  <label for="confirm_password">{{ _('Confirm New Password') }}:</label>
+
+                   <div class="password-box">
+                     <input type="password" id="confirm_password" name="confirm_password" required>
+                     <i class='bx bx-show toggle-password'
+                       onclick="togglePassword('confirm_password', this)"></i>
+
+                    </div>
+
+                    <small id="confirm-password-msg" class="error-message"></small>
+
+                </div>
+
+              </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" onclick="closePasswordModal()">{{ _('Cancel') }}</button>
+                <button type="submit" class="btn-submit">{{ _('Update Password') }}</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script src="{{ url_for('static', filename='js/validation.js') }}"></script>

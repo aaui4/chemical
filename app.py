@@ -2,9 +2,10 @@ from flask import Blueprint, Flask, render_template, request, flash, redirect, u
 import sqlite3
 from flask_mail import Mail, Message
 from werkzeug.utils import secure_filename
-from werkzeug.security import generate_password_hash  # 🔥 أضف هذا السطر
+from werkzeug.security import generate_password_hash, check_password_hash  # 🔥 أضف هذا السطر
 import secrets
 import os
+import re
 from pathlib import Path
 from config import Config
 from database.models import create_tables
@@ -332,6 +333,58 @@ def delete_avatar():
 
         flash("Avatar deleted successfully", "success")
 
+    return redirect(url_for('profile'))
+
+
+@app.route('/change-password', methods=['POST'])
+def change_password():
+    
+    user_id = session.get("user_id")
+    if not user_id:
+        flash('Please login first', 'error')
+        return redirect(url_for('login.login'))
+    
+    current_password = request.form.get('current_password').strip()
+    new_password = request.form.get('new_password').strip()
+    confirm_password = request.form.get('confirm_password').strip()
+    
+    if not current_password or not new_password or not confirm_password:
+        flash('All fields are required', 'error')
+        return redirect(url_for('profile'))
+    
+    if new_password != confirm_password:
+        flash('New passwords do not match', 'error')
+        return redirect(url_for('profile'))
+    
+    if len(new_password) < 6:
+        flash('Password must be at least 6 characters long', 'error')
+        return redirect(url_for('profile'))
+    
+    db = get_db()
+    
+    user = db.execute("SELECT password FROM user WHERE id = ?", (user_id,)).fetchone()
+    
+    if not user:
+        flash('User not found', 'error')
+        return redirect(url_for('login.login'))
+    
+    stored_password = user["password"]
+
+    if not check_password_hash(stored_password, current_password):
+        flash('Current password is incorrect', 'error')
+        return redirect(url_for('profile'))
+    
+    hashed_password = generate_password_hash(new_password)
+    
+    try:
+        db.execute("UPDATE user SET password = ? WHERE id = ?", (hashed_password, user_id))
+        db.commit()
+        flash('Password changed successfully!', 'success')
+    except Exception as e:
+        db.rollback()
+        flash('An error occurred. Please try again.', 'error')
+        print(f"Error: {e}")
+    
     return redirect(url_for('profile'))
 
 @app.route('/settings')
