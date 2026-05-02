@@ -119,3 +119,104 @@ if (passwordInput) {
         passwordMsg.style.color = "green";
     });
 }
+
+// فتح وإغلاق المودال
+function openPasswordModal() {
+    document.getElementById("passwordModal").style.display = "flex";
+}
+
+function closePasswordModal() {
+    document.getElementById("passwordModal").style.display = "none";
+    // تنظيف النموذج عند الإغلاق
+    document.getElementById("changePasswordForm").reset();
+    // إخفاء رسائل الخطأ
+    document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+}
+
+// إغلاق المودال عند النقر خارج المحتوى
+window.onclick = function(event) {
+    let modal = document.getElementById("passwordModal");
+    if (event.target == modal) {
+        closePasswordModal();
+    }
+}
+
+// التحقق من صحة كلمة المرور قبل الإرسال
+document.getElementById("changePasswordForm").addEventListener("submit", function(event) {
+    let isValid = true;
+    
+    // تنظيف الرسائل السابقة
+    document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+    
+    const currentPassword = document.getElementById("current_password").value;
+    const newPassword = document.getElementById("new_password").value;
+    const confirmPassword = document.getElementById("confirm_password").value;
+    
+    // التحقق من كلمة المرور الحالية
+    if (!currentPassword) {
+        document.getElementById("current-password-msg").textContent = "{{ _('Current password is required') }}";
+        isValid = false;
+    }
+    
+    // التحقق من طول كلمة المرور الجديدة
+    if (newPassword.length < 6) {
+        document.getElementById("new-password-msg").textContent = "{{ _('Password must be at least 6 characters') }}";
+        isValid = false;
+    }
+    
+    // التحقق من أن كلمة المرور تحتوي فقط على حروف وأرقام
+    const passwordRegex = /^[A-Za-z0-9]+$/;
+    if (newPassword && !passwordRegex.test(newPassword)) {
+        document.getElementById("new-password-msg").textContent = "{{ _('Password can only contain letters and numbers') }}";
+        isValid = false;
+    }
+    
+    // التحقق من تطابق كلمتي المرور
+    if (newPassword !== confirmPassword) {
+        document.getElementById("confirm-password-msg").textContent = "{{ _('Passwords do not match') }}";
+        isValid = false;
+    }
+    
+    if (!isValid) {
+        event.preventDefault();
+    }
+});
+
+function showNotification(message, type) {
+    // إنشاء عنصر الإشعار
+    let notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <i class='bx ${type === 'success' ? 'bx-check-circle' : 'bx-error-circle'}'></i>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // إظهار الإشعار
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 100);
+    
+    // إخفاء الإشعار بعد 3 ثواني
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
+}
+
+function togglePassword(inputId, icon) {
+    let input = document.getElementById(inputId);
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("bx-show");
+        icon.classList.add("bx-hide");
+    } else {
+        input.type = "password";
+        icon.classList.remove("bx-hide");
+        icon.classList.add("bx-show");
+    }
+}

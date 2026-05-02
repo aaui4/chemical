@@ -1,66 +1,133 @@
 {% extends "base.html" %}
 
-{% block title %}{{ _('Compound') }}{% endblock %}
+{% block title %}{{ compound.name }} - Chemical Encyclopedia{% endblock %}
 
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+
+
 {% endblock %}
 
 {% block content %}
 
-<div class="compound-wrapper">
-
-    <div class="compound-card">
-
-        <div class="compound-header">
-            <h1>{{ compound.name }}</h1>
+<div class="compound-detailed">
+    
+    {% if compound %}
+    
+    <!-- الهيدر مع الصورة -->
+    <div class="compound-header-large">
+        <h1>{{ compound.name }}</h1>
+        <div class="compound-badge">
+            <span class="badge">📋 {{ compound.formula }}</span>
+            <span class="badge">⚖️ {{ compound.weight }} g/mol</span>
         </div>
-
-        <div class="compound-body">
-
-            {% if compound.image %}
-            <div class="image-container">
-                <img src="{{ compound.image }}" alt="{{ compound.name }}">
-            </div>
-            {% else %}
-            <div class="image-container">
-                <p>{{ _('No image available') }}</p>
-            </div>
-            {% endif %}
-
-            <div class="info">
-
-                <div class="info-row">
-                    <span>{{ _('Formula') }}:</span>
-                    <strong>{{ compound.formula }}</strong>
-                </div>
-
-                <div class="info-row">
-                    <span>{{ _('Molecular Weight') }}:</span>
-                    <strong>{{ compound.weight }}</strong>
-                </div>
-
-                <div class="description-box">
-                    <h3>{{ _('Description') }}</h3>
-                    <p>
-                        {% if compound.description %}
-                            {{ compound.description }}
-                        {% else %}
-                            {{ _('No description available.') }}
-                        {% endif %}
-                    </p>
-                </div>
-
-            </div>
-
-        </div>
-
     </div>
-
-    <a href="{{ url_for('compound.encyclopedia') }}">
-        <button class="back-btn">{{ _('← Back') }}</button>
-    </a>
-
+    
+    {% if compound.image %}
+    <div class="image-container-detailed">
+        <img src="{{ compound.image }}" alt="{{ compound.name }}">
+    </div>
+    {% endif %}
+    
+    {% set info = compound.detailed_info %}
+    
+    <!-- 🔹 DESCRIPTION -->
+    <div class="info-section">
+        <div class="section-header">
+            <h2>Description</h2>
+        </div>
+        <div class="section-content">
+            {% if info and info.description %}
+                <p>{{ info.description }}</p>
+            {% else %}
+                <p class="empty-message">No description available for {{ compound.name }}.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- 🔹 USES -->
+    <div class="info-section">
+        <div class="section-header">
+            <h2>Uses</h2>
+        </div>
+        <div class="section-content">
+            {% if info and info.uses and info.uses|length > 0 %}
+                <ul>
+                    {% for use in info.uses[:5] %}
+                        <li>{{ use }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="empty-message">No usage information available.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- 🔹 PROPERTIES -->
+    <div class="info-section">
+        <div class="section-header">
+            <h2>Properties</h2>
+        </div>
+        <div class="section-content">
+            {% if info and info.properties and info.properties|length > 0 %}
+                {% for prop in info.properties[:8] %}
+                    <div class="property-item">
+                        {% if ':' in prop %}
+                            {% set parts = prop.split(':', 1) %}
+                            <span class="property-key">{{ parts[0]|trim }}:</span>
+                            <span class="property-value">{{ parts[1]|trim }}</span>
+                        {% else %}
+                            <span class="property-value">{{ prop }}</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="property-item">
+                    <span class="property-key">Formula:</span>
+                    <span class="property-value">{{ compound.formula }}</span>
+                </div>
+                <div class="property-item">
+                    <span class="property-key">Molecular Weight:</span>
+                    <span class="property-value">{{ compound.weight }} g/mol</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- 🔹 SAFETY -->
+    <div class="info-section">
+        <div class="section-header">
+            <h2>Safety</h2>
+        </div>
+        <div class="section-content">
+            {% if info and info.safety and info.safety|length > 0 %}
+                <ul>
+                    {% for safety in info.safety[:5] %}
+                        <li>{{ safety }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="empty-message">No safety information available.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% else %}
+    
+    <div class="info-section">
+        <div class="section-content">
+            <p class="empty-message">Compound information not found.</p>
+        </div>
+    </div>
+    
+    {% endif %}
+    
+    <div style="text-align: center;">
+        <a href="{{ url_for('compound.encyclopedia') }}" class="back-btn">
+            ← Back to Encyclopedia
+        </a>
+    </div>
+    
 </div>
 
 {% endblock %}
