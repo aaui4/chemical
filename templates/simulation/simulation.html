@@ -55,7 +55,10 @@ block head %}
     <div class="sidebar-form">
       <h1>{{ _('CHEMICAL SIMULATOR') }}</h1>
       <a href="{{ url_for('reaction.add_reaction') }}">
-        <button class="add-btn" type="button">{{ _('+ Add Reaction') }}</button>
+        <button type="submit" class="submit-btn" id="submitBtn"
+           {% if session['role'] == 'admin' %}disabled{% endif %}>
+           {{ _(' + Add Reaction') }}
+        </button>
       </a>
       <form method="POST" action="{{ url_for('simulation.start_simulation') }}">
         <div class="form">

@@ -1,41 +1,41 @@
 {% extends "base.html" %}
 
-{% block title %}Register{% endblock %}
+{% block title %}{{ _('Register') }}{% endblock %}
 
 {% block content %}
 
 <div class="wrapper">
     <form method="POST" action="{{ url_for('register.register') }}">
-        <h1>Register</h1>    {% if error %}
+        <h1>{{ _('Register') }}</h1>    {% if error %}
     <div class="form-error">
         {{ error }}
     </div>
     {% endif %}
         <div class="input-box">
     <i class="bx bx-user"></i>
-    <input type="text" id="username" name="username" placeholder="Username" required autocapitalize="none" spellcheck="false">
+    <input type="text" id="username" name="username" placeholder="{{ _('Username') }}" required autocapitalize="none" spellcheck="false">
     <small id="username-msg" class="error"></small>
 
 </div>
 
 <div class="input-box">
     <i class="bx bx-envelope"></i>
-    <input type="email" id="email" name="email" placeholder="Email" required>
+    <input type="email" id="email" name="email" placeholder="{{ _('Email') }}" required>
     <small id="email-msg" class="error"></small>
 
 </div>
 
 <div class="input-box">
     <i class="bx bx-lock"></i>
-    <input type="password" name="password" placeholder="Password" required>
+    <input type="password" name="password" placeholder="{{ _('Password') }}" required>
 </div>
 
 
-        <button type="submit" class="btn">Register</button>
+        <button type="submit" class="btn">{{ _('Register') }}</button>
 
         <div class="register-link">
-            <p>Already have an account?
-                <a href="{{ url_for('login.login') }}">Login</a>
+            <p>{{ _('Already have an account?') }}
+                <a href="{{ url_for('login.login') }}">{{ _('Login') }}</a>
             </p>
         </div>
     </form>
