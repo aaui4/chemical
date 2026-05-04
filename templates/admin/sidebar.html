@@ -2,6 +2,13 @@
   <h2>{{ _('Admin') }}</h2>
 
   <ul class="menu">
+    <!-- 🏠 زر HOME -->
+    <li class="home-item">
+      <a href="/">
+        <i class="bx bx-home-alt"></i>{{ _('Home') }}
+      </a>
+    </li>
+
     <li class="{% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
       <a href="{{ url_for('admin.dashboard') }}">
         <i class="bx bxs-dashboard"></i>{{ _('Dashboard') }}
@@ -14,25 +21,19 @@
       </a>
     </li>
 
-    <li
-      class="{% if request.endpoint == 'admin.experiments' %}active{% endif %}"
-    >
+    <li class="{% if request.endpoint == 'admin.experiments' %}active{% endif %}">
       <a href="{{ url_for('admin.experiments') }}">
         <i class="bx bxs-flask"></i> {{ _('Experiments') }}
       </a>
     </li>
 
-    <li
-      class="{% if request.endpoint == 'admin.statistics' %}active{% endif %}"
-    >
+    <li class="{% if request.endpoint == 'admin.statistics' %}active{% endif %}">
       <a href="{{ url_for('admin.statistics') }}">
         <i class="bx bxs-bar-chart-alt-2"></i> {{ _('Statistics') }}
       </a>
     </li>
 
-    <li
-      class="{% if request.endpoint == 'reaction.pending_reactions' %}active{% endif %}"
-    >
+    <li class="{% if request.endpoint == 'reaction.pending_reactions' %}active{% endif %}">
       <a href="{{ url_for('reaction.pending_reactions') }}">
         <i class="bx bx-git-branch"></i> {{ _('Pending Reactions') }}
         <span class="badge">{{ pending_count }}</span>

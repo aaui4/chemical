@@ -29,12 +29,19 @@
             <p>
                 {{ _('This platform offers an interactive and visual way to understand chemical reactions,
                  making chemical concepts easier and more enjoyable to learn.') }}
-              
             </p>
 
             <div class="mt-4">
               <a href="{{ url_for('simulation.simulation_page') }}" class="btn">{{ _('Start Simulation') }}</a>
+              
+              <!-- 🏠 زر Dashboard - يظهر فقط للأدمن -->
+              {% if session.get('role') == 'admin' %}
+                <a href="{{ url_for('admin.dashboard') }}" class="btn admin-dashboard-btn">
+                  <i class='bx bxs-dashboard'></i> {{ _('Go to Dashboard') }}
+                </a>
+              {% endif %}
             </div>
+
           </div>
         </div>
       </div>

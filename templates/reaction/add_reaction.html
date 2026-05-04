@@ -29,6 +29,45 @@
           <textarea name="description" id="description" placeholder="Enter detailed description of the reaction..."></textarea>
         </div>
 
+
+        <hr>
+
+<div class="section-title">🧪 {{ _('Reactants') }}</div>
+
+<div class="reactants-row">
+    <div class="form-group">
+        <label>⚗️ {{ _('Reactant 1 Name') }}</label>
+        <input type="text" name="reactant1_name" required>
+    </div>
+
+    <div class="form-group">
+        <label>🔤 {{ _('Symbol') }}</label>
+        <input type="text" name="reactant1_symbol" required>
+    </div>
+
+     <div class="form-group">
+        <label>⚗️ Reactant 1 Color</label>
+        <input type="text" name="reactant1_color" placeholder="e.g. #ff0000" value="#cccccc">
+    </div>
+</div>
+
+<div class="reactants-row">
+    <div class="form-group">
+        <label>⚗️ {{ _('Reactant 2 Name') }}</label>
+        <input type="text" name="reactant2_name" required>
+    </div>
+
+    <div class="form-group">
+        <label>🔤 {{ _('Symbol') }}</label>
+        <input type="text" name="reactant2_symbol" required>
+    </div>
+
+     <div class="form-group">
+        <label>⚗️ Reactant 2 Color</label>
+        <input type="text" name="reactant2_color" placeholder="e.g. #ff0000" value="#cccccc">
+    </div>
+</div>
+
        <hr>
 
         <div class="section-title">⚙️{{ _(' Reaction Properties') }}</div>

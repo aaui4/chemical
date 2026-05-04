@@ -4,6 +4,31 @@ from flask_babel import gettext as _
 
 reaction = Blueprint('reaction', __name__)
 
+# ✅ دالة منع التكرار
+def get_or_create_element(cursor, name, symbol):
+    # تنظيف بسيط (حتى لو ديرتيه في الفورم ما يضرش)
+    name = name.strip().lower()
+    symbol = symbol.strip().upper()
+
+    cursor.execute("""
+        SELECT id FROM chemical_elements
+        WHERE LOWER(name) = ? AND LOWER(symbol) = LOWER(?)
+    """, (name, symbol))
+
+    existing = cursor.fetchone()
+
+    if existing:
+        return existing[0]
+
+    cursor.execute("""
+        INSERT INTO chemical_elements (name, symbol)
+        VALUES (?, ?)
+    """, (name, symbol))
+
+    return cursor.lastrowid
+
+
+
 # ===== USER: Add Reaction =====
 @reaction.route('/add_reaction', methods=['GET', 'POST'])
 def add_reaction():
@@ -16,20 +41,37 @@ def add_reaction():
         reaction_type = request.form.get('reaction_type', 'default')
         temperature = request.form.get('temperature')
         pressure = request.form.get('pressure')
-        
-        # جلب لون النتيجة من المستخدم
+        reactant1_color = request.form.get("reactant1_color", "#cccccc")
+        reactant2_color = request.form.get("reactant2_color", "#cccccc")
+
+        # 🆕 المتفاعلات
+        reactant1_name = request.form.get("reactant1_name")
+        reactant1_symbol = request.form.get("reactant1_symbol")
+        reactant2_name = request.form.get("reactant2_name")
+        reactant2_symbol = request.form.get("reactant2_symbol")
+
         result_color = request.form.get('result_color_text') or request.form.get('result_color') or '#ffffff'
-        
+
         user_id = session['user_id']
 
         conn = sqlite3.connect('database/chemical.db')
         c = conn.cursor()
 
-        # تخزين التفاعل مع result_color
+        # ✅ إنشاء أو جلب العناصر
+        reactant1_id = get_or_create_element(c, reactant1_name, reactant1_symbol)
+        reactant2_id = get_or_create_element(c, reactant2_name, reactant2_symbol)
+
+        # تخزين التفاعل
         c.execute("""
             INSERT INTO pending_reactions (user_id, equation, description, type, temperature, pressure, result_color, status)
             VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')
         """, (user_id, equation, description, reaction_type, temperature, pressure, result_color))
+
+        reaction_id = c.lastrowid
+
+        # ✅ ربط المتفاعلات
+        c.execute("INSERT INTO reaction_elements (reaction_id, element_id) VALUES (?, ?)", (reaction_id, reactant1_id))
+        c.execute("INSERT INTO reaction_elements (reaction_id, element_id) VALUES (?, ?)", (reaction_id, reactant2_id))
 
         conn.commit()
         conn.close()
@@ -40,12 +82,12 @@ def add_reaction():
     return render_template('reaction/add_reaction.html')
 
 
-# ===== ADMIN: عرض التفاعلات المعلقة =====
+# ===== ADMIN: عرض التفاعلات =====
 @reaction.route('/admin/pending_reactions')
 def pending_reactions():
     if 'user_id' not in session:
         return redirect(url_for('login.login'))
-    
+
     conn = sqlite3.connect('database/chemical.db')
     c = conn.cursor()
 
@@ -60,7 +102,6 @@ def pending_reactions():
     reactions = c.fetchall()
 
     conn.close()
-
     return render_template('reaction/pending_reactions.html', reactions=reactions)
 
 
@@ -70,7 +111,6 @@ def accept(id):
     conn = sqlite3.connect('database/chemical.db')
     c = conn.cursor()
 
-    # جلب بيانات التفاعل مع result_color
     c.execute("""
         SELECT equation, description, type, temperature, pressure, result_color
         FROM pending_reactions 
@@ -79,13 +119,22 @@ def accept(id):
     reaction_data = c.fetchone()
 
     if reaction_data:
-        # إضافة التفاعل إلى chemical_reactions مع result_color
+        # إدخال في chemical_reactions
         c.execute("""
             INSERT INTO chemical_reactions (equation, description, type, temperature, pressure, result_color)
             VALUES (?, ?, ?, ?, ?, ?)
         """, reaction_data)
 
-        # تحديث حالة التفاعل في pending_reactions إلى 'accepted'
+        new_reaction_id = c.lastrowid
+
+        # ✅ نقل المتفاعلات
+        c.execute("SELECT element_id FROM reaction_elements WHERE reaction_id = ?", (id,))
+        elements = c.fetchall()
+
+        for el in elements:
+            c.execute("INSERT INTO reaction_elements (reaction_id, element_id) VALUES (?, ?)", (new_reaction_id, el[0]))
+
+        # تحديث الحالة
         c.execute("UPDATE pending_reactions SET status = 'accepted' WHERE id = ?", (id,))
 
         conn.commit()
@@ -97,7 +146,7 @@ def accept(id):
     return redirect(url_for('reaction.pending_reactions'))
 
 
-# ===== ADMIN: رفض التفاعل =====
+# ===== ADMIN: رفض =====
 @reaction.route('/reject/<int:id>')
 def reject(id):
     conn = sqlite3.connect('database/chemical.db')

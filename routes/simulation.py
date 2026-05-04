@@ -95,7 +95,14 @@ def start_simulation():
     result_text = ""
 
     if reaction:
-        reaction_id, equation, reaction_type, result_color, gas_produced, precipitate, min_temp, opt_temp, pressure = reaction
+        reaction_id, equation, reaction_type, result_color, gas_produced, precipitate, min_temp, temperature_db, pressure = reaction
+        
+        # ✅ ربط temperature في DB مع opt_temp
+        opt_temp = temperature_db
+        
+         # ✅ حماية من None
+        min_temp = min_temp or 20
+        opt_temp = opt_temp or 25
 
         if temperature < min_temp:
             temp_message = _("⚠️ Temperature too low! Reaction needs at least %(temp)s°C", temp=min_temp)

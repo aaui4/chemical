@@ -1,21 +1,19 @@
 {% block content %}
 
 <link rel="stylesheet" href="/static/css/admin.css" />
-
 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
 
-     <title>{{ _('Statistics') }}</title>
-
+<title>{{ _('Statistics') }}</title>
 
 <div class="container">
 
     {% include 'admin/sidebar.html' %}
 
-
     <div class="main">
-        <div class="topbar">
-            <h3>{{ _('Statistics') }}</h3>
-        </div>
+
+               <div class="topbar">
+                   <h3 class="page-title">{{ _('Statistics') }}</h3>
+                </div>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -33,18 +31,17 @@
             <canvas id="statsChart"></canvas>
         </div>
 
-    </main>
-
+    </div>
 </div>
+
 
 <script>
    window.chartLabels = JSON.parse('{{ labels | tojson | safe }}');
-    window.chartData = JSON.parse('{{ data | tojson | safe }}');
+   window.chartData = JSON.parse('{{ data | tojson | safe }}');
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
- <script src="{{ url_for('static', filename='js/statistics.js') }}"></script>
-
+<script src="{{ url_for('static', filename='js/statistics.js') }}"></script>
 
 {% endblock %}

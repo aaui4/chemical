@@ -13,9 +13,9 @@
 
         <!-- Top Bar -->
         <div class="topbar">
-            <h3>{{ _('Experiments') }}</h3>
+                <h3>{{ _('Experiments') }}</h3>
             <button type="button" class="add-btn" onclick="openModal()">
-                <i class='bx bx-plus'></i> {{ _('Add Reaction') }}
+              <i class='bx bx-plus'></i> {{ _('Add Reaction') }}
             </button>
         </div>
 
@@ -128,41 +128,7 @@
 
 
 <!--  Scripts  -->
-<script>
-    function openModal() {
-        var modal = document.getElementById('modal');
-        if (modal) modal.style.display = 'flex';
-    }
 
-    function closeModal() {
-        var modal = document.getElementById('modal');
-        if (modal) modal.style.display = 'none';
-    }
-
-    function openEditModal(id, equation) {
-        var modal = document.getElementById('editModal');
-        var editEquation = document.getElementById('editEquation');
-        var editForm = document.getElementById('editForm');
-        
-        if (modal && editEquation && editForm) {
-            editEquation.value = equation;
-            editForm.action = '/admin/update_reaction/' + id;
-            modal.style.display = 'flex';
-        }
-    }
-
-    function closeEditModal() {
-        var modal = document.getElementById('editModal');
-        if (modal) modal.style.display = 'none';
-    }
-
-    window.onclick = function(event) {
-        var addModal = document.getElementById('modal');
-        var editModal = document.getElementById('editModal');
-        if (event.target == addModal) closeModal();
-        if (event.target == editModal) closeEditModal();
-    }
-</script>
 <script src="{{ url_for('static', filename='js/experiments.js') }}"></script>
 
 {% endblock %}

@@ -315,3 +315,42 @@ html[dir="rtl"] .user-dropdown {
 .user-dropdown a:hover {
   background: #f2f6ff;
 }
+
+/* ================= ADMIN DASHBOARD BUTTON ================= */
+.admin-dashboard-btn {
+  background: linear-gradient(135deg, #1f4ed8, #0e2a5a);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.admin-dashboard-btn i {
+  font-size: 1.8rem;
+}
+
+.admin-dashboard-btn:hover {
+  background: linear-gradient(135deg, #0e2a5a, #1f4ed8);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(31, 78, 216, 0.4);
+}
+
+/* تنسيق الأزرار جنب بعض */
+.mt-4 .btn {
+  margin-right: 12px;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 576px) {
+  .mt-4 .btn {
+    display: inline-block;
+    margin-right: 8px;
+    padding: 0.8rem 1.8rem;
+    font-size: 1.4rem;
+  }
+  
+  .admin-dashboard-btn i {
+    font-size: 1.4rem;
+  }
+}

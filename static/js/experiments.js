@@ -54,3 +54,38 @@ function formatChemicalFormulas() {
 document.addEventListener("DOMContentLoaded", function () {
     formatChemicalFormulas();
 });
+
+
+    function openModal() {
+        var modal = document.getElementById('modal');
+        if (modal) modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        var modal = document.getElementById('modal');
+        if (modal) modal.style.display = 'none';
+    }
+
+    function openEditModal(id, equation) {
+        var modal = document.getElementById('editModal');
+        var editEquation = document.getElementById('editEquation');
+        var editForm = document.getElementById('editForm');
+        
+        if (modal && editEquation && editForm) {
+            editEquation.value = equation;
+            editForm.action = '/admin/update_reaction/' + id;
+            modal.style.display = 'flex';
+        }
+    }
+
+    function closeEditModal() {
+        var modal = document.getElementById('editModal');
+        if (modal) modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        var addModal = document.getElementById('modal');
+        var editModal = document.getElementById('editModal');
+        if (event.target == addModal) closeModal();
+        if (event.target == editModal) closeEditModal();
+    }
