@@ -29,7 +29,7 @@ def dashboard():
        """).fetchone()["count"]
 
     reaction_results = db.execute("""
-        SELECT cr.equation, rr.state, s.date, rr.energyReleased
+        SELECT cr.equation, rr.state, s.date, 
         FROM reaction_results rr
         JOIN simulation s ON rr.simulation_id = s.id
         JOIN chemical_reactions cr ON s.reaction_id = cr.id
@@ -37,11 +37,6 @@ def dashboard():
         LIMIT 5
     """).fetchall()
 
-    logs = db.execute("""
-        SELECT message FROM logs
-        ORDER BY id DESC
-        LIMIT 5
-    """).fetchall()
 
     chart_data_raw = db.execute("""SELECT strftime('%Y-%m-%d', s.date) as day, COUNT(*) as count FROM simulation s GROUP BY day ORDER BY day
     """).fetchall()
@@ -60,7 +55,6 @@ def dashboard():
         users_count=users_count,
         total_experiments=total_experiments,
         reaction_results=reaction_results,
-        logs=logs,
         chart_labels=chart_labels,
         chart_data=chart_data
     )
@@ -236,7 +230,6 @@ def experiments():
         ORDER BY cr.id DESC
     """).fetchall()
 
-    logs = db.execute("SELECT message FROM logs ORDER BY id DESC LIMIT 5").fetchall()
 
     
     db.close()
@@ -246,7 +239,6 @@ def experiments():
         "admin/experiments.html",
         user=user,   # لازم
         reactions=reactions,
-        logs=logs
     )
 
 @admin_bp.route("/reaction/edit/<int:id>", methods=["GET", "POST"])

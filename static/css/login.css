@@ -20,7 +20,18 @@ body {
     background-size: cover;
     background-position: center;
 }
+/* تنسيق رابط "نسيت كلمة السر" بنفس تنسيق الروابط الأخرى */
+  .forgot-link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
 
+  .forgot-link:hover {
+    text-decoration: underline;
+    color: #ddd;
+  }
 /*Wrapper / Form Container*/
 .wrapper {
     width: 420px;

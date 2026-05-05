@@ -1,11 +1,12 @@
 {% block content %}
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/reaction.css') }}">
 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
 
 <title>{{ _('Experiments') }}</title>
 
-<!--  Main Layout  -->
+<!-- ================= MAIN LAYOUT ================= -->
 <div class="container">
     {% include 'admin/sidebar.html' %}
 
@@ -19,7 +20,7 @@
             </button>
         </div>
 
-        <!-- Experiments Table -->
+        <!-- TABLE -->
         <div class="table-box glass-table">
             <h4>{{ _('All Experiments') }}</h4>
 
@@ -30,99 +31,129 @@
                         <th>{{ _('Actions') }}</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for r in reactions %}
+
+                <tbody id="reactionTable">
+                {% for r in reactions %}
                     <tr>
-                        <td class="equation-text">{{ r.equation }}</td>
+                        <td>{{ r.equation }}</td>
+
                         <td class="actions">
 
-                            <!-- Edit Button -->
+                            <!-- EDIT -->
                             <a href="#"
-                              class="edit-btn"
-                              data-id="{{ r.id }}"
-                              data-equation="{{ r.equation }}"
-                              onclick="openEditModal(this)">
-                              <i class='bx bx-edit'></i>
+                               class="edit-btn"
+                               data-id="{{ r.id }}"
+                               data-equation="{{ r.equation }}"
+                               onclick="openEditModal(this)">
+                                <i class='bx bx-edit'></i>
                             </a>
 
-                            <!-- Delete Button -->
-                           <form method="POST"
-                              action="{{ url_for('admin.delete_reaction', id=r.id) }}"
-                               style="display: inline;">
-                             <button type="submit"
-                               class="delete-btn"
-                               onclick="return confirm(`{{ _('Are you sure?') }}`);">
-                               <i class='bx bx-trash'></i> {{ _('Delete') }}
-                             </button>
+                            <!-- DELETE -->
+                            <form method="POST"
+                                  action="{{ url_for('admin.delete_reaction', id=r.id) }}"
+                                  style="display:inline;">
+
+                                <button type="submit"
+                                        class="delete-btn"
+                                        onclick="return confirm('Are you sure?');">
+                                    <i class='bx bx-trash'></i>
+                                </button>
+
                             </form>
 
                         </td>
                     </tr>
-                    {% endfor %}
+                {% endfor %}
                 </tbody>
+
             </table>
         </div>
 
     </main>
 </div>
 
+<!-- ================= ADD MODAL ================= -->
+<div id="addModal" class="modal-custom">
 
-<!--  Modal: Add Reaction  -->
-<div id="modal" class="modal-custom">
-    <div class="modal-box">
-        <form method="POST" action="{{ url_for('admin.add_reaction') }}">
+    <div class="modal-box add-modal">
 
-            <div class="modal-header">
-                <h5>{{ _('Add Reaction') }}</h5>
-                <span class="close-btn" onclick="closeModal()">&times;</span>
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+
+        <h2>🧪 {{ _('Add New Reaction') }}</h2>
+
+        <!-- IMPORTANT: id + no submit redirect control -->
+        <form id="addForm" method="POST" action="{{ url_for('reaction.add_reaction') }}">
+
+            <div class="form-group">
+                <label>⚡ Equation</label>
+                <input type="text" name="equation" required>
             </div>
 
-            <div class="modal-body">
-
-                <input type="text" name="equation" placeholder="{{ _('Equation') }}" required>
-
-                <input type="text" name="reactant1" placeholder="{{ _('Reactant 1') }}">
-
-                <input type="text" name="color1" placeholder="{{ _('Reactant 1 Color (e.g. #ff0000)') }}" required>
-
-                <input type="text" name="reactant2" placeholder="{{ _('Reactant 2') }}">
-
-                <input type="text" name="color2" placeholder="{{ _('Reactant 2 Color (e.g. #ff0000)') }}" required>
-
-                <input type="text" name="product" placeholder="{{ _('Product') }}">
-
-                <input type="text" name="color3" placeholder="{{ _('Product Color (e.g. #ff0000)') }}" required>
-
+            <div class="form-group">
+                <label>📝 Description</label>
+                <textarea name="description"></textarea>
             </div>
 
-            <div class="modal-footer">
-                <button type="submit" class="add-reaction-btn">{{ _('Save') }}</button>
+            <div class="form-group">
+                <label>🏷️ Reaction Type</label>
+                <select name="reaction_type">
+                    <option value="neutralization">Neutralization</option>
+                    <option value="precipitation">Precipitation</option>
+                    <option value="complex">Complexation</option>
+                    <option value="gas">Gas</option>
+                    <option value="combustion">Combustion</option>
+                    <option value="default">Default</option>
+                </select>
             </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>🌡️ Temperature</label>
+                    <input type="number" name="temperature" step="0.1">
+                </div>
+
+                <div class="form-group">
+                    <label>💨 Pressure</label>
+                    <input type="number" name="pressure" step="0.1">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>🎨 Result Color</label>
+                <input type="color" name="result_color" value="#ffffff">
+            </div>
+
+            <button type="submit" class="submit-btn">
+                {{ _('Add Reaction') }}
+            </button>
 
         </form>
+
     </div>
 </div>
 
-
-<!--  Modal: Edit Reaction  -->
+<!-- ================= EDIT MODAL ================= -->
 <div id="editModal" class="modal-custom">
+
     <div class="modal-box">
+
+        <span class="close-btn" onclick="closeEditModal()">&times;</span>
+
+        <h2>✏️ Edit Reaction</h2>
+
         <form method="POST" id="editForm">
 
-            <div class="modal-header">
-                <h5>{{ _('Edit Reaction') }}</h5>
-                <span class="close-btn" onclick="closeEditModal()">&times;</span>
-            </div>
-
-            <div class="modal-body">
+            <div class="form-group">
+                <label>⚡ Equation</label>
                 <input type="text" name="equation" id="editEquation" required>
             </div>
 
-            <div class="modal-footer">
-                <button type="submit" class="add-reaction-btn">{{ _('Update') }}</button>
-            </div>
+            <button type="submit" class="submit-btn">
+                Update
+            </button>
 
         </form>
+
     </div>
 </div>
 

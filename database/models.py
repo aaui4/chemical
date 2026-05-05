@@ -72,7 +72,6 @@ def create_tables():
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         simulation_id INTEGER UNIQUE NOT NULL,
         products TEXT,
-        energyReleased REAL,
         state TEXT,
         color TEXT,
         FOREIGN KEY (simulation_id) REFERENCES simulation(id)

@@ -298,24 +298,52 @@ tbody tr:hover {
 }
 
 /* Add Reaction Button (modal footer) */
-.add-reaction-btn {
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: all 0.3s;
+.add-modal {
+    width: 420px;              /* مهم: تصغير */
+    max-width: 92%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 20px;
 }
 
-.add-reaction-btn:hover {
-    background: #0e2a5a;
-    transform: translateY(-2px);
+/* تنظيم الحقول */
+.add-modal form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* صفين جنب بعض */
+.form-row {
+    display: flex;
+    gap: 10px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+/* inputs أصغر */
+.add-modal input,
+.add-modal textarea,
+.add-modal select {
+    padding: 9px;
+    font-size: 13px;
+}
+
+/* العنوان */
+.add-modal h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+/* زر الإغلاق */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 20px;
+    cursor: pointer;
 }
 
 /* Delete Reaction Button */
@@ -341,6 +369,18 @@ tbody tr:hover {
     background: rgba(255, 59, 59, 0.4);
     transform: scale(1.1);
 }
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    color: black;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+}
 
 
 /* GLASS CARD */
@@ -363,47 +403,6 @@ tbody tr:hover {
 .glass-card h4 i {
     font-size: 1.2rem;
     color: var(--primary-color);
-}
-
-
-/* ADD REACTION FORM */
-.add-reaction-form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.add-reaction-form input {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 12px;
-    border-radius: 8px;
-    color: white;
-    font-size: 0.9rem;
-    transition: all 0.3s;
-}
-
-.add-reaction-form input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.add-reaction-form input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.form-row {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.form-row input {
-    flex: 1;
 }
 
 
@@ -485,49 +484,39 @@ tbody tr:hover {
     display: none;
     position: fixed;
     top: 0; left: 0;
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
     background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(6px);
     justify-content: center;
     align-items: center;
-    z-index: 999;
+    z-index: 9999;
 }
 
 .modal-box {
-    background: var(--main-bg);
+    background: white;
+    width: 500px;          /* بدل 600px ولا auto */
+    max-width: 90%;        /* responsive */
+    max-height: 90vh;      /* مهم جداً */
+    overflow-y: auto;      /* scroll داخل المودال */
     padding: 20px;
-    border-radius: var(--card-radius);
-    width: 400px;
-    backdrop-filter: blur(var(--blur-effect));
+    border-radius: 16px;
+    position: relative;
+    animation: pop 0.25s ease;
 }
 
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+@keyframes pop {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
 .close-btn {
-    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    top: 10px;
     font-size: 22px;
+    cursor: pointer;
 }
-
-.modal-body input {
-    width: 100%;
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 6px;
-    border: none;
-    background: rgba(255,255,255,0.1);
-    color: white;
-}
-
-.modal-footer {
-    margin-top: 15px;
-    text-align: right;
-}
-
-
 /* ALERTS */
 .alert {
     background: rgba(0, 0, 0, 0.7);
@@ -553,35 +542,6 @@ tbody tr:hover {
     to   { transform: translateX(0);    opacity: 1; }
 }
 
-
-/* LOGS */
-.logs {
-    margin-top: 20px;
-}
-
-.logs ul {
-    list-style: none;
-    margin-top: 10px;
-}
-
-.logs li {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 0;
-    margin-bottom: 8px;
-    font-size: 14px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.logs li i {
-    color: var(--primary-color);
-    font-size: 0.9rem;
-}
-
-.logs li:last-child {
-    border-bottom: none;
-}
 
 
 /* EMPTY STATE */
