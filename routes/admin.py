@@ -29,7 +29,7 @@ def dashboard():
        """).fetchone()["count"]
 
     reaction_results = db.execute("""
-        SELECT cr.equation, rr.state, s.date, 
+        SELECT cr.equation, rr.state, s.date
         FROM reaction_results rr
         JOIN simulation s ON rr.simulation_id = s.id
         JOIN chemical_reactions cr ON s.reaction_id = cr.id

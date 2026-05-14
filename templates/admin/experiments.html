@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}"/>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/reaction.css') }}">
-<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet"/>
+<link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" />
 
 <title>{{ _('Experiments') }}</title>
 
@@ -27,7 +27,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>{{ _('Equation') }}</th>
+                        <th >{{ _('Equation') }}</th>
                         <th>{{ _('Actions') }}</th>
                     </tr>
                 </thead>
@@ -35,7 +35,7 @@
                 <tbody id="reactionTable">
                 {% for r in reactions %}
                     <tr>
-                        <td>{{ r.equation }}</td>
+                        <td class="equation-text">{{ r.equation }}</td>
 
                         <td class="actions">
 
@@ -72,55 +72,103 @@
     </main>
 </div>
 
-<!-- ================= ADD MODAL ================= -->
+<!-- ================= ADD MODAL (UPDATED with same design as second code) ================= -->
 <div id="addModal" class="modal-custom">
 
     <div class="modal-box add-modal">
 
         <span class="close-btn" onclick="closeModal()">&times;</span>
 
-        <h2>🧪 {{ _('Add New Reaction') }}</h2>
+        <h2> {{ _('Add New Reaction') }}</h2>
 
         <!-- IMPORTANT: id + no submit redirect control -->
         <form id="addForm" method="POST" action="{{ url_for('reaction.add_reaction') }}">
 
             <div class="form-group">
-                <label>⚡ Equation</label>
-                <input type="text" name="equation" required>
+                <label>{{ _(' Equation') }}</label>
+                <input type="text" name="equation" id="equation" placeholder="Example: HCl + NaOH → NaCl + H2O" required>
             </div>
 
             <div class="form-group">
-                <label>📝 Description</label>
-                <textarea name="description"></textarea>
+                <label>{{ _(' Description') }}</label>
+                <textarea name="description" id="description" placeholder="Enter detailed description of the reaction..."></textarea>
             </div>
 
-            <div class="form-group">
-                <label>🏷️ Reaction Type</label>
-                <select name="reaction_type">
-                    <option value="neutralization">Neutralization</option>
-                    <option value="precipitation">Precipitation</option>
-                    <option value="complex">Complexation</option>
-                    <option value="gas">Gas</option>
-                    <option value="combustion">Combustion</option>
-                    <option value="default">Default</option>
-                </select>
-            </div>
+            <hr>
 
-            <div class="form-row">
+            <div class="section-title"> {{ _('Reactants') }}</div>
+
+            <div class="reactants-row">
                 <div class="form-group">
-                    <label>🌡️ Temperature</label>
-                    <input type="number" name="temperature" step="0.1">
+                    <label> {{ _('Reactant 1 Name') }}</label>
+                    <input type="text" name="reactant1_name" required>
                 </div>
 
                 <div class="form-group">
-                    <label>💨 Pressure</label>
-                    <input type="number" name="pressure" step="0.1">
+                    <label> {{ _('Symbol') }}</label>
+                    <input type="text" name="reactant1_symbol" required>
+                </div>
+
+                <div class="form-group">
+                    <label> Reactant 1 Color</label>
+                    <input type="text" name="reactant1_color" placeholder="e.g. #ff0000" value="#cccccc">
+                </div>
+            </div>
+
+            <div class="reactants-row">
+                <div class="form-group">
+                    <label> {{ _('Reactant 2 Name') }}</label>
+                    <input type="text" name="reactant2_name" required>
+                </div>
+
+                <div class="form-group">
+                    <label> {{ _('Symbol') }}</label>
+                    <input type="text" name="reactant2_symbol" required>
+                </div>
+
+                <div class="form-group">
+                    <label> Reactant 2 Color</label>
+                    <input type="text" name="reactant2_color" placeholder="e.g. #ff0000" value="#cccccc">
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="section-title">{{ _(' Reaction Properties') }}</div>
+
+            <div class="reactants-row">
+                <div class="form-group">
+                    <label>{{ _(' Reaction Type') }}</label>
+                    <select name="reaction_type" id="reaction_type">
+                        <option value="neutralization">{{ _('Neutralization') }}</option>
+                        <option value="precipitation">{{ _('Precipitation') }}</option>
+                        <option value="complex">{{ _('Complexation') }}</option>
+                        <option value="gas">{{ _('Gas') }}</option>
+                        <option value="combustion">{{ _('Combustion') }}</option>
+                        <option value="default">{{ _('Default') }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="reactants-row">
+                <div class="form-group">
+                    <label>{{ _(' Temperature (°C)') }}</label>
+                    <input type="number" name="temperature" id="temperature" step="0.1" placeholder="{{ _('e.g., 25') }}">
+                </div>
+
+                <div class="form-group">
+                    <label>{{ _(' Pressure (atm)') }}</label>
+                    <input type="number" name="pressure" id="pressure" step="0.1" placeholder="{{ _('e.g., 1') }}">
                 </div>
             </div>
 
             <div class="form-group">
-                <label>🎨 Result Color</label>
-                <input type="color" name="result_color" value="#ffffff">
+                <label>{{ _(' Result Color') }}</label>
+                <div class="color-input-wrapper">
+                    <input type="color" name="result_color" id="result_color" value="#ffffff">
+                    <input type="text" name="result_color_text" id="result_color_text"
+                           placeholder="{{ _('Color (e.g. #ff0000)') }}">
+                </div>
             </div>
 
             <button type="submit" class="submit-btn">
@@ -157,9 +205,7 @@
     </div>
 </div>
 
-
-<!--  Scripts  -->
-
+<!-- Scripts -->
 <script src="{{ url_for('static', filename='js/experiments.js') }}"></script>
 
 {% endblock %}

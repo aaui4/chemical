@@ -9,7 +9,7 @@
 /* ===== BACKGROUND ===== */
 body {
   min-height: 100vh;
-  background: url("../img/img1.png") no-repeat center / cover;
+  
   display: flex;
   flex-direction: column;
   padding-left: 60px;
@@ -17,6 +17,16 @@ body {
   padding-bottom: 40px;
 }
 
+.bg-layer {
+    position: fixed;
+    inset: 0;
+    background: url("../img/img1.png") no-repeat center;
+
+    /* أهم سطر: بدون تمديد نهائي */
+    background-size: cover;
+
+    z-index: -2;
+}
 /* ===== TITLES ===== */
 .hero-text {
   margin-bottom: 20px;
@@ -144,7 +154,7 @@ body {
 }
 
 /* ============================================================
-   تصميم صفحة COMPOUND فقط (لا يؤثر على Encyclopedia)
+   تصميم صفحة COMPOUND  (   Encyclopedia)
    ============================================================ */
 
 .compound-wrapper {
@@ -272,16 +282,16 @@ body {
   transition: 0.2s ease;
 }
 
-/* hover خفيف فقط */
+
 .back-btn:hover {
   background: #f5f8ff;
 }
 
-/* تنسيقات صفحة المركب - تصميم أصغر وأوضح */
+/* تنسيقات صفحة المركب -    */
 .compound-detailed {
     max-width: 750px;
     margin: 0 auto;
-    margin-top: 60px;  /* هبط الكارد إلى الأسفل */
+    margin-top: 60px;  
     padding: 15px;
 }
 
@@ -313,7 +323,6 @@ body {
 }
 
 .section-header h2::before {
-    content: "🔹";
     font-size: 14px;
 }
 
@@ -478,10 +487,6 @@ body {
     }
 }
 
-/* ============================================================
-   ⭐ FIX مهم لمشكل RTL في صفحة البحث (هذا هو الحل الحقيقي)
-   ============================================================ */
-
 html[dir="rtl"] body {
   padding-left: 0;
   padding-right: 60px;
@@ -499,7 +504,7 @@ html[dir="rtl"] .layout {
   flex-direction: row; /* ما يتقلبش */
 }
 
-/* input search ما يتكسرش */
+
 html[dir="rtl"] input {
   direction: ltr;
   text-align: left;

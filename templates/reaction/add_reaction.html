@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="reaction-form-container">
-    <h2>🧪{{ _(' Add New Reaction') }}</h2>
+    <h2>{{ _(' Add New Reaction') }}</h2>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -20,61 +20,61 @@
 
     <form method="POST" action="{{ url_for('reaction.add_reaction') }}">
         <div class="form-group">
-         <label>⚡{{ _(' Equation') }}</label>
+         <label>{{ _(' Equation') }}</label>
          <input type="text" name="equation" id="equation" placeholder="Example: HCl + NaOH → NaCl + H2O" required>
         </div>
 
         <div class="form-group">
-          <label>📝{{ _(' Description') }}</label>
+          <label>{{ _(' Description') }}</label>
           <textarea name="description" id="description" placeholder="Enter detailed description of the reaction..."></textarea>
         </div>
 
 
         <hr>
 
-<div class="section-title">🧪 {{ _('Reactants') }}</div>
+<div class="section-title"> {{ _('Reactants') }}</div>
 
 <div class="reactants-row">
     <div class="form-group">
-        <label>⚗️ {{ _('Reactant 1 Name') }}</label>
+        <label> {{ _('Reactant 1 Name') }}</label>
         <input type="text" name="reactant1_name" required>
     </div>
 
     <div class="form-group">
-        <label>🔤 {{ _('Symbol') }}</label>
+        <label> {{ _('Symbol') }}</label>
         <input type="text" name="reactant1_symbol" required>
     </div>
 
      <div class="form-group">
-        <label>⚗️ Reactant 1 Color</label>
+        <label> Reactant 1 Color</label>
         <input type="text" name="reactant1_color" placeholder="e.g. #ff0000" value="#cccccc">
     </div>
 </div>
 
 <div class="reactants-row">
     <div class="form-group">
-        <label>⚗️ {{ _('Reactant 2 Name') }}</label>
+        <label> {{ _('Reactant 2 Name') }}</label>
         <input type="text" name="reactant2_name" required>
     </div>
 
     <div class="form-group">
-        <label>🔤 {{ _('Symbol') }}</label>
+        <label> {{ _('Symbol') }}</label>
         <input type="text" name="reactant2_symbol" required>
     </div>
 
      <div class="form-group">
-        <label>⚗️ Reactant 2 Color</label>
+        <label> Reactant 2 Color</label>
         <input type="text" name="reactant2_color" placeholder="e.g. #ff0000" value="#cccccc">
     </div>
 </div>
 
        <hr>
 
-        <div class="section-title">⚙️{{ _(' Reaction Properties') }}</div>
+        <div class="section-title">{{ _(' Reaction Properties') }}</div>
 
           <div class="reactants-row">
               <div class="form-group">
-                 <label>🏷️{{ _(' Reaction Type') }}</label>
+                 <label>{{ _(' Reaction Type') }}</label>
                  <select name="reaction_type" id="reaction_type">
                        <option value="neutralization">{{ _('Neutralization') }}</option>
                        <option value="precipitation">{{ _('Precipitation') }}</option>
@@ -88,18 +88,18 @@
 
             <div class="reactants-row">
                <div class="form-group">
-                   <label>🌡️{{ _(' Temperature (°C)') }}</label>
+                   <label>{{ _(' Temperature (°C)') }}</label>
                    <input type="number" name="temperature" id="temperature" step="0.1" placeholder="{{ _('e.g., 25') }}">
                 </div>
 
                 <div class="form-group">
-                   <label>💨{{ _(' Pressure (atm)') }}</label>
+                   <label>{{ _(' Pressure (atm)') }}</label>
                     <input type="number" name="pressure" id="pressure" step="0.1" placeholder="{{ _('e.g., 1') }}">
                 </div>
             </div>
 
            <div class="form-group">
-              <label>🎨{{ _(' Result Color') }}</label>
+              <label>{{ _(' Result Color') }}</label>
               <div class="color-input-wrapper">
                   <input type="color" name="result_color" id="result_color" value="#ffffff">
                   <input type="text" name="result_color_text" id="result_color_text"

@@ -1,13 +1,39 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: url("../img/img1.png") no-repeat center center / cover;
+}
+
+.overlay {
+  position: fixed;
+  top: 80px; /*  عوّض ارتفاع الهيدر */
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 /* ========== القسم الأول: Add Reaction Form ========== */
 
 .reaction-form-container {
-    max-width: 700px;
-    margin: 0 auto;
+    max-height: 90vh;
     background: white;
     border-radius: 16px;
     padding: 30px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding-right: 10px; /* باش scrollbar ما يغطيش المحتوى */
+    overflow-y: auto;   /* scroll عمودي */
+
 }
+
 
 .reaction-form-container h2 {
     text-align: center;

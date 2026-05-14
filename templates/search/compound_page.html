@@ -18,8 +18,8 @@
     <div class="compound-header-large">
         <h1>{{ compound.name }}</h1>
         <div class="compound-badge">
-            <span class="badge">📋 {{ compound.formula }}</span>
-            <span class="badge">⚖️ {{ compound.weight }} g/mol</span>
+            <span class="badge"> {{ compound.formula }}</span>
+            <span class="badge"> {{ compound.weight }} g/mol</span>
         </div>
     </div>
     
@@ -31,7 +31,7 @@
     
     {% set info = compound.detailed_info %}
     
-    <!-- 🔹 DESCRIPTION -->
+    <!--  DESCRIPTION -->
     <div class="info-section">
         <div class="section-header">
             <h2>Description</h2>
@@ -45,7 +45,7 @@
         </div>
     </div>
     
-    <!-- 🔹 USES -->
+    <!--  USES -->
     <div class="info-section">
         <div class="section-header">
             <h2>Uses</h2>
@@ -63,7 +63,7 @@
         </div>
     </div>
     
-    <!-- 🔹 PROPERTIES -->
+    <!-- PROPERTIES -->
     <div class="info-section">
         <div class="section-header">
             <h2>Properties</h2>
@@ -94,7 +94,7 @@
         </div>
     </div>
     
-    <!-- 🔹 SAFETY -->
+    <!--  SAFETY -->
     <div class="info-section">
         <div class="section-header">
             <h2>Safety</h2>
@@ -129,5 +129,6 @@
     </div>
     
 </div>
-
+<div class="bg-layer"></div>
+    <div class="bg-overlay"></div>
 {% endblock %}
