@@ -11,13 +11,13 @@ def encyclopedia():
 
     compounds = []
     reactions = []
-    q_type = None   # 🔥 مهم جدا
+    q_type = None   #  مهم جدا
 
     if query:
         query = normalize_formula(query)
         q_type = detect_query_type(query)
 
-        # 🔥 ELEMENT
+        #  ELEMENT
         if q_type == "element":
             element = get_element_data(query)
             if element:

@@ -2,7 +2,7 @@ from flask import Blueprint, Flask, render_template, request, flash, redirect, u
 import sqlite3
 from flask_mail import Mail, Message
 from werkzeug.utils import secure_filename
-from werkzeug.security import generate_password_hash, check_password_hash  # 🔥 أضف هذا السطر
+from werkzeug.security import generate_password_hash, check_password_hash  
 import secrets
 import os
 import re

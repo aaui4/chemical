@@ -29,7 +29,7 @@ REACTION_DESCRIPTIONS = {
 
 @simulation_bp.route("/", methods=["GET"])
 def simulation_page():
-    # ✅ التعديل الوحيد هنا: منع غير المسجل من دخول صفحة المحاكاة
+    #  التعديل الوحيد هنا: منع غير المسجل من دخول صفحة المحاكاة
     if "user_id" not in session:
         return redirect(url_for("login.login"))
 
@@ -42,7 +42,7 @@ def simulation_page():
 
 @simulation_bp.route("/start", methods=["POST"])
 def start_simulation():
-    # ✅ تم إزالة شرط تسجيل الدخول من هنا
+    #  تم إزالة شرط تسجيل الدخول من هنا
     db = get_db()
     cursor = db.cursor()
 
