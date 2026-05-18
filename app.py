@@ -57,6 +57,8 @@ app.register_blueprint(reaction)
 
 mail = Mail(app)
 
+app.teardown_appcontext(close_db)
+
 # إنشاء مجلد التحميلات عند بدء التشغيل
 def create_upload_folder():
     upload_path = Path(app.config['UPLOAD_FOLDER'])
@@ -137,62 +139,86 @@ def create_password_resets_table():
 # استدعاء الدالة عند بدء التشغيل
 with app.app_context():
     create_password_resets_table()
-
 @app.route('/forgot', methods=["GET", "POST"])
 def forgot():
+
     if request.method == 'POST':
         user_email = request.form['email']
-        
-        # التحقق إذا كان الإيميل موجود في قاعدة البيانات
+
         db = get_db()
         cursor = db.cursor()
-        cursor.execute("SELECT id FROM user WHERE email = ?", (user_email,))
+
+        cursor.execute(
+            "SELECT id FROM user WHERE email = ?",
+            (user_email,)
+        )
+
         user = cursor.fetchone()
-        
+
         if user:
+
             token = secrets.token_urlsafe(32)
-            expires_at = datetime.now() + timedelta(hours=1)  # صلاحية ساعة واحدة
-            
-            # حفظ التوكن في قاعدة البيانات
+            expires_at = datetime.now() + timedelta(hours=1)
+
+            # حفظ التوكن
             cursor.execute(
-                "INSERT INTO password_resets (email, token, expires_at) VALUES (?, ?, ?)",
+                """
+                INSERT INTO password_resets
+                (email, token, expires_at)
+                VALUES (?, ?, ?)
+                """,
                 (user_email, token, expires_at)
             )
+
             db.commit()
-            
-            # بناء الرابط يدوياً باستخدام IP الحقيقي
+
+            # إنشاء الرابط
             reset_link = f"{SERVER_BASE_URL}/reset-password/{token}"
-            
-            print(f"🔗 Reset link sent: {reset_link}")
-            print(f"📧 To: {user_email}")
-            
+
+            # إنشاء الرسالة
             msg = Message(
                 _("Password Reset"),
-                sender="kindkiki9@gmail.com",
+                sender="chemicalsimulator926@gmail.com",
                 recipients=[user_email]
             )
-            
+
             msg.body = f"""
-            {_('Click the following link to reset your password (valid for 1 hour):')}
+{_('Click the following link to reset your password (valid for 1 hour):')}
 
-            {reset_link}
+{reset_link}
 
-            {_('If you did not request this, please ignore this email.')}
-            """
-            
+{_('If you did not request this, please ignore this email.')}
+"""
+
             try:
                 mail.send(msg)
-                flash(_("A password reset link has been sent to your email"), "success")
+
+                print(f"🔗 Reset link sent: {reset_link}")
+                print(f"📧 To: {user_email}")
+
+                flash(
+                    _("A password reset link has been sent to your email"),
+                    "success"
+                )
+
             except Exception as e:
                 print(f"خطأ في إرسال البريد: {e}")
-                flash(_("An error occurred while sending the email. Please try again later"), "error")
+
+                flash(
+                    _("An error occurred while sending the email."),
+                    "error"
+                )
+
         else:
-            # لأسباب أمنية، نعطي نفس الرسالة حتى لو الإيميل غير موجود
-            flash(_("If this email exists, a reset link will be sent"), "info")
-        
+            flash(
+                _("If this email exists, a reset link will be sent"),
+                "info"
+            )
+
         db.close()
+
         return redirect(url_for('forgot'))
-    
+
     return render_template('login/forgot.html')
 
 # ========== دالة reset_password المعدلة (الحل النهائي) ==========
@@ -246,23 +272,29 @@ def reset_password(token):
 
 @app.route('/profile')
 def profile():
+
     user_id = session.get("user_id")
     if not user_id:
         return redirect(url_for("login.login"))
 
     db = get_db()
     cursor = db.cursor()
+
     cursor.execute("SELECT * FROM user WHERE id = ?", (user_id,))
     user = cursor.fetchone()
+
     db.close()
+
     if not user:
         flash("User not found")
         return redirect(url_for("login.login"))
 
     return render_template("profile/profile.html", user=user)
 
+
 @app.route('/update_profile', methods=['POST'])
 def update_profile():
+
     user_id = session.get("user_id")
     if not user_id:
         return redirect(url_for("login.login"))
@@ -270,42 +302,134 @@ def update_profile():
     db = get_db()
     cursor = db.cursor()
 
-    username = request.form.get('username')
+    # =========================
+    # البيانات
+    # =========================
+    first_name = request.form.get('first_name', '').strip()
+    institution = request.form.get('institution', '').strip()
+    username = request.form.get('username', '').strip()
+    email = request.form.get('email', '').strip()
     file = request.files.get('avatar')
+
     avatar_filename = None
 
+    # =========================
+    # First name validation
+    # =========================
+    if not re.fullmatch(r'[A-Za-z]{3,9}', first_name):
+        flash("First name invalid", "error")
+        return redirect(url_for('profile'))
+
+    # =========================
+    # Institution validation
+    # =========================
+    if not institution:
+        flash("Institution is required", "error")
+        return redirect(url_for('profile'))
+
+    if not re.fullmatch(r'[A-Za-z0-9\s]+', institution):
+        flash("Invalid institution", "error")
+        return redirect(url_for('profile'))
+
+    words = institution.split()
+
+    if len(words) < 3 or len(words) > 6:
+        flash("Institution must be 3–6 words", "error")
+        return redirect(url_for('profile'))
+
+    numbers = re.findall(r'\d+', institution)
+
+    for num in numbers:
+        if len(num) != 4:
+            flash("Only 4-digit numbers allowed", "error")
+            return redirect(url_for('profile'))
+
+    # =========================
+    # username exists
+    # =========================
+    cursor.execute(
+        "SELECT id FROM user WHERE username = ?",
+        (username,)
+    )
+
+    existing_user = cursor.fetchone()
+
+    if existing_user and existing_user["id"] != user_id:
+        flash("Username already exists!", "error")
+        return redirect(url_for('profile'))
+
+    # =========================
+    # email exists
+    # =========================
+    cursor.execute(
+        "SELECT id FROM user WHERE email = ?",
+        (email,)
+    )
+
+    existing_email = cursor.fetchone()
+
+    if existing_email and existing_email["id"] != user_id:
+        flash("Email already exists!", "error")
+        return redirect(url_for('profile'))
+
+    # =========================
+    # avatar
+    # =========================
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        from datetime import datetime
+
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
         name_part = Path(filename).stem
         ext = Path(filename).suffix
+
         avatar_filename = f"{name_part}_{timestamp}{ext}"
+
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], avatar_filename))
 
-        cursor.execute("SELECT avatar FROM user WHERE id = ?", (user_id,))
+        cursor.execute(
+            "SELECT avatar FROM user WHERE id = ?",
+            (user_id,)
+        )
+
         old_avatar = cursor.fetchone()["avatar"]
+
         if old_avatar and old_avatar != 'default.png':
             old_path = Path(app.config['UPLOAD_FOLDER']) / old_avatar
             if old_path.exists():
                 old_path.unlink()
 
-    if username and avatar_filename:
-        cursor.execute("UPDATE user SET username = ?, avatar = ? WHERE id = ?", (username, avatar_filename, user_id))
-    elif username:
-        cursor.execute("UPDATE user SET username = ? WHERE id = ?", (username, user_id))
-    elif avatar_filename:
-        cursor.execute("UPDATE user SET avatar = ? WHERE id = ?", (avatar_filename, user_id))
+    # =========================
+    # UPDATE
+    # =========================
+    if avatar_filename:
 
-    if username:
-        cursor.execute("SELECT id FROM user WHERE username = ?", (username,))
-        existing_user = cursor.fetchone()
+        cursor.execute("""
+            UPDATE user
+            SET first_name = ?,
+                institution = ?,
+                username = ?,
+                email = ?,
+                avatar = ?
+            WHERE id = ?
+        """,
+        (first_name, institution, username, email, avatar_filename, user_id))
 
-        if existing_user and existing_user["id"] != user_id:
-            flash("Username already exists!", "error")
-            return redirect(url_for('profile'))
+    else:
+
+        cursor.execute("""
+            UPDATE user
+            SET first_name = ?,
+                institution = ?,
+                username = ?,
+                email = ?
+            WHERE id = ?
+        """,
+        (first_name, institution, username, email, user_id))
 
     db.commit()
+    db.close()
+
     flash("Profile updated successfully!", "success")
     return redirect(url_for('profile'))
 

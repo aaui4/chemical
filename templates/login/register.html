@@ -11,12 +11,43 @@
         {{ error }}
     </div>
     {% endif %}
-        <div class="input-box">
+
+
+
+     <div class="input-box">
     <i class="bx bx-user"></i>
     <input type="text" id="username" name="username" placeholder="{{ _('Username') }}" required autocapitalize="none" spellcheck="false">
     <small id="username-msg" class="error"></small>
 
+</div> 
+
+<div class="input-box">
+    <i class='bx bx-user'></i>
+
+    <input
+        type="text"
+        id="first_name"
+        name="first_name"
+        placeholder="{{ _('First Name') }}"
+        required>
+
+    <small id="first-name-msg" class="error"></small>
 </div>
+
+
+<div class="input-box">
+    <i class='bx bx-building'></i>
+
+    <input
+        type="text"
+        id="institution"
+        name="institution"
+        placeholder="{{ _('Institution') }}"
+        required>
+
+    <small id="institution-msg" class="error"></small>
+</div>
+        
 
 <div class="input-box">
     <i class="bx bx-envelope"></i>

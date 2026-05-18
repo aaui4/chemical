@@ -9,11 +9,20 @@ def register():
 
     if request.method == "POST":
 
+        first_name = request.form.get("first_name", "").strip()
+        institution = request.form.get("institution", "").strip()
+
         username = request.form.get("username", "").strip()
         email = request.form.get("email", "").strip()
         password = request.form.get("password", "")
 
-        success, error = auth_register_user(username, email, password)
+        success, error = auth_register_user(
+            first_name,
+            institution,
+            username,
+            email,
+            password
+        )
 
         if success:
             return redirect(url_for("login.login"))

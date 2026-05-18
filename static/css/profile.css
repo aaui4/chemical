@@ -513,7 +513,7 @@ body {
 
 .btn-submit {
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: #2196F3;
     color: white;
     border: none;
     border-radius: 6px;
@@ -524,7 +524,7 @@ body {
 }
 
 .btn-submit:hover {
-    background-color: #45a049;
+    background-color: #2196F3;
 }
 
 .btn-change-password {

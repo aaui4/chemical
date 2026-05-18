@@ -6,6 +6,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATABASE = os.path.join(BASE_DIR, "chemical.db")
 
 
+
 def create_tables():
     db = get_db()
     cursor = db.cursor()
@@ -14,15 +15,52 @@ def create_tables():
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS user (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    first_name TEXT,
+    institution  TEXT,
+
     username TEXT UNIQUE NOT NULL,
     email TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
+
     role TEXT CHECK(role IN ('admin', 'user')) NOT NULL,
+
     avatar TEXT DEFAULT 'default.png',
+
     created_at TEXT DEFAULT (datetime('now','localtime'))
 )
     """)
 
+    # إضافة first_name إذا غير موجود
+    try:
+        cursor.execute("""
+            ALTER TABLE user
+            ADD COLUMN first_name TEXT
+        """)
+    except:
+        pass
+
+    # إضافة institution  إذا غير موجود
+    try:
+        cursor.execute("""
+            ALTER TABLE user
+            ADD COLUMN institution  TEXT
+        """)
+    except:
+        pass
+
+    # ===== chemical_elements =====
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS chemical_elements (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        symbol TEXT NOT NULL,
+        atomicNumber INTEGER,
+        atomicMass REAL,
+        default_color TEXT,
+        state TEXT CHECK(state IN ('solid','liquid','gas'))
+    )
+    """)
     # ===== chemical_elements =====
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS chemical_elements (
