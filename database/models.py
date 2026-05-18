@@ -29,8 +29,6 @@ def create_tables():
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
         symbol TEXT NOT NULL,
-        atomicNumber INTEGER,
-        atomicMass REAL,
         default_color TEXT,
         state TEXT CHECK(state IN ('solid','liquid','gas'))
     )
@@ -61,10 +59,13 @@ def create_tables():
         reaction_id INTEGER NOT NULL,
         date TEXT NOT NULL,
         result TEXT,
+        temperature REAL DEFAULT 25,
+        pressure REAL DEFAULT 1,
         FOREIGN KEY (user_id) REFERENCES user(id),
         FOREIGN KEY (reaction_id) REFERENCES chemical_reactions(id)
     )
     """)
+    
 
     # ===== reaction_results =====
     cursor.execute("""
@@ -101,6 +102,7 @@ def create_tables():
         temperature REAL,
         pressure REAL,
         result_color TEXT,
+        gas_produced INTEGER DEFAULT 0,
         status TEXT DEFAULT 'pending',
         created_at TEXT DEFAULT (datetime('now', 'localtime')),
         FOREIGN KEY (user_id) REFERENCES user(id)

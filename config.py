@@ -7,10 +7,11 @@ class Config:
 
     #  Mail configuration
     MAIL_SERVER = 'smtp.gmail.com'
-    MAIL_PORT = 587
-    MAIL_USE_TLS = True
+    MAIL_PORT = 465
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
     MAIL_USERNAME = 'kindkiki9@gmail.com'
-    MAIL_PASSWORD = 'bcfo evel snsr dvuq'
+    MAIL_PASSWORD = 'bcfoevelsnsrdvuq'
 
     #  Uploads
     UPLOAD_FOLDER = Path("static/uploads/")

@@ -1,32 +1,40 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 import sqlite3
 from flask_babel import gettext as _
+import re
 
 reaction = Blueprint('reaction', __name__)
 
 # ✅ دالة منع التكرار
-def get_or_create_element(cursor, name, symbol):
-    # تنظيف بسيط (حتى لو ديرتيه في الفورم ما يضرش)
-    name = name.strip().lower()
+def get_or_create_element(cursor, name, symbol, color="#cccccc"):
+
+    name = name.strip()
     symbol = symbol.strip().upper()
+    symbol = symbol.strip().lower().replace("₂","2")
+    symbol = symbol.strip().lower()
+
+  # توحيد الحالات الشائعة
+    if symbol in ["hcl(aq)", "hydrochloric acid"]:
+      symbol = "hcl"
 
     cursor.execute("""
         SELECT id FROM chemical_elements
-        WHERE LOWER(name) = ? AND LOWER(symbol) = LOWER(?)
-    """, (name, symbol))
+        WHERE LOWER(symbol) = LOWER(?)
+    """, (symbol,))
 
     existing = cursor.fetchone()
 
+    # ✅ إذا موجود يرجع نفس الـ id
     if existing:
         return existing[0]
 
+    # ✅ إذا غير موجود ينشئ عنصر جديد
     cursor.execute("""
-        INSERT INTO chemical_elements (name, symbol)
-        VALUES (?, ?)
-    """, (name, symbol))
+        INSERT INTO chemical_elements (name, symbol, default_color)
+        VALUES (?, ?, ?)
+    """, (name, symbol, color))
 
     return cursor.lastrowid
-
 
 
 # ===== USER: Add Reaction =====
@@ -41,6 +49,7 @@ def add_reaction():
         reaction_type = request.form.get('reaction_type', 'default')
         temperature = request.form.get('temperature')
         pressure = request.form.get('pressure')
+        gas_produced = int(request.form.get('gas_produced', 0))
         reactant1_color = request.form.get("reactant1_color", "#cccccc")
         reactant2_color = request.form.get("reactant2_color", "#cccccc")
 
@@ -58,16 +67,43 @@ def add_reaction():
         c = conn.cursor()
 
         # ✅ إنشاء أو جلب العناصر
-        reactant1_id = get_or_create_element(c, reactant1_name, reactant1_symbol)
-        reactant2_id = get_or_create_element(c, reactant2_name, reactant2_symbol)
+        reactant1_id = get_or_create_element( c, reactant1_name,  reactant1_symbol, reactant1_color)
+        reactant2_id = get_or_create_element(c, reactant2_name, reactant2_symbol, reactant2_color)
 
-        # تخزين التفاعل
-        c.execute("""
-            INSERT INTO pending_reactions (user_id, equation, description, type, temperature, pressure, result_color, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')
-        """, (user_id, equation, description, reaction_type, temperature, pressure, result_color))
+        # ✅ إذا كان Admin يضاف مباشرة
+        if session.get("role") == "admin":
+            c.execute("""
+                INSERT INTO chemical_reactions
+                (equation, description, type, temperature, pressure,gas_produced , result_color)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                """, (
+                   equation,
+                   description,
+                   reaction_type,
+                   temperature,
+                   pressure,
+                   gas_produced,
+                   result_color
+               ))
 
-        reaction_id = c.lastrowid
+            reaction_id = c.lastrowid
+        else:
+            c.execute("""
+                INSERT INTO pending_reactions
+                (user_id, equation, description, type, temperature, pressure,gas_produced , result_color, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending')
+            """, (
+                user_id,
+                equation,
+                description,
+                reaction_type,
+                temperature,
+                pressure,
+                gas_produced,
+                result_color
+            ))
+
+            reaction_id = c.lastrowid
 
         # ✅ ربط المتفاعلات
         c.execute("INSERT INTO reaction_elements (reaction_id, element_id) VALUES (?, ?)", (reaction_id, reactant1_id))
@@ -112,7 +148,7 @@ def accept(id):
     c = conn.cursor()
 
     c.execute("""
-        SELECT equation, description, type, temperature, pressure, result_color
+        SELECT equation, description, type, temperature, pressure,gas_produced, result_color
         FROM pending_reactions 
         WHERE id = ? AND status = 'pending'
     """, (id,))
@@ -121,8 +157,8 @@ def accept(id):
     if reaction_data:
         # إدخال في chemical_reactions
         c.execute("""
-            INSERT INTO chemical_reactions (equation, description, type, temperature, pressure, result_color)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO chemical_reactions (equation, description, type, temperature, pressure, gas_produced, result_color)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         """, reaction_data)
 
         new_reaction_id = c.lastrowid

@@ -97,6 +97,12 @@ block head %}
             name="temperature"
             placeholder="{{ _('Temperature °C') }}"
           />
+          <input
+            type="number"
+            name="pressure"
+            step="0.1"
+            placeholder="{{ _('Pressure atm') }}"
+          />
           <button type="submit" class="start">{{ _('Start Simulation') }}</button>
         </div>
       </form>
@@ -108,9 +114,13 @@ block head %}
 
       <!-- المعادلة -->
       <div class="equation-card">
-        <span class="equation-text">\( \ce{ {{ equation }} } \)</span>
+        <span class="equation-text"> {{ equation }} </span>
         {% if temperature %}
-        <span class="temp-badge">🌡️ {{ temperature }}°C</span>
+          <span class="temp-badge">🌡️ {{ temperature }}°C</span>
+        {% endif %}
+
+        {% if pressure %}
+          <span class="temp-badge">🧭 {{ pressure }} atm</span>
         {% endif %}
       </div>
 
@@ -206,6 +216,10 @@ block head %}
         <div class="result-item">
           <div class="result-label">{{ _('TEMPERATURE') }}</div>
           <div class="result-value">{{ temperature|default('0') }}°C</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">{{ _('PRESSURE') }}</div>
+          <div class="result-value">{{ pressure|default('1') }} atm</div>
         </div>
         <div class="result-item">
           <div class="result-label">{{ _('PRODUCTS') }}</div>

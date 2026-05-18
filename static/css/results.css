@@ -758,8 +758,8 @@ h1 {
 
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
   margin: 20px 0;
 }
 
