@@ -148,50 +148,132 @@ def accept(id):
     c = conn.cursor()
 
     c.execute("""
-        SELECT equation, description, type, temperature, pressure,gas_produced, result_color
-        FROM pending_reactions 
-        WHERE id = ? AND status = 'pending'
-    """, (id,))
+        SELECT equation, description, type, temperature,
+               pressure, gas_produced, result_color
+        FROM pending_reactions
+        WHERE id=? AND status='pending'
+    """,(id,))
+
     reaction_data = c.fetchone()
 
     if reaction_data:
-        # إدخال في chemical_reactions
+
+        # إدخال التفاعل في chemical_reactions
         c.execute("""
-            INSERT INTO chemical_reactions (equation, description, type, temperature, pressure, gas_produced, result_color)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        """, reaction_data)
+        INSERT INTO chemical_reactions
+        (equation,description,type,temperature,
+         pressure,gas_produced,result_color)
+        VALUES (?,?,?,?,?,?,?)
+        """,reaction_data)
 
         new_reaction_id = c.lastrowid
 
-        #  نقل المتفاعلات
-        c.execute("SELECT element_id FROM reaction_elements WHERE reaction_id = ?", (id,))
-        elements = c.fetchall()
+
+        # نقل العناصر
+        c.execute("""
+        SELECT element_id
+        FROM reaction_elements
+        WHERE reaction_id=?
+        """,(id,))
+
+        elements=c.fetchall()
 
         for el in elements:
-            c.execute("INSERT INTO reaction_elements (reaction_id, element_id) VALUES (?, ?)", (new_reaction_id, el[0]))
+            c.execute("""
+            INSERT INTO reaction_elements
+            (reaction_id,element_id)
+            VALUES (?,?)
+            """,(new_reaction_id,el[0]))
+
 
         # تحديث الحالة
-        c.execute("UPDATE pending_reactions SET status = 'accepted' WHERE id = ?", (id,))
+        c.execute("""
+        UPDATE pending_reactions
+        SET status='accepted'
+        WHERE id=?
+        """,(id,))
+
+
+        # جلب المستخدم صاحب التفاعل
+        c.execute("""
+        SELECT user_id,equation
+        FROM pending_reactions
+        WHERE id=?
+        """,(id,))
+
+        user_data=c.fetchone()
+
+        if user_data:
+
+            user_id=user_data[0]
+            equation=user_data[1]
+
+            c.execute("""
+            INSERT INTO notifications
+            (user_id,message)
+            VALUES (?,?)
+            """,(
+                user_id,
+                f"Your reaction ({equation}) has been accepted"
+            ))
 
         conn.commit()
-        flash(_("Reaction accepted successfully!"), "success")
-    else:
-        flash(_("Reaction not found or already processed"), "error")
+
+        flash(_("Reaction accepted successfully!"),"success")
 
     conn.close()
-    return redirect(url_for('reaction.pending_reactions'))
+
+    return redirect(
+        url_for('reaction.pending_reactions')
+    )
 
 
 # ===== ADMIN: رفض =====
 @reaction.route('/reject/<int:id>')
 def reject(id):
+
     conn = sqlite3.connect('database/chemical.db')
     c = conn.cursor()
 
-    c.execute("UPDATE pending_reactions SET status = 'rejected' WHERE id = ?", (id,))
+    # جلب صاحب التفاعل قبل تغيير الحالة
+    c.execute("""
+    SELECT user_id, equation
+    FROM pending_reactions
+    WHERE id=?
+    """, (id,))
+
+    user_data = c.fetchone()
+
+
+    # تغيير الحالة
+    c.execute("""
+    UPDATE pending_reactions
+    SET status='rejected'
+    WHERE id=?
+    """, (id,))
+
+
+    # إنشاء إشعار
+    if user_data:
+
+        user_id = user_data[0]
+        equation = user_data[1]
+
+        c.execute("""
+        INSERT INTO notifications
+        (user_id, message)
+        VALUES (?,?)
+        """, (
+            user_id,
+            f"Your reaction ({equation}) has been rejected"
+        ))
+
 
     conn.commit()
     conn.close()
 
     flash(_("Reaction rejected"), "error")
-    return redirect(url_for('reaction.pending_reactions'))
+
+    return redirect(
+        url_for('reaction.pending_reactions')
+    )

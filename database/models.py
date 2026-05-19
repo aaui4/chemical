@@ -156,3 +156,20 @@ def create_tables():
     """)
 
     db.commit()
+    # ===== notifications =====
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS notifications (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    message TEXT NOT NULL,
+    is_read INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id) REFERENCES user(id)
+)
+""")
+
+    db.commit()
+    db.close()
+
+                   
