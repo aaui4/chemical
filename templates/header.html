@@ -12,6 +12,47 @@
       <a href="{{ request.path }}?lang=en" class="lang-btn">EN</a>
       <a href="{{ request.path }}?lang=ar" class="lang-btn">AR</a>
     </nav>
+   
+    {% if session.get('username') %}
+
+<div class="notification-menu">
+      
+    <a href="{{ url_for('mark_notifications_read') }}">
+    <i class='bx bx-bell notification-icon'></i>
+</a>
+        {% set unread = notifications|selectattr(2,'equalto',0)|list|length %}
+
+{% if unread > 0 %}
+<span class="notification-count">
+    {{ unread }}
+</span>
+{% endif %}
+
+    <ul class="notification-dropdown">
+
+        {% for notification in notifications %}
+
+        <li>
+            <span class="dropdown-item">
+                {{ notification[1] }}
+            </span>
+        </li>
+
+        {% else %}
+
+        <li>
+            <span class="dropdown-item">
+                {{ _('No notifications') }}
+            </span>
+        </li>
+
+        {% endfor %}
+
+    </ul>
+
+</div>
+
+{% endif %} 
 
 <div class="user-menu">
 
