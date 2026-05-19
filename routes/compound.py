@@ -25,7 +25,7 @@ def encyclopedia():
 
             compounds += search_compounds_by_symbol(query)
 
-        # 🔥 COMPOUND
+        #  COMPOUND
         elif q_type == "compound":
             comp = get_compound_data(query)
             if comp:
@@ -33,7 +33,7 @@ def encyclopedia():
 
             reactions = get_reactions(query)
 
-        # 🔥 REACTION
+        #  REACTION
         elif q_type == "reaction":
             reactions = get_reactions(query)
 
@@ -135,27 +135,27 @@ def get_detailed_compound_info(name):
             for sec in sec_list:
                 title = sec.get("TOCHeading", "").lower()
                 
-                # 🔹 DESCRIPTION - الوصف العام
+                #  DESCRIPTION - الوصف العام
                 if "description" in title or "summary" in title or "identification" in title:
                     texts = extract_text_from_section(sec)
                     if texts and not result["description"]:
                         result["description"] = texts[0][:1000]  # حد الطول
                 
-                # 🔹 USES - الاستخدامات
+                #  USES - الاستخدامات
                 if any(kw in title for kw in ["use", "application", "agricultural", "industrial", "pharmaceutical"]):
                     texts = extract_text_from_section(sec)
                     for text in texts:
                         if len(text) > 30 and text not in result["uses"]:
                             result["uses"].append(text[:500])
                 
-                # 🔹 PROPERTIES - الخواص
+                #  PROPERTIES - الخواص
                 if any(kw in title for kw in ["property", "physical", "chemical", "characteristic"]):
                     texts = extract_text_from_section(sec)
                     for text in texts:
                         if len(text) > 20 and text not in result["properties"]:
                             result["properties"].append(text[:300])
                 
-                # 🔹 SAFETY - الأمان والتحذيرات
+                #  SAFETY - الأمان والتحذيرات
                 if any(kw in title for kw in ["safety", "hazard", "toxic", "warning", "precaution", "first aid"]):
                     texts = extract_text_from_section(sec)
                     for text in texts:
@@ -258,7 +258,7 @@ def get_reactions(query):
     db = get_db()
     cursor = db.cursor()
 
-    # 🔥 فلترة ذكية
+    #  فلترة ذكية
     if len(query) <= 2:
         cursor.execute("""
             SELECT * FROM chemical_reactions

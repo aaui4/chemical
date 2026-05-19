@@ -141,7 +141,7 @@ input[type="password"] {
 /* Flash Messages */
 .flashes {
     position: absolute;
-    top: 60px;              /* المسافة من الأعلى */
+    top: 180px;              /* المسافة من الأعلى */
     left: 50%;
     transform: translateX(-50%);
     width: 420px;           /* نفس عرض الفورم */
@@ -160,12 +160,15 @@ input[type="password"] {
 /* Error */
 .alert.error {
     color: #ff4d4d;
+    top: -96px;
 }
 
 /* Success */
 .alert.success {
     background: rgba(0, 255, 0, 0.15);
     color: #00aa00;
+    top: -90px;
+
 }
 
 

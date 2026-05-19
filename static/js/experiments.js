@@ -11,28 +11,7 @@ function closeModal() {
     if (modal) modal.style.display = "none";
 }
 
-// =========================
-// EDIT MODAL
-// =========================
-function openEditModal(btn) {
-    const id = btn.dataset.id;
-    const equation = btn.dataset.equation;
 
-    const modal = document.getElementById("editModal");
-    const editEquation = document.getElementById("editEquation");
-    const editForm = document.getElementById("editForm");
-
-    if (modal && editEquation && editForm) {
-        editEquation.value = equation;
-        editForm.action = "/admin/update_reaction/" + id;
-        modal.style.display = "flex";
-    }
-}
-
-function closeEditModal() {
-    const modal = document.getElementById("editModal");
-    if (modal) modal.style.display = "none";
-}
 
 // =========================
 // CLOSE ON OUTSIDE CLICK

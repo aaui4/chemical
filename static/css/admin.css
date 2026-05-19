@@ -496,7 +496,7 @@ tbody tr:hover {
 
 .modal-box {
     background: white;
-    width: 500px;          /* بدل 600px ولا auto */
+    width: 500px;          
     max-width: 90%;        /* responsive */
     max-height: 90vh;      /* مهم جداً */
     overflow-y: auto;      /* scroll داخل المودال */

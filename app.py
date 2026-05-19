@@ -246,7 +246,7 @@ def reset_password(token):
     if request.method == 'POST':
         new_password = request.form['password']
         
-        # 🔥 التعديل المهم: تشفير كلمة المرور بنفس طريقة التسجيل
+        #   تشفير كلمة المرور بنفس طريقة التسجيله
         hashed_password = generate_password_hash(new_password)
         
         # تحديث كلمة المرور المشفرة في جدول المستخدمين

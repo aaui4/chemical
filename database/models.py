@@ -103,6 +103,14 @@ def create_tables():
         FOREIGN KEY (reaction_id) REFERENCES chemical_reactions(id)
     )
     """)
+
+    try:
+     cursor.execute("""
+        ALTER TABLE simulation
+        ADD COLUMN pressure REAL DEFAULT 1
+    """)
+    except:
+       pass
     
 
     # ===== reaction_results =====

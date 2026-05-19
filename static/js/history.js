@@ -101,6 +101,8 @@ function printTable() {
   newWindow.print();
 }
 
+
+
 // تشغيل البحث عند تحميل الصفحة (للتأكد)
 window.onload = function () {
   console.log(" History page loaded, search is ready");

@@ -32,7 +32,7 @@ def login():
             (username,)
         ).fetchone()
 
-        #  تحقق آمن (لا نكشف السبب)
+        
         if user and check_password_hash(user["password"], password):
 
             session.clear()  # حماية إضافية

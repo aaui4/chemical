@@ -39,14 +39,7 @@
 
                         <td class="actions">
 
-                            <!-- EDIT -->
-                            <a href="#"
-                               class="edit-btn"
-                               data-id="{{ r.id }}"
-                               data-equation="{{ r.equation }}"
-                               onclick="openEditModal(this)">
-                                <i class='bx bx-edit'></i>
-                            </a>
+                            
 
                             <!-- DELETE -->
                             <form method="POST"
@@ -188,30 +181,7 @@
     </div>
 </div>
 
-<!-- ================= EDIT MODAL ================= -->
-<div id="editModal" class="modal-custom">
 
-    <div class="modal-box">
-
-        <span class="close-btn" onclick="closeEditModal()">&times;</span>
-
-        <h2>✏️ Edit Reaction</h2>
-
-        <form method="POST" id="editForm">
-
-            <div class="form-group">
-                <label>⚡ Equation</label>
-                <input type="text" name="equation" id="editEquation" required>
-            </div>
-
-            <button type="submit" class="submit-btn">
-                Update
-            </button>
-
-        </form>
-
-    </div>
-</div>
 
 <!-- Scripts -->
 <script src="{{ url_for('static', filename='js/experiments.js') }}"></script>

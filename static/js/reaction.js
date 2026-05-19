@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // تشغيل أولي باش يتحقق من الحالة
+    
     checkForm();
 
 });

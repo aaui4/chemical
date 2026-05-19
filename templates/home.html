@@ -34,7 +34,7 @@
             <div class="mt-4">
               <a href="{{ url_for('simulation.simulation_page') }}" class="btn">{{ _('Start Simulation') }}</a>
               
-              <!-- 🏠 زر Dashboard - يظهر فقط للأدمن -->
+              <!--  زر Dashboard - يظهر فقط للأدمن -->
               {% if session.get('role') == 'admin' %}
                 <a href="{{ url_for('admin.dashboard') }}" class="btn admin-dashboard-btn">
                   <i class='bx bxs-dashboard'></i> {{ _('Go to Dashboard') }}

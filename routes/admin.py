@@ -128,15 +128,23 @@ def delete_user(user_id):
 
     db = get_db()
 
+    # منع الأدمن من حذف نفسه
     if session.get("user_id") == user_id:
         db.close()
         return redirect(url_for("admin.user_profile", user_id=user_id))
 
-    db.execute("DELETE FROM user WHERE id = ?", (user_id,))
-    db.close()
+    try:
+        db.execute("DELETE FROM user WHERE id = ?", (user_id,))
+        db.commit()   
+
+    except Exception as e:
+        print("Delete error:", e)
+        db.rollback()
+
+    finally:
+        db.close()
 
     return redirect(url_for("admin.users"))
-
 
 # =========================
 # ADD REACTION
@@ -241,33 +249,7 @@ def experiments():
         reactions=reactions,
     )
 
-@admin_bp.route("/reaction/edit/<int:id>", methods=["GET", "POST"])
-def edit_reaction(id):
-    if session.get("role") != "admin":
-        return redirect(url_for("login.login"))
 
-    db = get_db()
-
-    if request.method == "POST":
-        equation = request.form.get("equation")
-
-        db.execute(
-            "UPDATE chemical_reactions SET equation = ? WHERE id = ?",
-            (equation, id)
-        )
-        
-        db.commit()
-        db.close()
-        return redirect(url_for("admin.experiments"))
-
-    reaction = db.execute(
-        "SELECT * FROM chemical_reactions WHERE id = ?",
-        (id,)
-    ).fetchone()
-
-    db.close()
-
-    return render_template("admin/edit_reaction.html", reaction=reaction)
 
 @admin_bp.route("/reaction/delete/<int:id>", methods=["POST"])
 def delete_reaction(id):

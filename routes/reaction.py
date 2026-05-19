@@ -5,8 +5,8 @@ import re
 
 reaction = Blueprint('reaction', __name__)
 
-# ✅ دالة منع التكرار
-def get_or_create_element(cursor, name, symbol, color="#cccccc"):
+# دالة منع التكرار
+def get_or_create_element(cursor, name, symbol, color=""):
 
     name = name.strip()
     symbol = symbol.strip().upper()
@@ -24,11 +24,11 @@ def get_or_create_element(cursor, name, symbol, color="#cccccc"):
 
     existing = cursor.fetchone()
 
-    # ✅ إذا موجود يرجع نفس الـ id
+    #  إذا موجود يرجع نفس الـ id
     if existing:
         return existing[0]
 
-    # ✅ إذا غير موجود ينشئ عنصر جديد
+    #  إذا غير موجود ينشئ عنصر جديد
     cursor.execute("""
         INSERT INTO chemical_elements (name, symbol, default_color)
         VALUES (?, ?, ?)
@@ -50,10 +50,10 @@ def add_reaction():
         temperature = request.form.get('temperature')
         pressure = request.form.get('pressure')
         gas_produced = int(request.form.get('gas_produced', 0))
-        reactant1_color = request.form.get("reactant1_color", "#cccccc")
-        reactant2_color = request.form.get("reactant2_color", "#cccccc")
+        reactant1_color = request.form.get("reactant1_color", "")
+        reactant2_color = request.form.get("reactant2_color", "")
 
-        # 🆕 المتفاعلات
+        #  المتفاعلات
         reactant1_name = request.form.get("reactant1_name")
         reactant1_symbol = request.form.get("reactant1_symbol")
         reactant2_name = request.form.get("reactant2_name")
@@ -66,11 +66,11 @@ def add_reaction():
         conn = sqlite3.connect('database/chemical.db')
         c = conn.cursor()
 
-        # ✅ إنشاء أو جلب العناصر
+        #  إنشاء أو جلب العناصر
         reactant1_id = get_or_create_element( c, reactant1_name,  reactant1_symbol, reactant1_color)
         reactant2_id = get_or_create_element(c, reactant2_name, reactant2_symbol, reactant2_color)
 
-        # ✅ إذا كان Admin يضاف مباشرة
+        #  إذا كان Admin يضاف مباشرة
         if session.get("role") == "admin":
             c.execute("""
                 INSERT INTO chemical_reactions
@@ -105,7 +105,7 @@ def add_reaction():
 
             reaction_id = c.lastrowid
 
-        # ✅ ربط المتفاعلات
+        #  ربط المتفاعلات
         c.execute("INSERT INTO reaction_elements (reaction_id, element_id) VALUES (?, ?)", (reaction_id, reactant1_id))
         c.execute("INSERT INTO reaction_elements (reaction_id, element_id) VALUES (?, ?)", (reaction_id, reactant2_id))
 
@@ -163,7 +163,7 @@ def accept(id):
 
         new_reaction_id = c.lastrowid
 
-        # ✅ نقل المتفاعلات
+        #  نقل المتفاعلات
         c.execute("SELECT element_id FROM reaction_elements WHERE reaction_id = ?", (id,))
         elements = c.fetchall()
 

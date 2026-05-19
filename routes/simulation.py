@@ -29,7 +29,7 @@ REACTION_DESCRIPTIONS = {
 
 @simulation_bp.route("/", methods=["GET"])
 def simulation_page():
-    #  التعديل الوحيد هنا: منع غير المسجل من دخول صفحة المحاكاة
+    #   منع غير المسجل من دخول صفحة المحاكاة
     if "user_id" not in session:
         return redirect(url_for("login.login"))
 
@@ -42,7 +42,7 @@ def simulation_page():
 
 @simulation_bp.route("/start", methods=["POST"])
 def start_simulation():
-    #  تم إزالة شرط تسجيل الدخول من هنا
+
     db = get_db()
     cursor = db.cursor()
 
@@ -156,7 +156,7 @@ def start_simulation():
             INSERT INTO simulation (user_id, reaction_id, date, result, temperature, pressure)
             VALUES (?, ?, ?, ?, ?, ?)
         """, (
-            session.get("user_id"),  # ✅ ممكن يكون None إذا لم يسجل دخول، نحتاج معالجة هذا
+            session.get("user_id"),  # ممكن يكون None إذا لم يسجل دخول، نحتاج معالجة هذا
             reaction_id,
             datetime.now(),
             result_text or description,
