@@ -26,6 +26,8 @@ from flask_babel import gettext as _
 
 app = Flask(__name__)
 app.config.from_object(Config)
+mail = Mail(app)
+app.config['MAIL_DEBUG'] = True
 
 # ===== Babel =====
 def get_locale():
@@ -55,7 +57,7 @@ app.register_blueprint(simulation_bp)
 app.register_blueprint(compound_bp)
 app.register_blueprint(reaction)
 
-mail = Mail(app)
+
 
 app.teardown_appcontext(close_db)
 
@@ -173,24 +175,28 @@ def forgot():
             db.commit()
 
             # إنشاء الرابط
-            reset_link = f"{SERVER_BASE_URL}/reset-password/{token}"
+            reset_link = url_for('reset_password',token=token,  _external=True)
 
             # إنشاء الرسالة
             msg = Message(
-                _("Password Reset"),
-                sender="chemicalsimulator926@gmail.com",
-                recipients=[user_email]
+                 subject="Chemical Simulator - Password Reset",
+                 sender=("Chemical Simulator", app.config['MAIL_USERNAME']),
+                 recipients=[user_email]
             )
 
             msg.body = f"""
-{_('Click the following link to reset your password (valid for 1 hour):')}
+             {_('Click the following link to reset your password (valid for 1 hour):')}
 
-{reset_link}
+             {reset_link}
 
-{_('If you did not request this, please ignore this email.')}
-"""
+             {_('If you did not request this, please ignore this email.')}
+            """
 
             try:
+                
+                print(app.config['MAIL_USERNAME'])
+                print(app.config['MAIL_PASSWORD'])
+                print(reset_link)
                 mail.send(msg)
 
                 print(f"🔗 Reset link sent: {reset_link}")
@@ -586,10 +592,6 @@ def mark_notifications_read():
         conn.close()
 
     return redirect(request.referrer)
-
-
-
-
 
 # تصحيح requests
 import requests
