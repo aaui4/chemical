@@ -16,39 +16,25 @@
     {% if session.get('role') == 'user' %}
 
 <div class="notification-menu">
-      
-    <a href="{{ url_for('mark_notifications_read') }}">
-    <i class='bx bx-bell notification-icon'></i>
-</a>
-        {% set unread = notifications|selectattr(2,'equalto',0)|list|length %}
 
-{% if unread > 0 %}
-<span class="notification-count">
-    {{ unread }}
-</span>
-{% endif %}
+  <i class='bx bx-bell notification-icon' id="notifBell"></i>
 
-    <ul class="notification-dropdown">
+  {% set unread = notifications|selectattr(2,'equalto',0)|list|length %}
+  {% if unread > 0 %}
+  <span class="notification-count">{{ unread }}</span>
+  {% endif %}
 
-        {% for notification in notifications %}
-
-        <li>
-            <span class="dropdown-item">
-                {{ notification[1] }}
-            </span>
-        </li>
-
-        {% else %}
-
-        <li>
-            <span class="dropdown-item">
-                {{ _('No notifications') }}
-            </span>
-        </li>
-
-        {% endfor %}
-
-    </ul>
+  <ul class="notification-dropdown" id="notifDropdown">
+    {% for notification in notifications %}
+      <li>
+        <span class="dropdown-item">
+          {{ notification[1] }}
+        </span>
+      </li>
+    {% else %}
+      <li>{{ _('No notifications') }}</li>
+    {% endfor %}
+  </ul>
 
 </div>
 

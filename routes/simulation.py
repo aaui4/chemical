@@ -54,8 +54,11 @@ def start_simulation():
     db = get_db()
     cursor = db.cursor()
 
-    reactant1_id = request.form["reactant1"]
-    reactant2_id = request.form["reactant2"]
+    reactant1_id = request.form.get("reactant1")
+    reactant2_id = request.form.get("reactant2")
+
+    if not reactant1_id or not reactant2_id:
+      return redirect(url_for("simulation.simulation_page"))
 
     if reactant1_id == reactant2_id:
         flash("⚠️ " + _("You cannot select the same reactant twice."), "error")
