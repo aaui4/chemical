@@ -13,7 +13,7 @@
       <a href="{{ request.path }}?lang=ar" class="lang-btn">AR</a>
     </nav>
    
-    {% if session.get('username') %}
+    {% if session.get('role') == 'user' %}
 
 <div class="notification-menu">
       

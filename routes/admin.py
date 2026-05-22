@@ -107,13 +107,23 @@ def user_profile(user_id):
 
 @admin_bp.route("/user/<int:user_id>/change-role", methods=["POST"])
 def change_role(user_id):
+
     if session.get("role") != "admin":
         return redirect(url_for("login.login"))
 
     new_role = request.form.get("role")
 
     db = get_db()
-    db.execute("UPDATE user SET role = ? WHERE id = ?", (new_role, user_id))
+
+    db.execute(
+        "UPDATE user SET role = ? WHERE id = ?",
+        (new_role, user_id)
+    )
+
+    db.commit()   # ← هذا كان ناقص
+
+    flash(_("Role updated successfully"), "success")
+
     db.close()
 
     return redirect(url_for("admin.user_profile", user_id=user_id))
