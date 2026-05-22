@@ -465,6 +465,21 @@ block head %}
       resetBtn.addEventListener("click", window.resetSimulation);
     }
   })();
+
+  // تحديث الصفحة بعد تغيير اللغة مباشرة
+document.querySelectorAll('a[href*="set-language"]').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var lang = this.href.split('/').pop();
+        
+        // تغيير اللغة عن طريق fetch
+        fetch('/simulation/set-language/' + lang)
+            .then(function() {
+                // إعادة تحميل نفس الصفحة
+                window.location.reload();
+            });
+    });
+});
 </script>
 <script src="{{ url_for('static', filename='js/simulation.js') }}"></script>
 
