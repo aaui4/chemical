@@ -9,8 +9,8 @@
       <a href="{{ url_for('compound.encyclopedia') }}" class="text-white mx-2">{{ _('Search') }}</a>
       <a href="{{ url_for('simulation.simulation_page') }}" class="text-white mx-2">{{ _('Simulation') }}</a>
       <a href="{{ url_for('home') }}#about" class="text-white mx-2">{{ _('About') }}</a>
-      <a href="{{ request.path }}?lang=en" class="lang-btn">EN</a>
-      <a href="{{ request.path }}?lang=ar" class="lang-btn">AR</a>
+      <a href="{{ url_for('set_language_route', lang='en') }}" class="lang-btn">EN</a>
+      <a href="{{ url_for('set_language_route', lang='ar') }}" class="lang-btn">AR</a>
     </nav>
    
     {% if session.get('role') == 'user' %}

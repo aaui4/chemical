@@ -76,6 +76,11 @@ def allowed_file(filename):
 def home():
     return render_template('home.html')
 
+@app.route('/set-language/<lang>')
+def set_language_route(lang):
+    session['lang'] = lang
+    return redirect(request.referrer or url_for('home'))
+
 @app.route('/go-home')
 def go_home():
     return redirect(url_for('home'))

@@ -27,6 +27,14 @@ REACTION_DESCRIPTIONS = {
     'default': 'Reaction completed successfully'
 }
 
+@simulation_bp.route("/set-language/<lang>")
+def set_language(lang):
+    if lang in ['ar', 'en']:
+        session['lang'] = lang
+    # ارجع للصفحة التي جاء منها المستخدم
+    return redirect(request.referrer or url_for("simulation.simulation_page"))
+
+
 @simulation_bp.route("/", methods=["GET"])
 def simulation_page():
     #   منع غير المسجل من دخول صفحة المحاكاة
@@ -40,7 +48,7 @@ def simulation_page():
     return render_template("simulation/simulation.html", reactants=reactants)
 
 
-@simulation_bp.route("/start", methods=["POST"])
+@simulation_bp.route('/start', methods=['GET', 'POST'])
 def start_simulation():
 
     db = get_db()
@@ -206,6 +214,11 @@ def start_simulation():
                 r1=reactant1[1],
                 r2=reactant2[1]), "error")
         return redirect(url_for("simulation.simulation_page"))
+    
+@simulation_bp.before_request
+def change_lang_from_url():
+    if request.args.get('lang'):
+        session['lang'] = request.args.get('lang')
 
 
 @simulation_bp.route("/view/<int:simulation_id>", methods=["GET"])
@@ -266,6 +279,9 @@ def view_simulation(simulation_id):
         reaction_data['gas_produced'] = 1
     if sim[3] and 'Precipitate' in sim[3]:
         reaction_data['precipitate'] = 1
+        
+    if request.args.get('lang'):
+        session['lang'] = request.args.get('lang')
     
     return render_template("simulation/simulation.html", **reaction_data)
 
