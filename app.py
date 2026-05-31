@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, render_template, request, flash, redirect, url_for, session
+from flask import Blueprint, Flask, render_template, request, flash, redirect, url_for, session, jsonify
 import sqlite3
 from flask_mail import Mail, Message
 from werkzeug.utils import secure_filename
@@ -19,8 +19,7 @@ from database.db import get_db, close_db
 from routes.compound import compound_bp
 from routes.reaction import reaction
 from datetime import datetime, timedelta
-
-from flask import Flask, request, session
+from reaction_engine import predict_reaction
 from flask_babel import Babel
 from flask_babel import gettext as _
 
@@ -28,6 +27,21 @@ app = Flask(__name__)
 app.config.from_object(Config)
 mail = Mail(app)
 app.config['MAIL_DEBUG'] = True
+
+
+reaction_api = Blueprint("reaction_api", __name__)
+
+@reaction_api.route("/predict_reaction", methods=["POST"])
+def predict():
+
+    data = request.get_json()
+
+    r1 = data.get("reactant1")
+    r2 = data.get("reactant2")
+
+    result = predict_reaction(r1, r2)
+
+    return jsonify(result)
 
 # ===== Babel =====
 def get_locale():
@@ -56,6 +70,7 @@ app.register_blueprint(admin_bp)
 app.register_blueprint(simulation_bp)
 app.register_blueprint(compound_bp)
 app.register_blueprint(reaction)
+app.register_blueprint(reaction_api)
 
 
 
@@ -71,6 +86,8 @@ create_upload_folder()
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+
 
 @app.route('/')
 def home():

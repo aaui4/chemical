@@ -1,0 +1,1176 @@
+[
+  {
+    "reactants": [
+      {
+        "name": "Hydrogen",
+        "symbol": "H2",
+        "default_color": "#ffffff",
+        "state": "gas"
+      },
+      {
+        "name": "Oxygen",
+        "symbol": "O2",
+        "default_color": "#ffffff",
+        "state": "gas"
+      }
+    ],
+    "products": [{ "name": "Water", "symbol": "H2O", "state": "liquid" }],
+    "equation": "2H2 + O2 → 2H2O",
+    "description": "Hydrogen combustion",
+    "type": "combustion",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#87ceeb",
+    "gas_produced": 0,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      {
+        "name": "Carbon",
+        "symbol": "C",
+        "default_color": "#222222",
+        "state": "solid"
+      },
+      {
+        "name": "Oxygen",
+        "symbol": "O2",
+        "default_color": "#ffffff",
+        "state": "gas"
+      }
+    ],
+    "products": [{ "name": "Carbon Dioxide", "symbol": "CO2", "state": "gas" }],
+    "equation": "C + O2 → CO2",
+    "description": "Carbon combustion",
+    "type": "combustion",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ff6600",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      {
+        "name": "Carbon Monoxide",
+        "symbol": "CO",
+        "default_color": "#ffffff",
+        "state": "gas"
+      },
+      {
+        "name": "Oxygen",
+        "symbol": "O2",
+        "default_color": "#ffffff",
+        "state": "gas"
+      }
+    ],
+    "products": [{ "name": "Carbon Dioxide", "symbol": "CO2", "state": "gas" }],
+    "equation": "2CO + O2 → 2CO2",
+    "description": "Carbon monoxide oxidation",
+    "type": "oxidation",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ff6600",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      {
+        "name": "Magnesium",
+        "symbol": "Mg",
+        "default_color": "#c0c0c0",
+        "state": "solid"
+      },
+      {
+        "name": "Oxygen",
+        "symbol": "O2",
+        "default_color": "#ffffff",
+        "state": "gas"
+      }
+    ],
+    "products": [
+      { "name": "Magnesium Oxide", "symbol": "MgO", "state": "solid" }
+    ],
+    "equation": "2Mg + O2 → 2MgO",
+    "description": "Magnesium combustion",
+    "type": "oxidation",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 1
+  },
+
+  {
+    "reactants": [
+      {
+        "name": "Iron",
+        "symbol": "Fe",
+        "default_color": "#808080",
+        "state": "solid"
+      },
+      {
+        "name": "Oxygen",
+        "symbol": "O2",
+        "default_color": "#ffffff",
+        "state": "gas"
+      }
+    ],
+    "products": [
+      { "name": "Iron(III) Oxide", "symbol": "Fe2O3", "state": "solid" }
+    ],
+    "equation": "4Fe + 3O2 → 2Fe2O3",
+    "description": "Iron oxidation",
+    "type": "oxidation",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#b7410e",
+    "gas_produced": 0,
+    "precipitate": 1
+  },
+
+  {
+    "reactants": [
+      {
+        "name": "Zinc",
+        "symbol": "Zn",
+        "default_color": "#c0c0c0",
+        "state": "solid"
+      },
+      {
+        "name": "Oxygen",
+        "symbol": "O2",
+        "default_color": "#ffffff",
+        "state": "gas"
+      }
+    ],
+    "products": [{ "name": "Zinc Oxide", "symbol": "ZnO", "state": "solid" }],
+    "equation": "2Zn + O2 → 2ZnO",
+    "description": "Zinc oxidation",
+    "type": "oxidation",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#f5f5f5",
+    "gas_produced": 0,
+    "precipitate": 1
+  },
+
+  {
+    "reactants": [
+      {
+        "name": "Aluminum",
+        "symbol": "Al",
+        "default_color": "#d3d3d3",
+        "state": "solid"
+      },
+      {
+        "name": "Oxygen",
+        "symbol": "O2",
+        "default_color": "#ffffff",
+        "state": "gas"
+      }
+    ],
+    "products": [
+      { "name": "Aluminum Oxide", "symbol": "Al2O3", "state": "solid" }
+    ],
+    "equation": "4Al + 3O2 → 2Al2O3",
+    "description": "Aluminum oxidation",
+    "type": "oxidation",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 1
+  },
+
+  {
+    "reactants": [
+      {
+        "name": "Sulfur",
+        "symbol": "S",
+        "default_color": "#ffff00",
+        "state": "solid"
+      },
+      {
+        "name": "Oxygen",
+        "symbol": "O2",
+        "default_color": "#ffffff",
+        "state": "gas"
+      }
+    ],
+    "products": [{ "name": "Sulfur Dioxide", "symbol": "SO2", "state": "gas" }],
+    "equation": "S + O2 → SO2",
+    "description": "Sulfur combustion",
+    "type": "combustion",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffcc",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      {
+        "name": "Phosphorus",
+        "symbol": "P4",
+        "default_color": "#ffffff",
+        "state": "solid"
+      },
+      {
+        "name": "Oxygen",
+        "symbol": "O2",
+        "default_color": "#ffffff",
+        "state": "gas"
+      }
+    ],
+    "products": [
+      { "name": "Phosphorus Pentoxide", "symbol": "P4O10", "state": "solid" }
+    ],
+    "equation": "P4 + 5O2 → P4O10",
+    "description": "Phosphorus combustion",
+    "type": "combustion",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 1
+  },
+
+  {
+    "reactants": [
+      {
+        "name": "Methane",
+        "symbol": "CH4",
+        "default_color": "#ffffff",
+        "state": "gas"
+      },
+      {
+        "name": "Oxygen",
+        "symbol": "O2",
+        "default_color": "#ffffff",
+        "state": "gas"
+      }
+    ],
+    "products": [
+      { "name": "Carbon Dioxide", "symbol": "CO2", "state": "gas" },
+      { "name": "Water", "symbol": "H2O", "state": "liquid" }
+    ],
+    "equation": "CH4 + 2O2 → CO2 + 2H2O",
+    "description": "Methane combustion",
+    "type": "combustion",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ff6600",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Zinc", "symbol": "Zn" },
+      { "name": "Hydrochloric Acid", "symbol": "HCl" }
+    ],
+    "products": [
+      { "name": "Zinc Chloride", "symbol": "ZnCl2" },
+      { "name": "Hydrogen", "symbol": "H2" }
+    ],
+    "equation": "Zn + 2HCl → ZnCl2 + H2",
+    "description": "Metal-acid reaction releasing hydrogen",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Magnesium", "symbol": "Mg" },
+      { "name": "Hydrochloric Acid", "symbol": "HCl" }
+    ],
+    "products": [
+      { "name": "Magnesium Chloride", "symbol": "MgCl2" },
+      { "name": "Hydrogen", "symbol": "H2" }
+    ],
+    "equation": "Mg + 2HCl → MgCl2 + H2",
+    "description": "Metal-acid reaction releasing hydrogen",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Iron", "symbol": "Fe" },
+      { "name": "Hydrochloric Acid", "symbol": "HCl" }
+    ],
+    "products": [
+      { "name": "Iron(II) Chloride", "symbol": "FeCl2" },
+      { "name": "Hydrogen", "symbol": "H2" }
+    ],
+    "equation": "Fe + 2HCl → FeCl2 + H2",
+    "description": "Metal-acid reaction releasing hydrogen",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Aluminum", "symbol": "Al" },
+      { "name": "Hydrochloric Acid", "symbol": "HCl" }
+    ],
+    "products": [
+      { "name": "Aluminum Chloride", "symbol": "AlCl3" },
+      { "name": "Hydrogen", "symbol": "H2" }
+    ],
+    "equation": "2Al + 6HCl → 2AlCl3 + 3H2",
+    "description": "Metal-acid reaction releasing hydrogen",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Calcium Carbonate", "symbol": "CaCO3" },
+      { "name": "Hydrochloric Acid", "symbol": "HCl" }
+    ],
+    "products": [
+      { "name": "Calcium Chloride", "symbol": "CaCl2" },
+      { "name": "Carbon Dioxide", "symbol": "CO2" }
+    ],
+    "equation": "CaCO3 + 2HCl → CaCl2 + CO2 + H2O",
+    "description": "Carbonate-acid reaction releasing carbon dioxide",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Sodium Carbonate", "symbol": "Na2CO3" },
+      { "name": "Hydrochloric Acid", "symbol": "HCl" }
+    ],
+    "products": [
+      { "name": "Sodium Chloride", "symbol": "NaCl" },
+      { "name": "Carbon Dioxide", "symbol": "CO2" }
+    ],
+    "equation": "Na2CO3 + 2HCl → 2NaCl + CO2 + H2O",
+    "description": "Carbonate-acid reaction releasing carbon dioxide",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Sodium Bicarbonate", "symbol": "NaHCO3" },
+      { "name": "Hydrochloric Acid", "symbol": "HCl" }
+    ],
+    "products": [
+      { "name": "Sodium Chloride", "symbol": "NaCl" },
+      { "name": "Carbon Dioxide", "symbol": "CO2" }
+    ],
+    "equation": "NaHCO3 + HCl → NaCl + CO2 + H2O",
+    "description": "Bicarbonate-acid reaction releasing carbon dioxide",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Magnesium Carbonate", "symbol": "MgCO3" },
+      { "name": "Hydrochloric Acid", "symbol": "HCl" }
+    ],
+    "products": [
+      { "name": "Magnesium Chloride", "symbol": "MgCl2" },
+      { "name": "Carbon Dioxide", "symbol": "CO2" }
+    ],
+    "equation": "MgCO3 + 2HCl → MgCl2 + CO2 + H2O",
+    "description": "Carbonate-acid reaction releasing carbon dioxide",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Potassium Carbonate", "symbol": "K2CO3" },
+      { "name": "Hydrochloric Acid", "symbol": "HCl" }
+    ],
+    "products": [
+      { "name": "Potassium Chloride", "symbol": "KCl" },
+      { "name": "Carbon Dioxide", "symbol": "CO2" }
+    ],
+    "equation": "K2CO3 + 2HCl → 2KCl + CO2 + H2O",
+    "description": "Carbonate-acid reaction releasing carbon dioxide",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Calcium Sulfide", "symbol": "CaS" },
+      { "name": "Hydrochloric Acid", "symbol": "HCl" }
+    ],
+    "products": [
+      { "name": "Calcium Chloride", "symbol": "CaCl2" },
+      { "name": "Hydrogen Sulfide", "symbol": "H2S" }
+    ],
+    "equation": "CaS + 2HCl → CaCl2 + H2S",
+    "description": "Sulfide-acid reaction releasing hydrogen sulfide",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Sodium Sulfide", "symbol": "Na2S" },
+      { "name": "Hydrochloric Acid", "symbol": "HCl" }
+    ],
+    "products": [
+      { "name": "Sodium Chloride", "symbol": "NaCl" },
+      { "name": "Hydrogen Sulfide", "symbol": "H2S" }
+    ],
+    "equation": "Na2S + 2HCl → 2NaCl + H2S",
+    "description": "Sulfide-acid reaction releasing hydrogen sulfide",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Ammonium Chloride", "symbol": "NH4Cl" },
+      { "name": "Sodium Hydroxide", "symbol": "NaOH" }
+    ],
+    "products": [
+      { "name": "Ammonia", "symbol": "NH3" },
+      { "name": "Sodium Chloride", "symbol": "NaCl" }
+    ],
+    "equation": "NH4Cl + NaOH → NH3 + NaCl + H2O",
+    "description": "Ammonium salt reaction releasing ammonia",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Ammonium Nitrate", "symbol": "NH4NO3" },
+      { "name": "Potassium Hydroxide", "symbol": "KOH" }
+    ],
+    "products": [
+      { "name": "Ammonia", "symbol": "NH3" },
+      { "name": "Potassium Nitrate", "symbol": "KNO3" }
+    ],
+    "equation": "NH4NO3 + KOH → NH3 + KNO3 + H2O",
+    "description": "Ammonium salt reaction releasing ammonia",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Zinc", "symbol": "Zn" },
+      { "name": "Sulfuric Acid", "symbol": "H2SO4" }
+    ],
+    "products": [
+      { "name": "Zinc Sulfate", "symbol": "ZnSO4" },
+      { "name": "Hydrogen", "symbol": "H2" }
+    ],
+    "equation": "Zn + H2SO4 → ZnSO4 + H2",
+    "description": "Metal-acid reaction releasing hydrogen",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Magnesium", "symbol": "Mg" },
+      { "name": "Sulfuric Acid", "symbol": "H2SO4" }
+    ],
+    "products": [
+      { "name": "Magnesium Sulfate", "symbol": "MgSO4" },
+      { "name": "Hydrogen", "symbol": "H2" }
+    ],
+    "equation": "Mg + H2SO4 → MgSO4 + H2",
+    "description": "Metal-acid reaction releasing hydrogen",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Iron", "symbol": "Fe" },
+      { "name": "Sulfuric Acid", "symbol": "H2SO4" }
+    ],
+    "products": [
+      { "name": "Iron Sulfate", "symbol": "FeSO4" },
+      { "name": "Hydrogen", "symbol": "H2" }
+    ],
+    "equation": "Fe + H2SO4 → FeSO4 + H2",
+    "description": "Metal-acid reaction releasing hydrogen",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Aluminum", "symbol": "Al" },
+      { "name": "Sulfuric Acid", "symbol": "H2SO4" }
+    ],
+    "products": [
+      { "name": "Aluminum Sulfate", "symbol": "Al2(SO4)3" },
+      { "name": "Hydrogen", "symbol": "H2" }
+    ],
+    "equation": "2Al + 3H2SO4 → Al2(SO4)3 + 3H2",
+    "description": "Metal-acid reaction releasing hydrogen",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Sodium Sulfite", "symbol": "Na2SO3" },
+      { "name": "Hydrochloric Acid", "symbol": "HCl" }
+    ],
+    "products": [
+      { "name": "Sulfur Dioxide", "symbol": "SO2" },
+      { "name": "Sodium Chloride", "symbol": "NaCl" }
+    ],
+    "equation": "Na2SO3 + 2HCl → 2NaCl + SO2 + H2O",
+    "description": "Sulfite-acid reaction releasing sulfur dioxide",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Potassium Sulfite", "symbol": "K2SO3" },
+      { "name": "Hydrochloric Acid", "symbol": "HCl" }
+    ],
+    "products": [
+      { "name": "Sulfur Dioxide", "symbol": "SO2" },
+      { "name": "Potassium Chloride", "symbol": "KCl" }
+    ],
+    "equation": "K2SO3 + 2HCl → 2KCl + SO2 + H2O",
+    "description": "Sulfite-acid reaction releasing sulfur dioxide",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Calcium Carbonate", "symbol": "CaCO3" },
+      { "name": "Acetic Acid", "symbol": "CH3COOH" }
+    ],
+    "products": [
+      { "name": "Calcium Acetate", "symbol": "Ca(CH3COO)2" },
+      { "name": "Carbon Dioxide", "symbol": "CO2" }
+    ],
+    "equation": "CaCO3 + 2CH3COOH → Ca(CH3COO)2 + CO2 + H2O",
+    "description": "Carbonate-acid reaction releasing carbon dioxide",
+    "type": "gas evolution",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 1,
+    "precipitate": 0
+  },
+  {
+    "reactants": [
+      { "name": "Hydrochloric Acid", "symbol": "HCl" },
+      { "name": "Sodium Hydroxide", "symbol": "NaOH" }
+    ],
+    "products": [
+      { "name": "Sodium Chloride", "symbol": "NaCl" },
+      { "name": "Water", "symbol": "H2O" }
+    ],
+    "equation": "HCl + NaOH → NaCl + H2O",
+    "description": "Neutralization reaction",
+    "type": "acid-base",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Hydrochloric Acid", "symbol": "HCl" },
+      { "name": "Potassium Hydroxide", "symbol": "KOH" }
+    ],
+    "products": [
+      { "name": "Potassium Chloride", "symbol": "KCl" },
+      { "name": "Water", "symbol": "H2O" }
+    ],
+    "equation": "HCl + KOH → KCl + H2O",
+    "description": "Neutralization reaction",
+    "type": "acid-base",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Hydrochloric Acid", "symbol": "HCl" },
+      { "name": "Calcium Hydroxide", "symbol": "Ca(OH)2" }
+    ],
+    "products": [
+      { "name": "Calcium Chloride", "symbol": "CaCl2" },
+      { "name": "Water", "symbol": "H2O" }
+    ],
+    "equation": "2HCl + Ca(OH)2 → CaCl2 + 2H2O",
+    "description": "Neutralization reaction",
+    "type": "acid-base",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Hydrochloric Acid", "symbol": "HCl" },
+      { "name": "Ammonium Hydroxide", "symbol": "NH4OH" }
+    ],
+    "products": [
+      { "name": "Ammonium Chloride", "symbol": "NH4Cl" },
+      { "name": "Water", "symbol": "H2O" }
+    ],
+    "equation": "HCl + NH4OH → NH4Cl + H2O",
+    "description": "Neutralization reaction",
+    "type": "acid-base",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Nitric Acid", "symbol": "HNO3" },
+      { "name": "Sodium Hydroxide", "symbol": "NaOH" }
+    ],
+    "products": [
+      { "name": "Sodium Nitrate", "symbol": "NaNO3" },
+      { "name": "Water", "symbol": "H2O" }
+    ],
+    "equation": "HNO3 + NaOH → NaNO3 + H2O",
+    "description": "Neutralization reaction",
+    "type": "acid-base",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Nitric Acid", "symbol": "HNO3" },
+      { "name": "Potassium Hydroxide", "symbol": "KOH" }
+    ],
+    "products": [
+      { "name": "Potassium Nitrate", "symbol": "KNO3" },
+      { "name": "Water", "symbol": "H2O" }
+    ],
+    "equation": "HNO3 + KOH → KNO3 + H2O",
+    "description": "Neutralization reaction",
+    "type": "acid-base",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Nitric Acid", "symbol": "HNO3" },
+      { "name": "Calcium Hydroxide", "symbol": "Ca(OH)2" }
+    ],
+    "products": [
+      { "name": "Calcium Nitrate", "symbol": "Ca(NO3)2" },
+      { "name": "Water", "symbol": "H2O" }
+    ],
+    "equation": "2HNO3 + Ca(OH)2 → Ca(NO3)2 + 2H2O",
+    "description": "Neutralization reaction",
+    "type": "acid-base",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Nitric Acid", "symbol": "HNO3" },
+      { "name": "Ammonium Hydroxide", "symbol": "NH4OH" }
+    ],
+    "products": [
+      { "name": "Ammonium Nitrate", "symbol": "NH4NO3" },
+      { "name": "Water", "symbol": "H2O" }
+    ],
+    "equation": "HNO3 + NH4OH → NH4NO3 + H2O",
+    "description": "Neutralization reaction",
+    "type": "acid-base",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Sulfuric Acid", "symbol": "H2SO4" },
+      { "name": "Sodium Hydroxide", "symbol": "NaOH" }
+    ],
+    "products": [
+      { "name": "Sodium Sulfate", "symbol": "Na2SO4" },
+      { "name": "Water", "symbol": "H2O" }
+    ],
+    "equation": "H2SO4 + 2NaOH → Na2SO4 + 2H2O",
+    "description": "Neutralization reaction",
+    "type": "acid-base",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Sulfuric Acid", "symbol": "H2SO4" },
+      { "name": "Potassium Hydroxide", "symbol": "KOH" }
+    ],
+    "products": [
+      { "name": "Potassium Sulfate", "symbol": "K2SO4" },
+      { "name": "Water", "symbol": "H2O" }
+    ],
+    "equation": "H2SO4 + 2KOH → K2SO4 + 2H2O",
+    "description": "Neutralization reaction",
+    "type": "acid-base",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Sulfuric Acid", "symbol": "H2SO4" },
+      { "name": "Calcium Hydroxide", "symbol": "Ca(OH)2" }
+    ],
+    "products": [
+      { "name": "Calcium Sulfate", "symbol": "CaSO4" },
+      { "name": "Water", "symbol": "H2O" }
+    ],
+    "equation": "H2SO4 + Ca(OH)2 → CaSO4 + 2H2O",
+    "description": "Neutralization reaction",
+    "type": "acid-base",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Sulfuric Acid", "symbol": "H2SO4" },
+      { "name": "Ammonium Hydroxide", "symbol": "NH4OH" }
+    ],
+    "products": [
+      { "name": "Ammonium Sulfate", "symbol": "(NH4)2SO4" },
+      { "name": "Water", "symbol": "H2O" }
+    ],
+    "equation": "H2SO4 + 2NH4OH → (NH4)2SO4 + 2H2O",
+    "description": "Neutralization reaction",
+    "type": "acid-base",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Acetic Acid", "symbol": "CH3COOH" },
+      { "name": "Sodium Hydroxide", "symbol": "NaOH" }
+    ],
+    "products": [
+      { "name": "Sodium Acetate", "symbol": "CH3COONa" },
+      { "name": "Water", "symbol": "H2O" }
+    ],
+    "equation": "CH3COOH + NaOH → CH3COONa + H2O",
+    "description": "Neutralization reaction",
+    "type": "acid-base",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Acetic Acid", "symbol": "CH3COOH" },
+      { "name": "Potassium Hydroxide", "symbol": "KOH" }
+    ],
+    "products": [
+      { "name": "Potassium Acetate", "symbol": "CH3COOK" },
+      { "name": "Water", "symbol": "H2O" }
+    ],
+    "equation": "CH3COOH + KOH → CH3COOK + H2O",
+    "description": "Neutralization reaction",
+    "type": "acid-base",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Acetic Acid", "symbol": "CH3COOH" },
+      { "name": "Calcium Hydroxide", "symbol": "Ca(OH)2" }
+    ],
+    "products": [
+      { "name": "Calcium Acetate", "symbol": "Ca(CH3COO)2" },
+      { "name": "Water", "symbol": "H2O" }
+    ],
+    "equation": "2CH3COOH + Ca(OH)2 → Ca(CH3COO)2 + 2H2O",
+    "description": "Neutralization reaction",
+    "type": "acid-base",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 0
+  },
+
+  {
+    "reactants": [
+      { "name": "Acetic Acid", "symbol": "CH3COOH" },
+      { "name": "Ammonium Hydroxide", "symbol": "NH4OH" }
+    ],
+    "products": [
+      { "name": "Ammonium Acetate", "symbol": "CH3COONH4" },
+      { "name": "Water", "symbol": "H2O" }
+    ],
+    "equation": "CH3COOH + NH4OH → CH3COONH4 + H2O",
+    "description": "Neutralization reaction",
+    "type": "acid-base",
+    "temperature": 25,
+    "pressure": 1,
+    "result_color": "#ffffff",
+    "gas_produced": 0,
+    "precipitate": 0
+  },
+
+  
+  {
+    "reactants":[{"name":"Silver Nitrate","symbol":"AgNO3"},{"name":"Sodium Chloride","symbol":"NaCl"}],
+    "products":[{"name":"Silver Chloride","symbol":"AgCl"},{"name":"Sodium Nitrate","symbol":"NaNO3"}],
+    "equation":"AgNO3 + NaCl → AgCl↓ + NaNO3",
+    "description":"Silver chloride precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#ffffff",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Silver Nitrate","symbol":"AgNO3"},{"name":"Potassium Chloride","symbol":"KCl"}],
+    "products":[{"name":"Silver Chloride","symbol":"AgCl"},{"name":"Potassium Nitrate","symbol":"KNO3"}],
+    "equation":"AgNO3 + KCl → AgCl↓ + KNO3",
+    "description":"Silver chloride precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#ffffff",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Silver Nitrate","symbol":"AgNO3"},{"name":"Calcium Chloride","symbol":"CaCl2"}],
+    "products":[{"name":"Silver Chloride","symbol":"AgCl"},{"name":"Calcium Nitrate","symbol":"Ca(NO3)2"}],
+    "equation":"2AgNO3 + CaCl2 → 2AgCl↓ + Ca(NO3)2",
+    "description":"Silver chloride precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#ffffff",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Lead Nitrate","symbol":"Pb(NO3)2"},{"name":"Sodium Chloride","symbol":"NaCl"}],
+    "products":[{"name":"Lead Chloride","symbol":"PbCl2"},{"name":"Sodium Nitrate","symbol":"NaNO3"}],
+    "equation":"Pb(NO3)2 + 2NaCl → PbCl2↓ + 2NaNO3",
+    "description":"Lead chloride precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#ffffff",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Lead Nitrate","symbol":"Pb(NO3)2"},{"name":"Potassium Iodide","symbol":"KI"}],
+    "products":[{"name":"Lead Iodide","symbol":"PbI2"},{"name":"Potassium Nitrate","symbol":"KNO3"}],
+    "equation":"Pb(NO3)2 + 2KI → PbI2↓ + 2KNO3",
+    "description":"Yellow precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#ffd700",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Silver Nitrate","symbol":"AgNO3"},{"name":"Potassium Iodide","symbol":"KI"}],
+    "products":[{"name":"Silver Iodide","symbol":"AgI"},{"name":"Potassium Nitrate","symbol":"KNO3"}],
+    "equation":"AgNO3 + KI → AgI↓ + KNO3",
+    "description":"Silver iodide precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#ffff99",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Silver Nitrate","symbol":"AgNO3"},{"name":"Potassium Bromide","symbol":"KBr"}],
+    "products":[{"name":"Silver Bromide","symbol":"AgBr"},{"name":"Potassium Nitrate","symbol":"KNO3"}],
+    "equation":"AgNO3 + KBr → AgBr↓ + KNO3",
+    "description":"Silver bromide precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#f5f5dc",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Barium Chloride","symbol":"BaCl2"},{"name":"Sodium Sulfate","symbol":"Na2SO4"}],
+    "products":[{"name":"Barium Sulfate","symbol":"BaSO4"},{"name":"Sodium Chloride","symbol":"NaCl"}],
+    "equation":"BaCl2 + Na2SO4 → BaSO4↓ + 2NaCl",
+    "description":"White precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#ffffff",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Barium Chloride","symbol":"BaCl2"},{"name":"Potassium Sulfate","symbol":"K2SO4"}],
+    "products":[{"name":"Barium Sulfate","symbol":"BaSO4"},{"name":"Potassium Chloride","symbol":"KCl"}],
+    "equation":"BaCl2 + K2SO4 → BaSO4↓ + 2KCl",
+    "description":"White precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#ffffff",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Calcium Chloride","symbol":"CaCl2"},{"name":"Sodium Carbonate","symbol":"Na2CO3"}],
+    "products":[{"name":"Calcium Carbonate","symbol":"CaCO3"},{"name":"Sodium Chloride","symbol":"NaCl"}],
+    "equation":"CaCl2 + Na2CO3 → CaCO3↓ + 2NaCl",
+    "description":"Calcium carbonate precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#ffffff",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Calcium Chloride","symbol":"CaCl2"},{"name":"Potassium Carbonate","symbol":"K2CO3"}],
+    "products":[{"name":"Calcium Carbonate","symbol":"CaCO3"},{"name":"Potassium Chloride","symbol":"KCl"}],
+    "equation":"CaCl2 + K2CO3 → CaCO3↓ + 2KCl",
+    "description":"Calcium carbonate precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#ffffff",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Copper Sulfate","symbol":"CuSO4"},{"name":"Sodium Hydroxide","symbol":"NaOH"}],
+    "products":[{"name":"Copper Hydroxide","symbol":"Cu(OH)2"},{"name":"Sodium Sulfate","symbol":"Na2SO4"}],
+    "equation":"CuSO4 + 2NaOH → Cu(OH)2↓ + Na2SO4",
+    "description":"Blue precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#4da6ff",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Copper Sulfate","symbol":"CuSO4"},{"name":"Potassium Hydroxide","symbol":"KOH"}],
+    "products":[{"name":"Copper Hydroxide","symbol":"Cu(OH)2"},{"name":"Potassium Sulfate","symbol":"K2SO4"}],
+    "equation":"CuSO4 + 2KOH → Cu(OH)2↓ + K2SO4",
+    "description":"Blue precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#4da6ff",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Iron(III) Chloride","symbol":"FeCl3"},{"name":"Sodium Hydroxide","symbol":"NaOH"}],
+    "products":[{"name":"Iron(III) Hydroxide","symbol":"Fe(OH)3"},{"name":"Sodium Chloride","symbol":"NaCl"}],
+    "equation":"FeCl3 + 3NaOH → Fe(OH)3↓ + 3NaCl",
+    "description":"Brown precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#8b4513",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Iron(II) Sulfate","symbol":"FeSO4"},{"name":"Sodium Hydroxide","symbol":"NaOH"}],
+    "products":[{"name":"Iron(II) Hydroxide","symbol":"Fe(OH)2"},{"name":"Sodium Sulfate","symbol":"Na2SO4"}],
+    "equation":"FeSO4 + 2NaOH → Fe(OH)2↓ + Na2SO4",
+    "description":"Green precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#90ee90",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Zinc Sulfate","symbol":"ZnSO4"},{"name":"Sodium Hydroxide","symbol":"NaOH"}],
+    "products":[{"name":"Zinc Hydroxide","symbol":"Zn(OH)2"},{"name":"Sodium Sulfate","symbol":"Na2SO4"}],
+    "equation":"ZnSO4 + 2NaOH → Zn(OH)2↓ + Na2SO4",
+    "description":"White precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#ffffff",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Magnesium Chloride","symbol":"MgCl2"},{"name":"Sodium Hydroxide","symbol":"NaOH"}],
+    "products":[{"name":"Magnesium Hydroxide","symbol":"Mg(OH)2"},{"name":"Sodium Chloride","symbol":"NaCl"}],
+    "equation":"MgCl2 + 2NaOH → Mg(OH)2↓ + 2NaCl",
+    "description":"White precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#ffffff",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Nickel Sulfate","symbol":"NiSO4"},{"name":"Sodium Hydroxide","symbol":"NaOH"}],
+    "products":[{"name":"Nickel Hydroxide","symbol":"Ni(OH)2"},{"name":"Sodium Sulfate","symbol":"Na2SO4"}],
+    "equation":"NiSO4 + 2NaOH → Ni(OH)2↓ + Na2SO4",
+    "description":"Green precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#7cfc00",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Manganese Sulfate","symbol":"MnSO4"},{"name":"Sodium Hydroxide","symbol":"NaOH"}],
+    "products":[{"name":"Manganese Hydroxide","symbol":"Mn(OH)2"},{"name":"Sodium Sulfate","symbol":"Na2SO4"}],
+    "equation":"MnSO4 + 2NaOH → Mn(OH)2↓ + Na2SO4",
+    "description":"Pale precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#f5f5f5",
+    "gas_produced":0,"precipitate":1
+  },
+
+  {
+    "reactants":[{"name":"Silver Nitrate","symbol":"AgNO3"},{"name":"Sodium Carbonate","symbol":"Na2CO3"}],
+    "products":[{"name":"Silver Carbonate","symbol":"Ag2CO3"},{"name":"Sodium Nitrate","symbol":"NaNO3"}],
+    "equation":"2AgNO3 + Na2CO3 → Ag2CO3↓ + 2NaNO3",
+    "description":"Silver carbonate precipitate formed",
+    "type":"precipitation",
+    "temperature":25,"pressure":1,
+    "result_color":"#ffffcc",
+    "gas_produced":0,"precipitate":1
+  }
+]

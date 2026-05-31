@@ -222,7 +222,7 @@ def get_compound_data(name):
         # جلب المعلومات المفصلة
         detailed_info = get_detailed_compound_info(name)
 
-        # 🔥 صورة
+        #  صورة
         image = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/{name}/PNG"
 
         return {

@@ -65,7 +65,7 @@ block head %}
           <select name="reactant1" required>
             <option value="">{{ _('Select the first reactant') }}</option>
             {% for reactant in reactants %}
-            <option value="{{ reactant[0] }}">{{ reactant[1] }}</option>
+            <option value="{{ reactant.id }}">{{ reactant.name }} ({{ reactant.symbol }})</option>
             {% endfor %}
           </select>
           <input
@@ -80,7 +80,7 @@ block head %}
           <select name="reactant2" required>
             <option value="">{{ _('Select the second reactant') }}</option>
             {% for reactant in reactants %}
-            <option value="{{ reactant[0] }}">{{ reactant[1] }}</option>
+            <option value="{{ reactant.id }}">{{ reactant.name }} ({{ reactant.symbol }})</option>
             {% endfor %}
           </select>
           <input
@@ -308,6 +308,42 @@ block head %}
       var liquidLeftElem = document.getElementById("liquidLeft");
       var liquidRightElem = document.getElementById("liquidRight");
       var liquidStreamElem = document.getElementById("liquidStream");
+
+          // ===== جلب معلومات التفاعل من Flask =====
+    function runReaction(r1, r2) {
+
+      fetch("/predict_reaction", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          reactant1: r1,
+          reactant2: r2
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+
+        console.log(data);
+
+        // تحديث لون النتيجة
+        if (document.getElementById("resultColorValue")) {
+          document.getElementById("resultColorValue").innerText =
+            data.result_color;
+        }
+
+        // تحديث المتغيرات المستعملة في السيميلاسيون
+        resultColorValue = data.result_color || "#999999";
+
+        precipitateFlag = data.precipitate || 0;
+        gasFlag = data.gas_produced || 0;
+
+      })
+      .catch(error => {
+        console.error("Reaction Error:", error);
+      });
+    }
       var startBtn = document.getElementById("startBtn");
 
       if (!startBtn) return;
@@ -440,9 +476,27 @@ block head %}
       if (liquidStreamElem) {
         liquidStreamElem.style.display = "none";
       }
-      if (startBtn) {
-        startBtn.innerHTML = "🔬 Start Reaction";
-      }
+     if (startBtn) {
+  startBtn.addEventListener("click", function () {
+
+    var reactant1Select =
+      document.querySelector('select[name="reactant1"]');
+
+    var reactant2Select =
+      document.querySelector('select[name="reactant2"]');
+
+    if (reactant1Select && reactant2Select) {
+
+      runReaction(
+        reactant1Select.value,
+        reactant2Select.value
+      );
+
+    }
+
+    window.startPouring();
+  });
+}
 
       if (precipitateDiv) {
         precipitateDiv.classList.remove("show");

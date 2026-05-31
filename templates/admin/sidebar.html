@@ -33,13 +33,7 @@
       </a>
     </li>
 
-    <li class="{% if request.endpoint == 'reaction.pending_reactions' %}active{% endif %}">
-      <a href="{{ url_for('reaction.pending_reactions') }}">
-        <i class="bx bx-git-branch"></i> {{ _('Pending Reactions') }}
-        <span class="badge">{{ pending_count }}</span>
-      </a>
-    </li>
-
+    
     <li>
       <a href="{{ url_for('logout') }}">
         <i class="bx bx-log-out"></i> {{ _('Logout') }}

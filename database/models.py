@@ -49,18 +49,7 @@ def create_tables():
     except:
         pass
 
-    # ===== chemical_elements =====
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS chemical_elements (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        symbol TEXT NOT NULL,
-        atomicNumber INTEGER,
-        atomicMass REAL,
-        default_color TEXT,
-        state TEXT CHECK(state IN ('solid','liquid','gas'))
-    )
-    """)
+   
     # ===== chemical_elements =====
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS chemical_elements (
@@ -130,45 +119,14 @@ def create_tables():
     CREATE TABLE IF NOT EXISTS reaction_elements (
         reaction_id INTEGER NOT NULL,
         element_id INTEGER NOT NULL,
-        quantity REAL,
+        role TEXT,
         PRIMARY KEY (reaction_id, element_id),
         FOREIGN KEY (reaction_id) REFERENCES chemical_reactions(id),
         FOREIGN KEY (element_id) REFERENCES chemical_elements(id)
     )
     """)
     
-    # ===== pending_reactions =====
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS pending_reactions (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER NOT NULL,
-        equation TEXT NOT NULL,
-        description TEXT,
-        type TEXT,
-        temperature REAL,
-        pressure REAL,
-        result_color TEXT,
-        gas_produced INTEGER DEFAULT 0,
-        status TEXT DEFAULT 'pending',
-        created_at TEXT DEFAULT (datetime('now', 'localtime')),
-        FOREIGN KEY (user_id) REFERENCES user(id)
-    )
-    """)
-
-    db.commit()
-    # ===== notifications =====
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS notifications (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    message TEXT NOT NULL,
-    is_read INTEGER DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-    FOREIGN KEY (user_id) REFERENCES user(id)
-)
-""")
-
+    
     db.commit()
     db.close()
 

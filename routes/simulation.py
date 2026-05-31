@@ -4,7 +4,47 @@ from datetime import datetime
 import random
 from flask import flash
 from flask_babel import gettext as _
+import importlib
+import json
+import os
 
+balance_stoichiometry = None
+try:
+    chempy = importlib.import_module("chempy")
+    balance_stoichiometry = chempy.balance_stoichiometry
+except ModuleNotFoundError:
+    balance_stoichiometry = None
+
+
+JSON_PATH = os.path.join("database", "reactions.json")
+
+def load_json_reactants():
+    try:
+        with open(JSON_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        reactants_dict = {}
+
+        for reaction in data:
+            for reactant in reaction.get("reactants", []):
+
+                name = reactant.get("name", "")
+                symbol = reactant.get("symbol", "")
+
+                # المفتاح يكون الرمز الكيميائي
+                if symbol not in reactants_dict:
+                    reactants_dict[symbol] = {
+                        "id": f"json_{symbol}",
+                        "name": name,
+                        "symbol": symbol,
+                        "default_color": reactant.get("default_color", "#cccccc")
+                    }
+
+        return list(reactants_dict.values())
+
+    except Exception as e:
+        print("JSON load error:", e)
+        return []
 
 simulation_bp = Blueprint("simulation", __name__, url_prefix="/simulation")
 
@@ -13,7 +53,6 @@ REACTION_COLORS = {
     'neutralization': 'transparent',
     'precipitation': 'white',
     'complex': 'blue',
-    'indicator': 'pink',
     'gas': 'bubbly',
     'default': 'transparent'
 }
@@ -37,15 +76,27 @@ def set_language(lang):
 
 @simulation_bp.route("/", methods=["GET"])
 def simulation_page():
-    #   منع غير المسجل من دخول صفحة المحاكاة
+
     if "user_id" not in session:
         return redirect(url_for("login.login"))
 
     db = get_db()
     cursor = db.cursor()
+
     cursor.execute("SELECT id, name, symbol, default_color FROM chemical_elements ORDER BY name")
-    reactants = cursor.fetchall()
+    db_reactants = cursor.fetchall()
+
+    reactants = []
+    for r in db_reactants:
+        reactants.append({
+            "id": r[0],
+            "name": r[1],
+            "symbol": r[2],
+            "color": r[3] or "#ccc"
+        })
+
     return render_template("simulation/simulation.html", reactants=reactants)
+
 
 
 @simulation_bp.route('/start', methods=['GET', 'POST'])
@@ -54,11 +105,14 @@ def start_simulation():
     db = get_db()
     cursor = db.cursor()
 
-    reactant1_id = request.form.get("reactant1")
-    reactant2_id = request.form.get("reactant2")
+    reactant1_id = int(request.form.get("reactant1"))
+    reactant2_id = int(request.form.get("reactant2"))
+    
+    print("reactant1_id =", reactant1_id)
+    print("reactant2_id =", reactant2_id)
 
     if not reactant1_id or not reactant2_id:
-      return redirect(url_for("simulation.simulation_page"))
+        return redirect(url_for("simulation.simulation_page"))
 
     if reactant1_id == reactant2_id:
         flash("⚠️ " + _("You cannot select the same reactant twice."), "error")
@@ -69,11 +123,48 @@ def start_simulation():
     temperature = float(request.form.get("temperature", 25))
     pressure_input = float(request.form.get("pressure", 1))
 
-    cursor.execute("SELECT id, name, symbol, default_color FROM chemical_elements WHERE id = ?", (reactant1_id,))
+    # ======================================================
+    # 🔥 FIX مهم: تحويل JSON ID إلى DB ID
+    # ======================================================
+
+    def resolve_id(rid):
+        if isinstance(rid, str) and rid.startswith("json_"):
+            symbol = rid.replace("json_", "")
+
+            cursor.execute(
+                "SELECT id FROM chemical_elements WHERE symbol = ?",
+                (symbol,)
+            )
+            row = cursor.fetchone()
+
+            if row:
+                return row[0]
+
+            return None
+
+        return rid
+
+    reactant1_id = resolve_id(reactant1_id)
+    reactant2_id = resolve_id(reactant2_id)
+
+    # ======================================================
+
+    cursor.execute("""
+        SELECT id, name, symbol, default_color
+        FROM chemical_elements
+        WHERE id = ?
+    """, (reactant1_id,))
     reactant1 = cursor.fetchone()
 
-    cursor.execute("SELECT id, name, symbol, default_color FROM chemical_elements WHERE id = ?", (reactant2_id,))
+    cursor.execute("""
+        SELECT id, name, symbol, default_color
+        FROM chemical_elements
+        WHERE id = ?
+    """, (reactant2_id,))
     reactant2 = cursor.fetchone()
+
+    print("reactant1 =", reactant1)
+    print("reactant2 =", reactant2)
 
     gas_produced = 0
     precipitate = 0
@@ -85,30 +176,35 @@ def start_simulation():
         return "Error: Reactants not found", 404
 
     cursor.execute("""
-    SELECT r.id, r.equation, r.type, r.result_color, r.gas_produced,
-           r.precipitate, r.min_temp, r.temperature, r.pressure
-    FROM chemical_reactions r
-    WHERE r.id IN (
-        SELECT re1.reaction_id
-        FROM reaction_elements re1
-        JOIN reaction_elements re2 
-        ON re1.reaction_id = re2.reaction_id
-        WHERE re1.element_id = ?
-        AND re2.element_id = ?
-    )
-""", (reactant1_id, reactant2_id))
+                     SELECT r.id, r.equation, r.type, r.result_color, r.gas_produced,
+                     r.precipitate, r.min_temp, r.temperature, r.pressure 
+                     FROM chemical_reactions r 
+                     WHERE r.id IN (
+                         SELECT re1.reaction_id
+                         FROM reaction_elements re1
+                         JOIN reaction_elements re2 
+                         ON re1.reaction_id = re2.reaction_id
+                         WHERE re1.reaction_id = re2.reaction_id
+                         AND re1.element_id IN (?, ?)
+                         AND re2.element_id IN (?, ?)
+                     )
+                     """, (reactant1_id, reactant2_id, reactant1_id, reactant2_id))
 
     reaction = cursor.fetchone()
 
-    reaction_id = None
-    equation = f"{reactant1[2]} + {reactant2[2]} → Product"
+    try:
+        reactants_set, products_set = balance_stoichiometry(
+            {reactant1[2], reactant2[2]},
+            set()
+        )
+        equation = " + ".join(reactants_set) + " → " + " + ".join(products_set)
+    except Exception:
+        equation = f"{reactant1[2]} + {reactant2[2]} → ?"
 
     min_temp = 20
     opt_temp = 25
     opt_pressure = 1.0
     min_pressure = 0.5
-    pressure = pressure_input
-    description = REACTION_DESCRIPTIONS['default']
     temp_message = ""
     result_text = ""
 
@@ -119,46 +215,30 @@ def start_simulation():
         min_pressure = max(0.5, opt_pressure - 1)
         opt_temp = temperature_db
 
-        min_temp = min_temp or 20
-        opt_temp = opt_temp or 25
-
         if temperature < min_temp:
             temp_message = _("⚠️ Temperature too low! Reaction needs at least %(temp)s°C", temp=min_temp)
-            result_text = _("Slow reaction at %(temp)s°C", temp=temperature)
         elif temperature > opt_temp + 30:
             temp_message = _("⚠️ Temperature too high! Optimal temperature is %(temp)s°C", temp=opt_temp)
-            result_text = _("Fast reaction at %(temp)s°C", temp=temperature)
         else:
             temp_message = _("✅ Optimal temperature (%(temp)s°C)", temp=temperature)
-            result_text = _("Normal reaction at %(temp)s°C", temp=temperature)
 
         if pressure_input < min_pressure:
-            temp_message += " " + _(
-                "⚠️ Pressure too low! Recommended pressure is %(p)s atm",
-                p=opt_pressure
-            )
+            temp_message += " " + _("⚠️ Pressure too low! Recommended pressure is %(p)s atm", p=opt_pressure)
         elif pressure_input > (opt_pressure + 1):
-            temp_message += " " + _(
-                "⚠️ Pressure too high! Optimal pressure is %(p)s atm",
-                p=opt_pressure
-            )
+            temp_message += " " + _("⚠️ Pressure too high! Optimal pressure is %(p)s atm", p=opt_pressure)
         else:
-            temp_message += " " + _(
-                "✅ Suitable pressure (%(p)s atm)",
-                p=pressure_input
-            )
+            temp_message += " " + _("✅ Suitable pressure (%(p)s atm)", p=pressure_input)
 
         cursor.execute("SELECT description FROM chemical_reactions WHERE id = ?", (reaction_id,))
         db_description = cursor.fetchone()
 
         if db_description and db_description[0]:
             description = db_description[0]
-        else:
-            description = REACTION_DESCRIPTIONS.get(reaction_type, _("{} reaction occurred").format(reaction_type))
 
         if precipitate:
             description += " with precipitate"
             result_text += " - Precipitate formed"
+
         if gas_produced:
             description += " with gas bubbles"
             result_text += " - Gas produced"
@@ -167,7 +247,7 @@ def start_simulation():
             INSERT INTO simulation (user_id, reaction_id, date, result, temperature, pressure)
             VALUES (?, ?, ?, ?, ?, ?)
         """, (
-            session.get("user_id"),  # ممكن يكون None إذا لم يسجل دخول، نحتاج معالجة هذا
+            session.get("user_id"),
             reaction_id,
             datetime.now(),
             result_text or description,
@@ -184,34 +264,21 @@ def start_simulation():
 
         db.commit()
 
-        reaction_data = {
-            'simulation_id': simulation_id,
-            'reactant1_name': reactant1[1],
-            'reactant2_name': reactant2[1],
-            'reactant1_symbol': reactant1[2],
-            'reactant2_symbol': reactant2[2],
-            'reactant1_color': reactant1[3] or 'transparent',
-            'reactant2_color': reactant2[3] or 'transparent',
-            'quantity1': quantity1,
-            'quantity2': quantity2,
-            'equation': equation,
-            'result_color': result_color,
-            'description': description,
-            'result_text': result_text,
-            'reaction_type': reaction_type,
-            'temperature': temperature,
-            'gas_produced': gas_produced,
-            'precipitate': precipitate,
-            'pressure': pressure_input,
-            'temp_message': temp_message,
-            'has_reaction': True
-        }
+        return render_template("simulation/simulation.html",
+                               simulation_id=simulation_id,
+                               reactant1_name=reactant1[1],
+                               reactant2_name=reactant2[1],
+                               reactant1_symbol=reactant1[2],
+                               reactant2_symbol=reactant2[2],
+                               equation=equation,
+                               description=description,
+                               result_text=result_text,
+                               reaction_type=reaction_type,
+                               temperature=temperature,
+                               gas_produced=gas_produced,
+                               precipitate=precipitate,
+                               has_reaction=True)
 
-        cursor.execute("SELECT id, name, symbol, default_color FROM chemical_elements ORDER BY name")
-        reactants = cursor.fetchall()
-        reaction_data['reactants'] = reactants
-
-        return render_template("simulation/simulation.html", **reaction_data)
     else:
         flash(_("❌ No reaction exists between %(r1)s and %(r2)s",
                 r1=reactant1[1],
