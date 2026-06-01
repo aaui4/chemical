@@ -548,72 +548,12 @@ def logout():
     session.clear()
     return redirect(url_for('login.login'))
 
-@app.context_processor
-def inject_notifications():
 
-    notifications = []
-    unread_count = 0
-    pending_count = 0
 
     conn = sqlite3.connect('database/chemical.db')
     c = conn.cursor()
 
-    # إشعارات المستخدم
-    if 'user_id' in session:
 
-        c.execute("""
-        SELECT id, message, is_read
-        FROM notifications
-        WHERE user_id=?
-        ORDER BY created_at DESC
-        LIMIT 5
-        """, (session['user_id'],))
-
-        notifications = c.fetchall()
-
-        c.execute("""
-        SELECT COUNT(*)
-        FROM notifications
-        WHERE user_id=? AND is_read=0
-        """, (session['user_id'],))
-
-        unread_count = c.fetchone()[0]
-
-    # إشعارات الأدمن (pending reactions)
-    c.execute("""
-    SELECT COUNT(*)
-    FROM pending_reactions
-    WHERE status='pending'
-    """)
-
-    pending_count = c.fetchone()[0]
-
-    conn.close()
-
-    return dict(
-        notifications=notifications,
-        unread_count=unread_count,
-        pending_count=pending_count
-    )
-
-@app.route('/mark_notifications_read')
-def mark_notifications_read():
-
-    if 'user_id' in session:
-
-        conn = sqlite3.connect('database/chemical.db')
-        c = conn.cursor()
-
-        c.execute("""
-        UPDATE notifications
-        SET is_read=1
-        WHERE user_id=?
-        """,(session['user_id'],))
-
-        conn.commit()
-        conn.close()
-
-    return redirect(request.referrer)
 
 # تصحيح requests
 import requests

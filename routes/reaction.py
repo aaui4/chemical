@@ -89,19 +89,18 @@ def add_reaction():
             reaction_id = c.lastrowid
         else:
             c.execute("""
-                INSERT INTO pending_reactions
-                (user_id, equation, description, type, temperature, pressure,gas_produced , result_color, status)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending')
-            """, (
-                user_id,
-                equation,
-                description,
-                reaction_type,
-                temperature,
-                pressure,
-                gas_produced,
-                result_color
-            ))
+INSERT INTO chemical_reactions
+(equation, description, type, temperature, pressure, gas_produced, result_color)
+VALUES (?, ?, ?, ?, ?, ?, ?)
+""", (
+    equation,
+    description,
+    reaction_type,
+    temperature,
+    pressure,
+    gas_produced,
+    result_color
+))
 
             reaction_id = c.lastrowid
 

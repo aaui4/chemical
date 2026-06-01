@@ -98,24 +98,44 @@ def simulation_page():
     return render_template("simulation/simulation.html", reactants=reactants)
 
 
+def get_reaction_from_json(symbol1, symbol2):
+    try:
+        with open(JSON_PATH, "r", encoding="utf-8") as f:
+            reactions = json.load(f)
 
-@simulation_bp.route('/start', methods=['GET', 'POST'])
+        for r in reactions:
+            reactants = [
+                x["symbol"].strip().upper()
+                for x in r.get("reactants", [])
+            ]
+
+            if symbol1.upper() in reactants and symbol2.upper() in reactants:
+                return r
+
+    except Exception as e:
+        print("JSON error:", e)
+
+    return None
+@simulation_bp.route('/start', methods=['POST'])
 def start_simulation():
 
     db = get_db()
     cursor = db.cursor()
 
-    reactant1_id = int(request.form.get("reactant1"))
-    reactant2_id = int(request.form.get("reactant2"))
-    
-    print("reactant1_id =", reactant1_id)
-    print("reactant2_id =", reactant2_id)
+    # =========================
+    # 1. قراءة الإدخال
+    # =========================
+    reactant1_id = request.form.get("reactant1")
+    reactant2_id = request.form.get("reactant2")
 
     if not reactant1_id or not reactant2_id:
         return redirect(url_for("simulation.simulation_page"))
 
+    reactant1_id = int(reactant1_id)
+    reactant2_id = int(reactant2_id)
+
     if reactant1_id == reactant2_id:
-        flash("⚠️ " + _("You cannot select the same reactant twice."), "error")
+        flash("⚠️ You cannot select the same reactant twice.", "error")
         return redirect(url_for("simulation.simulation_page"))
 
     quantity1 = float(request.form.get("quantity1", 0))
@@ -123,32 +143,9 @@ def start_simulation():
     temperature = float(request.form.get("temperature", 25))
     pressure_input = float(request.form.get("pressure", 1))
 
-    # ======================================================
-    # 🔥 FIX مهم: تحويل JSON ID إلى DB ID
-    # ======================================================
-
-    def resolve_id(rid):
-        if isinstance(rid, str) and rid.startswith("json_"):
-            symbol = rid.replace("json_", "")
-
-            cursor.execute(
-                "SELECT id FROM chemical_elements WHERE symbol = ?",
-                (symbol,)
-            )
-            row = cursor.fetchone()
-
-            if row:
-                return row[0]
-
-            return None
-
-        return rid
-
-    reactant1_id = resolve_id(reactant1_id)
-    reactant2_id = resolve_id(reactant2_id)
-
-    # ======================================================
-
+    # =========================
+    # 2. جلب العناصر من DB
+    # =========================
     cursor.execute("""
         SELECT id, name, symbol, default_color
         FROM chemical_elements
@@ -163,127 +160,115 @@ def start_simulation():
     """, (reactant2_id,))
     reactant2 = cursor.fetchone()
 
-    print("reactant1 =", reactant1)
-    print("reactant2 =", reactant2)
-
-    gas_produced = 0
-    precipitate = 0
-    result_color = 'transparent'
-    reaction_type = 'default'
-    description = REACTION_DESCRIPTIONS['default']
-
     if not reactant1 or not reactant2:
         return "Error: Reactants not found", 404
 
-    cursor.execute("""
-                     SELECT r.id, r.equation, r.type, r.result_color, r.gas_produced,
-                     r.precipitate, r.min_temp, r.temperature, r.pressure 
-                     FROM chemical_reactions r 
-                     WHERE r.id IN (
-                         SELECT re1.reaction_id
-                         FROM reaction_elements re1
-                         JOIN reaction_elements re2 
-                         ON re1.reaction_id = re2.reaction_id
-                         WHERE re1.reaction_id = re2.reaction_id
-                         AND re1.element_id IN (?, ?)
-                         AND re2.element_id IN (?, ?)
-                     )
-                     """, (reactant1_id, reactant2_id, reactant1_id, reactant2_id))
+    # =========================
+    # 3. جلب التفاعل من JSON
+    # =========================
+    json_reaction = get_reaction_from_json(
+        reactant1[2],
+        reactant2[2]
+    )
 
-    reaction = cursor.fetchone()
-
-    try:
-        reactants_set, products_set = balance_stoichiometry(
-            {reactant1[2], reactant2[2]},
-            set()
-        )
-        equation = " + ".join(reactants_set) + " → " + " + ".join(products_set)
-    except Exception:
-        equation = f"{reactant1[2]} + {reactant2[2]} → ?"
-
-    min_temp = 20
-    opt_temp = 25
-    opt_pressure = 1.0
-    min_pressure = 0.5
-    temp_message = ""
-    result_text = ""
-
-    if reaction:
-        reaction_id, equation, reaction_type, result_color, gas_produced, precipitate, min_temp, temperature_db, pressure_db = reaction
-
-        opt_pressure = pressure_db or 1.0
-        min_pressure = max(0.5, opt_pressure - 1)
-        opt_temp = temperature_db
-
-        if temperature < min_temp:
-            temp_message = _("⚠️ Temperature too low! Reaction needs at least %(temp)s°C", temp=min_temp)
-        elif temperature > opt_temp + 30:
-            temp_message = _("⚠️ Temperature too high! Optimal temperature is %(temp)s°C", temp=opt_temp)
-        else:
-            temp_message = _("✅ Optimal temperature (%(temp)s°C)", temp=temperature)
-
-        if pressure_input < min_pressure:
-            temp_message += " " + _("⚠️ Pressure too low! Recommended pressure is %(p)s atm", p=opt_pressure)
-        elif pressure_input > (opt_pressure + 1):
-            temp_message += " " + _("⚠️ Pressure too high! Optimal pressure is %(p)s atm", p=opt_pressure)
-        else:
-            temp_message += " " + _("✅ Suitable pressure (%(p)s atm)", p=pressure_input)
-
-        cursor.execute("SELECT description FROM chemical_reactions WHERE id = ?", (reaction_id,))
-        db_description = cursor.fetchone()
-
-        if db_description and db_description[0]:
-            description = db_description[0]
-
-        if precipitate:
-            description += " with precipitate"
-            result_text += " - Precipitate formed"
-
-        if gas_produced:
-            description += " with gas bubbles"
-            result_text += " - Gas produced"
-
-        cursor.execute("""
-            INSERT INTO simulation (user_id, reaction_id, date, result, temperature, pressure)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (
-            session.get("user_id"),
-            reaction_id,
-            datetime.now(),
-            result_text or description,
-            temperature,
-            pressure_input
-        ))
-
-        simulation_id = cursor.lastrowid
-
-        cursor.execute("""
-            INSERT INTO reaction_results (simulation_id, products, state, color)
-            VALUES (?, ?, ?, ?)
-        """, (simulation_id, equation, reaction_type, result_color))
-
-        db.commit()
-
-        return render_template("simulation/simulation.html",
-                               simulation_id=simulation_id,
-                               reactant1_name=reactant1[1],
-                               reactant2_name=reactant2[1],
-                               reactant1_symbol=reactant1[2],
-                               reactant2_symbol=reactant2[2],
-                               equation=equation,
-                               description=description,
-                               result_text=result_text,
-                               reaction_type=reaction_type,
-                               temperature=temperature,
-                               gas_produced=gas_produced,
-                               precipitate=precipitate,
-                               has_reaction=True)
+    if json_reaction:
+        equation = json_reaction.get("equation", "")
+        reaction_type = json_reaction.get("type", "default")
+        description = json_reaction.get("description", "")
+        result_color = json_reaction.get("result_color", "transparent")
+        gas_produced = json_reaction.get("gas_produced", 0)
+        precipitate = json_reaction.get("precipitate", 0)
+        opt_temp = json_reaction.get("temperature", 25)
+        opt_pressure = json_reaction.get("pressure", 1)
 
     else:
-        flash(_("❌ No reaction exists between %(r1)s and %(r2)s",
-                r1=reactant1[1],
-                r2=reactant2[1]), "error")
-        return redirect(url_for("simulation.simulation_page"))
+        equation = f"{reactant1[2]} + {reactant2[2]} → ?"
+        reaction_type = "default"
+        description = "Reaction completed successfully"
+        result_color = "transparent"
+        gas_produced = 0
+        precipitate = 0
+        opt_temp = 25
+        opt_pressure = 1
+
+    # =========================
+    # 4. تقييم الظروف (حرارة / ضغط)
+    # =========================
+    temp_message = ""
+
+    if temperature < opt_temp:
+        temp_message = f"⚠️ Temperature too low (optimal: {opt_temp}°C)"
+    elif temperature > opt_temp + 30:
+        temp_message = f"⚠️ Temperature too high (optimal: {opt_temp}°C)"
+    else:
+        temp_message = f"✅ Temperature OK ({temperature}°C)"
+
+    if pressure_input < opt_pressure:
+        temp_message += f" | ⚠️ Pressure too low (optimal: {opt_pressure} atm)"
+    elif pressure_input > opt_pressure + 1:
+        temp_message += f" | ⚠️ Pressure too high (optimal: {opt_pressure} atm)"
+    else:
+        temp_message += f" | ✅ Pressure OK ({pressure_input} atm)"
+
+    # =========================
+    # 5. حفظ المحاكاة
+    # =========================
+    cursor.execute("""
+        INSERT INTO simulation
+        (user_id, reaction_id, date, result, temperature, pressure)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (
+        session.get("user_id"),
+        0,  # لأنك تعتمدين على JSON فقط
+        datetime.now(),
+        description,
+        temperature,
+        pressure_input
+    ))
+
+    simulation_id = cursor.lastrowid
+
+    # =========================
+    # 6. حفظ النتائج
+    # =========================
+    cursor.execute("""
+        INSERT INTO reaction_results
+        (simulation_id, products, state, color)
+        VALUES (?, ?, ?, ?)
+    """, (
+        simulation_id,
+        equation,
+        reaction_type,
+        result_color
+    ))
+
+    db.commit()
+
+    # =========================
+    # 7. عرض النتيجة
+    # =========================
+    return render_template(
+        "simulation/simulation.html",
+        simulation_id=simulation_id,
+        reactant1_name=reactant1[1],
+        reactant2_name=reactant2[1],
+        reactant1_symbol=reactant1[2],
+        reactant2_symbol=reactant2[2],
+        equation=equation,
+        description=description,
+        reaction_type=reaction_type,
+        result_color=result_color,
+        temperature=temperature,
+        pressure=pressure_input,
+        gas_produced=gas_produced,
+        precipitate=precipitate,
+        quantity1=quantity1,
+        quantity2=quantity2,
+        has_reaction=True,
+        temp_message=temp_message
+    )
+
+      
     
 @simulation_bp.before_request
 def change_lang_from_url():
