@@ -37,7 +37,7 @@ def load_json_reactants():
                         "id": f"json_{symbol}",
                         "name": name,
                         "symbol": symbol,
-                        "default_color": reactant.get("default_color", "#cccccc")
+                        "default_color": reactant.get("default_color", None) or "#cccccc"
                     }
 
         return list(reactants_dict.values())
@@ -92,7 +92,7 @@ def simulation_page():
             "id": r[0],
             "name": r[1],
             "symbol": r[2],
-            "color": r[3] or "#ccc"
+            "color": r[3] if r[3] else None
         })
 
     return render_template("simulation/simulation.html", reactants=reactants)
@@ -254,6 +254,8 @@ def start_simulation():
         reactant2_name=reactant2[1],
         reactant1_symbol=reactant1[2],
         reactant2_symbol=reactant2[2],
+        reactant1_color=reactant1[3],
+        reactant2_color=reactant2[3],
         equation=equation,
         description=description,
         reaction_type=reaction_type,
